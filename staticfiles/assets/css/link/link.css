@@ -1,0 +1,57 @@
+.category-column  {
+    flex-direction: row!important;
+}
+.add-card {
+    display: inline-block;
+    margin-left: 10px;
+    
+}
+
+.quick-links .fade{
+    display: none;
+}
+
+.quick-links .active{
+    display: flex !important;
+}
+
+.add_category{
+    margin-bottom: 10px;
+    float: right;
+    clear: both;
+}
+
+.categorys{
+    /* display: block; */
+    margin-right: 100px !important;
+    clear:both;
+}
+
+.add_category_link{
+    margin-left: 1000px;
+    clear: both;
+}
+
+#operationContent{
+    width: 100%;
+    
+}
+
+.linkstyle{
+    display: none;
+    justify-content: right; }
+.add-card-wrapper{
+    width: 90px;
+    height: 123px;
+    background-color: #edeeef;
+    border-radius: 7px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.add_category_link{
+    position: relative;
+    left: 21px;
+    clear: both;
+}

@@ -1,0 +1,197 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+Now Time : {% now "jS F Y H:i" %} UTC
+{% endblock %}
+
+{% block body %}
+<!--begin::Row-->
+<style>
+    #overall_version_chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+</style>
+
+<div class="row g-5 g-xl-10 mb-xl-10">
+    <div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4 mb-md-4 mb-xl-0" id="chart_widget_1">
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-0">
+        <div class="col-lg-12 col-xl-12 col-xxl-12 mb-md-5 mb-xl-5" id="chart_widget_2"></div>
+        <div class="row g-5" id="static_widget_1"></div>
+    </div>
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-0">
+        <div class="row g-5" id="static_widget_2"></div>
+        <div class="col-12 col-xl-12 col-xxl-12 mb-md-5 mb-xl-5" id="arm_chart_1"></div>
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10" id="div_vm">
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-8 mb-md-5 mb-xl-10" id="div_on_stock">
+    </div>
+    
+    <div class="col-lg-6 col-xl-6 col-xxl-12 mb-md-5 mb-xl-10">
+
+        <div class="card card-flush" style="height:600px;">
+            <div class="card-header pt-7">
+                <h2 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-gray-800">Overall Version Count</span>
+                    <span class="text-gray-400 mt-1 fw-bold fs-6">grouped by system role</span>
+                </h2>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between pb-5 px-0">
+                <div class="tab-content ps-4 pe-6">
+                    <div style="height: 450px" class="ps-10" id="overall_version_chartdiv"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-10">
+        <div class="card card-flush" style="height:600px;">
+            <div class="card-header pt-7">
+                <h2 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-gray-800">System Count</span>
+                    <span class="text-gray-400 mt-1 fw-bold fs-6">grouped by system role</span>
+                </h2>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between pb-5 px-0">
+                <div class="tab-content p-0">
+                    <div id="kt_apexcharts_1" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+
+    <div class="col-lg-6 col-xl-6 col-xxl-8 ps-10 mb-md-5 mb-xl-10 overflow-hidden" id="div_internal_systems_customer_name">
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-0 mb-xl-0">
+        <div class="card card-flush" style="height:600px;">
+            <div class="card-header pt-7">
+                <h2 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-gray-800">Internal Systems Count</span>
+                    <span class="text-gray-400 mt-1 fw-bold fs-6">grouped by business type</span>
+                </h2>
+            </div>
+            <div class="card-body d-flex flex-column justify-content-between pb-5 px-0">
+                <div class="tab-content p-0">
+                    <div id="kt_apexcharts_2" ></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="card card-flush" style="height:600px;">
+            <div class="card-header pt-7">
+                <!--begin::Title-->
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-gray-800">New cluster requirements</span>
+                    <span class="text-gray-400 mt-1 fw-semibold fs-6">Based on possible tenants on a cluster</span>
+                </h3>
+                
+                <a href="#" class="btn btn-icon btn-light-muted" data-bs-toggle="modal" data-bs-target="#kt_modal_2"><i class="las la-expand-arrows-alt fs-2 me-2"></i></a>
+                
+                <!--end::Title-->
+                <!--begin::Toolbar-->
+                <div class="card-toolbar">
+                    <ul class="nav me-n1" id="kt_chart_widget_11_tabs">
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1 active" data-bs-toggle="tab" id="kt_list_widget_18_tab_1" href="#card_body_cluster_dc_at_risk">Data Center</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1" data-bs-toggle="tab" id="kt_list_widget_18_tab_2" href="#card_body_cluster_btype_at_risk">Business Type</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-sm btn-color-muted btn-active btn-active-light fw-bold px-4 me-1" data-bs-toggle="tab" id="kt_list_widget_18_tab_2" href="#card_body_cluster_network_at_risk">Network Segment</a>
+                        </li>
+                    </ul>
+                </div>
+                <!--end::Toolbar-->
+            </div>
+            <div class="card-body pt-4">
+                <div class="tab-content" >
+                    <div class="tab-pane fade show active" id="card_body_cluster_dc_at_risk"></div>
+                    <div class="tab-pane fade" id="card_body_cluster_btype_at_risk"></div>
+                    <div class="tab-pane fade" id="card_body_cluster_network_at_risk"></div>   
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<div class="modal bg-white fade" tabindex="-1" id="kt_modal_2">
+    <div class="modal-dialog modal-fullscreen">
+        <div class="modal-content shadow-none">
+            <div class="modal-header">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bold text-gray-800">New cluster requirements</span>
+                    <span class="text-gray-400 mt-1 fw-semibold fs-6">Press Esc to exit</span>
+                </h3>
+
+                <div class="card-toolbar">
+                    <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#kt_tab_pane_7">Data Center</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_8">Business Type</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#kt_tab_pane_9">Network Segment</a>
+                        </li>
+                    </ul>
+                </div>
+                
+            </div>
+
+            <div class="modal-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active" id="kt_tab_pane_7" role="tabpanel">
+                        <div id="card_body_cluster_dc_at_risk_expan"></div>
+                    </div>
+        
+                    <div class="tab-pane fade" id="kt_tab_pane_8" role="tabpanel">
+                        <div id="card_body_cluster_btype_at_risk_expan"></div>
+                    </div>
+        
+                    <div class="tab-pane fade" id="kt_tab_pane_9" role="tabpanel">
+                        <div id="card_body_cluster_network_at_risk_expan"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--end::Row-->
+
+{% endblock %}
+
+{% block js_block %}
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="{% static "assets/js/widgets.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/spc_cld/dashboard.js"%}" type="text/javascript"></script>
+{% endblock %}

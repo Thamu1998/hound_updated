@@ -1,0 +1,1050 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block subheader %}
+<div class="toolbar" id="kt_toolbar">
+  <!--begin::Container-->
+  <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+    <!--begin::Page title-->
+    <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex flex-column align-items-start me-3 mb-5 mb-lg-0">
+      <!--begin::Title-->
+      <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 mb-0">{% block page_title %}{% endblock %}</h1>
+      <!--end::Title-->
+      <!--begin::Breadcrumb-->
+      <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 pt-1">
+        {% block subheader-item %}
+        <!--begin::Item-->										
+        <li class="breadcrumb-item text-muted">
+          <a href="/" class="text-muted text-hover-primary">Home</a>
+        </li>
+        <!--end::Item-->
+        <!--begin::Item-->
+        <li class="breadcrumb-item">
+          <span class="bullet bg-gray-300 w-5px h-2px"></span>
+        </li>
+        <!--end::Item-->
+        <!--begin::Item-->
+        <li class="breadcrumb-item text-dark">Customer Event RCA</li>
+        <!--end::Item-->
+        {% endblock %}
+      </ul>
+      <!--end::Breadcrumb-->
+    </div>
+    <!--end::Page title-->
+    <!--begin::Actions-->
+    <div class="d-flex">
+      {% block subheader-button %}
+      <!--begin::Wrapper-->
+
+      <!-- <a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-2 me-3"></i> Filter</a> -->
+      
+<!-- <div class="mb-0">
+              <label class="form-label">Example</label>
+              <input class="form-control form-control-solid" placeholder="Pick date rage" id="kt_daterangepicker_2"/>
+          </div> -->
+          <a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-4 me-2"></i> Filter</a>
+
+
+      <!--end::Button-->
+      <a id="export_excel" href="" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+        <span class="svg-icon svg-icon-primary svg-icon-1x">
+            <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                    <rect x="0" y="0" width="24" height="24"/>
+                    <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                    <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+                </g>
+            </svg>
+            <!--end::Svg Icon-->
+        </span>Export
+    </a>
+    
+    <a title="Table Settings" href="#" id="kt_drawer_example_basic_button" class="btn btn-icon btn-sm btn-primary me-3">
+      <i class="las la-cube fs-2qx"></i>
+  </a>
+
+      {% endblock %}
+    </div>
+    <!--end::Actions-->							
+  </div>
+  <!--end::Container-->
+</div>
+{% endblock %} 
+{% block css_block %}
+<!-- PAGE SPECIFIC CSS -->
+{% endblock %} 
+
+{% block body %}
+<!-- BODY CONTENT HERE -->
+
+
+
+ <!--begin::Accordion-->
+ <div class="accordion" id="kt_accordion_1">
+
+  <div class="accordion-item">
+      <h2 class="accordion-header" id="kt_accordion_1_header_3">
+          <button class="accordion-button fs-4 fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_3" aria-expanded="false" aria-controls="kt_accordion_1_body_3">
+          Event RCA Summary
+          </button>
+      </h2>
+      <div id="kt_accordion_1_body_3" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_3" data-bs-parent="#kt_accordion_1">
+          <div class="accordion-body">
+            <div id="chartdiv" style="height:450px;"></div>
+            <!-- <div id="kt_apexcharts_5" style="height: 450px;"></div> -->
+          </div>
+      </div>
+  </div>
+</div>
+<!--end::Accordion-->
+
+        <div class="card card-flush shadow-sm row g-10 g-xl-8 mt-15">
+  
+          <div class="card-body py-5">
+              <!--begin::Section-->
+              <div class="p-0">
+                  <!--begin::Datatable-->
+                  <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                      <thead>
+                      <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                     
+                        <th class="EventID">EventID</th>
+                        <th class="BundleID">BundleID</th>
+                        <th class="CreationDateTime">CreationDateTime</th>
+                        <th class="TenantID">TenantID</th>
+                        <th class="CustomerID">CustomerID</th>
+                        <th class="SystemRole">SystemRole</th>
+                        <th  class="ServiceStatus">ServiceStatus</th>
+                        <th class="DataCenter">DataCenter</th>
+                        <th class="SLO">SLO</th>
+                        <th class="SLO">SLA</th>
+                        <th class="SLO">Action</th>
+                        <th class="Status">Status</th>
+                        <th class="JiraTicket">JiraTicket</th>
+                        <th class="TenantRole">TenantRole</th>
+                        <th class="CurrentTemplateName">CurrentTemplateName</th>
+                        <th class="CreatedBy">CreatedBy</th>
+                        <th class="StartDateTime">StartDateTime</th>
+                        <th class="EndDateTime">EndDateTime</th>
+                        <th class="EventName">EventName</th>
+                        <th class="EndDate">EndDate</th>
+                        <th class="EndTime">EndTime</th>
+                        <th class="NTDBEmailStatus">NTDBEmailStatus</th>
+                        <th class="Phase">Phase</th>
+                        <th class="StartDate">StartDate</th>
+                        <th class="StartTime">StartTime</th>
+                        <th class="TestMode">TestMode</th>
+                        <th class="NotificationType">NotificationType</th>
+                        <th class="IsSLARelevant">IsSLARelevant</th>
+                      </tr>
+                      </thead>
+                      <tbody class="text-gray-600 fw-bold fs-5">
+                      </tbody>
+                      <tfoot>
+                          <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                            <th>EventID</th>
+                            <th>BundleID</th>
+                            <th>CreationDateTime</th>
+                            <th>TenantID</th>
+                            <th>CustomerID</th>
+                            <th>SystemRole</th>
+                            <th>ServiceStatus</th>
+                            <th>DataCenter</th>
+                            <th>SLO</th>
+                            <th>SLA</th>
+                            <th>Action</th>
+                            <th>Status</th>
+                            <th>JiraTicket</th>
+                            <th>TenantRole</th>
+                            <th>CurrentTemplateName</th>
+                            <th>CreatedBy</th>
+                            <th>StartDateTime</th>
+                            <th>EndDateTime</th>
+                            <th>EventName</th>
+                            <th>EndDate</th>
+                            <th>EndTime</th>
+                            <th>NTDBEmailStatus</th>
+                            <th>Phase</th>
+                            <th>StartDate</th>
+                            <th>StartTime</th>
+                            <th>TestMode</th>
+                            <th>NotificationType</th>
+                            <th>IsSLARelevant</th>
+                          </tr>
+                      </tfoot>
+                  </table>
+                  <!--end::Datatable-->
+              </div>
+              <!--end::Section-->
+          </div>
+      </div>
+
+      <!--begin::search draw-->
+<div id="kt_drawer_example_advanced" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '300px'}">
+  <div class="card card-px-1">
+      <div class="card-header card-header-stretch">
+          <div class="card-toolbar">
+              <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                  <li class="nav-item">
+                      <a class="nav-link active" data-bs-toggle="tab" href="#app_tab">Application</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+      <div class="card-body">
+          <div class="tab-content" id="myTabContent">
+              <div class="tab-pane fade show active" id="app_tab" role="tabpanel">
+                  <div class="card-body-" id="search_form">                                
+                      <div class="form-group">
+                          <div class="mb-10">
+                              <label class="form-label fw-bold">DateTimeRange in UTC:</label>
+                                  <div class="d-flex mb-0">
+                                      <input class="form-control form-control-solid" placeholder="DateTime Range in UTC" id="kt_daterangepicker_2"/>
+                                  </div>
+                            </div>
+                            <div class="mb-10">
+                              <!--begin::Label-->
+                              <label class="form-label fw-bold">Service Status:</label>
+                              <!--end::Label-->
+                              <!--begin::Options-->
+                              <div class="d-flex">
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                  <input class="form-check-input" type="checkbox" name="getstatus" value="1" />
+                                  <span class="form-check-label">Disruption</span>
+                                </label>
+                                <!--end::Options-->
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                  <input class="form-check-input" type="checkbox" name="getstatus" value="2" />
+                                  <span class="form-check-label">Degradation</span>
+                                </label>
+                                <!--end::Options-->
+                              </div>
+                              <!--end::Options-->
+                            </div>
+                            <!--end::Input group-->
+                            <!--begin::Input group-->
+                            <div class="mb-10">
+                              <!--begin::Label-->
+                              <label class="form-label fw-bold">Tenant Role:</label>
+                              <!--end::Label-->
+                              <!--begin::Switch-->
+                              <div class="d-flex">
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                  <input class="form-check-input" type="checkbox" value="1" />
+                                  <span class="form-check-label">Production</span>
+                                </label>
+                                <!--end::Options-->
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                  <input class="form-check-input" type="checkbox" value="2" checked="checked" />
+                                  <span class="form-check-label">Non-Production</span>
+                                </label>
+                                <!--end::Options-->
+                              </div>
+                              <!--end::Switch-->
+                            </div>
+                            <div class="mb-10">
+                              <!--begin::Label-->
+                              <label class="form-label fw-bold">SLA & SLO</label>
+                              <!--end::Label-->
+                              <!--begin::Switch-->
+                              <div class="d-flex">
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                  <input class="form-check-input" type="checkbox" value="1" />
+                                  <span class="form-check-label">SLO</span>
+                                </label>
+                                <!--end::Options-->
+                                <!--begin::Options-->
+                                <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                  <input class="form-check-input" type="checkbox" value="2" checked="checked" />
+                                  <span class="form-check-label">SLA</span>
+                                </label>
+                                <!--end::Options-->
+                              </div>
+                              <!--end::Switch-->
+                            </div>
+                      </div>
+
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="card-footer">
+          <button type="button" style="margin-right: 30px;" class="btn btn-light" id="m_reset">Reset</button>
+          <button type="button" class="btn btn-primary float-right" id="search">Search</button>
+      </div>
+  </div>
+</div>
+<!--end::search draw-->
+
+
+      <!--begin::table setting draw-->
+<div id="kt_drawer_example_basic" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_basic_button" data-kt-drawer-close="#kt_drawer_example_basic_close" data-kt-drawer-width="500px">
+    
+  <!--begin: toggle column -->
+  <div class="kt-portlet__body">
+      <div class="card card-flush">
+          <div class="card-header">
+              <h3 class="card-title">Table Column Toggle</h3>
+          </div>
+          <div class="card-body py-5">
+              <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+            
+              </div>
+          </div>
+      </div>
+      
+  </div>
+  <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+      <!--end::body-->
+{% endblock %}
+
+{% block js_block %}
+<!-- PAGE SPECIFIC JAVASCRIPT -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}"></script>
+<script src="{% static "assets/js/pages/system_js_functions/excel_download.js"%}" type="text/javascript"></script>
+<!-- <script src="{% static "assets/js/pages/system_js_functions/datatable_initiate.js"%}" type="text/javascript"></script> -->
+
+<script>
+  $("#kt_daterangepicker_2").daterangepicker({
+      opens: 'right',
+      timePicker: false,
+      startDate: moment().startOf("hour"),
+      endDate: moment().startOf("hour").add(32, "hour"),
+      locale: {
+          format: "YYYY-MM-DD hh:mm A"
+      },
+      autoApply: true,
+  });
+  </script>
+
+
+<script>
+
+function generate_toggle_pill(){
+
+var toggle_pill = ""
+
+$('.table_header th').each(function (index) { 
+ 
+   var is_show = $(this).attr('is_show')
+   
+   var column_name = $(this).text()
+    
+   if (is_show=="false"){
+
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-primary font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-plus fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+    else
+    {
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-danger font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-times fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+
+});
+
+$("#toggle_pill").html(toggle_pill)
+};
+
+$(document).on('click', '.btn-pill', function (e) {
+            e.preventDefault();
+    
+            var column = table.column( $(this).attr('data-column') );
+    
+                    $(this).children('i').toggleClass("fa-times fa-plus")
+    
+                    $(this).toggleClass("btn-light-danger btn-light-primary");
+    
+            column.visible( ! column.visible() );
+        } );
+
+$( "#search" ).click(function() {
+  var content = $('#kt_daterangepicker_2').data('daterangepicker').startDate;
+  var enddate = $('#kt_daterangepicker_2').data('daterangepicker').endDate;
+  var DateTimeRange = content +'-'+ enddate
+  // var DateTimeRange = []
+  // DateTimeRange.push(DateTimeValue)
+  // var Service_Status = document.getElementsByName('getstatus');
+  // var a = []
+  // for (var checkbox of Service_Status) {
+  //   if (checkbox.checked)
+  //   a.push(checkbox.value);
+  // }
+  // DateTimeRange.push(a)
+
+  generate_toggle_pill();
+
+  $.ajax({
+    url : "/event/rca/api/" +DateTimeRange,
+    dataType : "json",
+    type : "GET",
+    success: function(data) {
+      console.log(data)
+        var table = $('#kt_datatable_example_1').DataTable({
+              data : data,
+
+              "scrollX": true,
+
+              destroy: true,
+
+			        deferRender: true,
+
+              colReorder: true,
+              
+              language: {'lengthMenu': 'Display _MENU_',},
+
+		        	searchDelay: 500,
+
+			        processing: true,
+
+
+			        lengthMenu: [5, 10, 15, 20, 50, 100, 200, 300, 500, 1000, 2000, 3000, 4000, 5000, 6000, 7000, 8000, 9000, 10000, 11000, 12000, 13000, 14000, 15000],
+
+			        pageLength: 15,
+              
+              columns: [
+              {'data' :'EventID',
+                'render': function (EventID){
+                  return '<a class="kt-link " href="https://spc.ondemand.com/open?evt='+EventID+'" target="_blank">' + EventID + '</a>';
+                }
+            },
+              { 'data' :'BundleID'},
+              { 'data' :'CreationDateTime',
+              'render': 
+              function (CreationDateTime) {
+                  if(!CreationDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(CreationDateTime.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+            },
+              {'data' :'TenantID'},
+              {'data' :'CustomerID'},
+              {'data' :'SystemRole'},
+              { 'data' :'ServiceStatus',
+              'render': function (ServiceStatus){
+                if(ServiceStatus == '1'){
+                    return '<span class="badge badge-secondary">' + 'Degradation' + '</span>';
+                }
+                else if(ServiceStatus == '2'){
+                  return '<span class="badge badge-primary">' + 'Disruption' + '</span>';
+                }
+                else{
+                  return 'None';
+                }
+            }},
+              { 'data' :'DataCenter'},
+              { 'data' :'StartDate',
+            'render': function (StartDate) {
+                  if(!StartDate){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(StartDate.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+                //   var dateobj = new Date(formattedDate);
+                //   var B = dateobj.toISOString();
+                  
+                //   function add_bus_days(date, busDays) { // add business days to a date
+                // var wkdy = date.getDay(); // get weekday number
+                // var addDays = wkdy >= 3 ? (busDays + 2) : busDays; // if it's wednesday or later set add days to 5 instead of 3 to account for the weekend
+                // date.setDate(date.getDate() + addDays); // add days to current date
+                // return date
+                //   }
+                // // usage
+                // var dt = B; // get date
+                // newDate = add_bus_days(dt, 3) // add 3 business days
+
+                  return formattedDate;
+                  }
+                  
+               }
+          },
+          { 'data' :'StartDate',
+            'render': function (StartDate) {
+                  if(!StartDate){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(StartDate.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  return formattedDate;
+                  }
+                  
+                }
+          },
+          { 'data' :'CurrentTemplateName',
+            'render': function (CurrentTemplateName){
+            {
+              if( CurrentTemplateName == 'Downtime_Notifications')
+                  {
+                    return '<span class="badge badge-light-success">' + CurrentTemplateName + '</span>';
+                  }
+                  else if(CurrentTemplateName == 'Downtime_notifications_RootCause')
+                  {
+                    return '<span class="badge badge-light-success">RCA Completed</span>';
+
+                  }
+                  else if(CurrentTemplateName == 'Solution_Notifications' || CurrentTemplateName == 'Downtime_Notification_Init_Resol')
+                  {
+                    return '<span class="badge badge-danger">Trigger Intermediate RCA</span>';
+
+                  }
+                  else if(CurrentTemplateName == 'Intermediate_RCA')
+                  {
+                    return '<span class="badge badge-warning">Trigger Final RCA</span>';
+
+                  }
+                { 
+                    return '<span class="badge badge-danger">' + CurrentTemplateName + '</span>';
+                  }
+              }
+            }
+          },{ 'data' :'Status',
+          'render': function (Status){
+            if(Status == '01'){
+              return 'Awaiting Approval';
+            }
+            else if(Status == '02'){
+              return 'In Process';
+            }
+            else if(Status == '03'){
+              return 'Closed';
+            }
+            else if(Status == '04'){
+              return 'Rejected';
+            }
+            else if(Status == '05'){
+              return 'Cancelled';
+            }
+            else if(Status == '06'){
+              return 'Scheduled';
+            }
+            else{
+              return Status;
+            }
+          }
+          },
+          { 'data' :'JiraTicket'},
+              { 'data' :'TenantRole',
+                'render': function (TenantRole){
+                  if(TenantRole == '01'){
+                      return 'Administration';
+                  }
+                  else if(TenantRole == '02'){
+                    return 'Template';
+                  }
+                  else if(TenantRole == '03'){
+                    return 'Stock';
+                  }
+                  else if(TenantRole == '04'){
+                    return 'Production';
+                  }
+                  else if(TenantRole == '05'){
+                    return 'Reference';
+                  }
+                  else if(TenantRole == '06'){
+                    return 'Development';
+                  }
+                  else if(TenantRole == '07'){
+                    return 'Test';
+                  }
+                  else if(TenantRole == '08'){
+                    return 'Partner Development';
+                  }
+                  else if(TenantRole == '11'){
+                    return 'Technical';
+                  }
+                  else{
+                    return 'N/A';
+                  }
+                }
+            },
+              
+              { 'data' :'CurrentTemplateName',
+                'render' : function(CurrentTemplateName){
+                  if( CurrentTemplateName == 'Downtime_Notifications')
+                  {
+                    return '<span class="badge badge-light-success">' + CurrentTemplateName + '</span>';
+                  }
+                  else if(CurrentTemplateName == 'Downtime_notifications_RootCause')
+                  {
+                    return '<span class="badge badge-light-success">Final RCA</span>';
+
+                  }
+
+                  else if(CurrentTemplateName == 'Solution_Notifications' || CurrentTemplateName == 'Downtime_Notification_Init_Resol')
+                  {
+                    return '<span class="badge badge-danger">' + CurrentTemplateName + '</span>';
+
+                  }
+                  else if(CurrentTemplateName == 'Intermediate_RCA')
+                  {
+                    return '<span class="badge badge-warning">' + CurrentTemplateName + '</span>';
+
+                  }
+
+                  else{ 
+                    return '<span class="badge badge-danger">' + CurrentTemplateName + '</span>';
+                  }
+                  }
+            },
+            
+              { 'data' :'CreatedBy'},
+              { 
+                'data' :'StartDateTime',
+                'render': function (StartDateTime) {
+                  if(!StartDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(StartDateTime.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+              },
+              { 'data' :'EndDateTime',
+                 'render': function (EndDateTime) {
+                  if(!EndDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(EndDateTime.substr(6)));
+                    var month = date.getMonth() + 1;
+                    var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+            },
+             { 'data':'EventName'},
+              
+              { 'data' :'EndDate',
+              'render': function (EndDate) {
+                  if(!EndDate){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(EndDate.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  // var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  // var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  // var formattedTime = hours + ":" + minutes;
+
+                  // formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+            },
+              { 'data' :'EndTime'},
+              
+              { 'data' :'NTDBEmailStatus'},
+              { 'data' :'Phase',
+                'render': function (Phase) {
+                  if(Phase == '1'){
+              return 'Identification';
+            }
+            else if(Phase == '2'){
+              return 'Isolation';
+            }
+            else if(Phase == '3'){
+              return 'Resolution';
+            }
+            else if(Phase == '4'){
+              return 'Root Cause';
+            }
+            else if(Phase == '5'){
+              return 'Release Announcement';
+            }
+            else if(Phase == '6'){
+              return 'Release Delay';
+            }
+            else if(Phase == '7'){
+              return 'Release Delay Completed';
+            }
+            else if(Phase == '8'){
+              return 'Release Confirmation';
+            }
+            else if(Phase == '9'){
+              return 'Scheduled Maintenance';
+            }
+            else if(Phase == '10'){
+              return 'Unscheduled Maintenance';
+            }
+            else if(Phase == '11'){
+              return 'SPC Downtime Announcement';
+            }
+            else if(Phase == '12'){
+              return 'SPC Downtime Start';
+            }
+            else if(Phase == '13'){
+              return 'SPC Downtime End';
+            }
+            else if(Phase == '14'){
+              return 'SPC Uptime Start';
+            }
+            else if(Phase == '15'){
+              return 'SPC Uptime End';
+            }
+            else if(Phase == '16'){
+              return 'Deployment Triggered';
+            }
+            else if(Phase == '17'){
+              return 'Deployment In Progress';
+            }
+            else if(Phase == '18'){
+              return 'Deployment Completed';
+            }
+            else if(Phase == '19'){
+              return 'Intermediate Root Cause';
+            }
+            else if(Phase == '20'){
+              return 'Maintenance Announcement';
+            }
+            else if(Phase == '21'){
+              return 'Maintenance Completed';
+            }
+            else if(Phase == '22'){
+              return 'Maintenance Cancelled';
+            }
+            else if(Phase == '23'){
+              return 'Under Investigation';
+            }
+            else{
+              return Phase;
+            }
+
+
+                }
+            },
+              { 'data' :'StartDate'
+              ,
+              'render': function (StartDate) {
+                  if(!StartDate){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(StartDate.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  // var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  // var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  // var formattedTime = hours + ":" + minutes;
+
+                  // formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+              },
+              { 'data' :'StartTime'},
+              { 'data' :'TestMode'},
+              { 'data' :'NotificationType',
+                'render':function (NotificationType) {
+                  if(NotificationType == '1'){
+              return 'Unplanned Event';
+            }
+            else if(NotificationType == '2'){
+              return 'Planned Event';
+            } 
+            else if(NotificationType == '3'){
+              return 'Customer Communication';
+            } 
+            else if(NotificationType == '4'){
+              return 'Free Style Communication';
+            } 
+            else if(NotificationType == '5'){
+              return 'Next-Generation Cloud Delivery Transition (One Strike)';
+            } 
+            else {
+              return NotificationType;
+            }
+                }
+            },
+              { 'data' :'IsSLARelevant'}
+              ]
+            });
+          }
+  })
+  
+
+});
+</script>
+
+
+<!-- ####################################################################### -->
+<script>
+   am5.ready(function() {
+
+// Create root element
+// https://www.amcharts.com/docs/v5/getting-started/#Root_element
+var root = am5.Root.new("chartdiv");
+
+
+// Set themes
+// https://www.amcharts.com/docs/v5/concepts/themes/
+root.setThemes([
+  am5themes_Animated.new(root)
+]);
+
+
+// Create chart
+// https://www.amcharts.com/docs/v5/charts/xy-chart/
+var chart = root.container.children.push(am5xy.XYChart.new(root, {
+  panX: false,
+  panY: false,
+  wheelX: "panX",
+  wheelY: "zoomX",
+  layout: root.verticalLayout
+}));
+
+
+// Add legend
+// https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+var legend = chart.children.push(am5.Legend.new(root, {
+  centerX: am5.p50,
+  x: am5.p50
+}));
+
+var data = [{
+  "year": "Jan",
+  "europe": 2.5,
+  "namerica": 2.5,
+  "asia": 2.1,
+  "lamerica": 1,
+  "meast": 0.8,
+  "africa": 0.4
+  // "Month": "Jan",
+  // "SLA Met": 2.5,
+  // "SLA Not Met": 2.5,
+  // "RCA not triggered in SLA": 2.1,
+  // "RCA not triggered outside SLA": 1,
+}, {
+  "year": "Feb",
+  "europe": 2.6,
+  "namerica": 2.7,
+  "asia": 2.2,
+  "lamerica": 0.5,
+  "meast": 0.4,
+  "africa": 0.3
+}, {
+  "year": "March",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "April",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "May",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "June",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "July",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "August",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "September",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "October",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "November",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+},
+{
+  "year": "December",
+  "europe": 2.8,
+  "namerica": 2.9,
+  "asia": 2.4,
+  "lamerica": 0.3,
+  "meast": 0.9,
+  "africa": 0.5
+}];
+
+
+// Create axes
+// https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+var xAxis = chart.xAxes.push(am5xy.CategoryAxis.new(root, {
+  categoryField: "year",
+  renderer: am5xy.AxisRendererX.new(root, {
+    cellStartLocation: 0.1,
+    cellEndLocation: 0.9
+  }),
+  tooltip: am5.Tooltip.new(root, {})
+}));
+
+xAxis.data.setAll(data);
+
+var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
+  min: 0,
+  renderer: am5xy.AxisRendererY.new(root, {})
+}));
+
+
+// Add series
+// https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+function makeSeries(name, fieldName, stacked) {
+  var series = chart.series.push(am5xy.ColumnSeries.new(root, {
+    stacked: stacked,
+    name: name,
+    xAxis: xAxis,
+    yAxis: yAxis,
+    valueYField: fieldName,
+    categoryXField: "year"
+  }));
+
+  series.columns.template.setAll({
+    tooltipText: "{name}, {categoryX}:{valueY}",
+    width: am5.percent(90),
+    tooltipY: am5.percent(10)
+  });
+  series.data.setAll(data);
+
+  // Make stuff animate on load
+  // https://www.amcharts.com/docs/v5/concepts/animations/
+  series.appear();
+
+  series.bullets.push(function () {
+    return am5.Bullet.new(root, {
+      locationY: 0.5,
+      sprite: am5.Label.new(root, {
+        text: "{valueY}",
+        fill: root.interfaceColors.get("alternativeText"),
+        centerY: am5.percent(50),
+        centerX: am5.percent(50),
+        populateText: true
+      })
+    });
+  });
+
+  legend.data.push(series);
+}
+
+makeSeries("Europe", "europe", false);
+makeSeries("North America", "namerica", true);
+makeSeries("Asia", "asia", false);
+makeSeries("Latin America", "lamerica", true);
+makeSeries("Middle East", "meast", true);
+makeSeries("Africa", "africa", true);
+
+
+// Make stuff animate on load
+// https://www.amcharts.com/docs/v5/concepts/animations/
+chart.appear(1000, 100);
+
+}); // end am5.ready()
+    </script>
+
+{% endblock %}

@@ -1,0 +1,208 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+
+<link href="{% static "assets/css/pages/roster/admin/shifts.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+    <!--begin::Button-->
+    <a href="#" id="prev_btn" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary me-3 ps-3"><i class="las la-chevron-left fs-4 me-2"></i>Previous</a>
+    <!--end::Button-->
+
+    <p id="shift_month_lbl" class="lead me-3 mt-5 fw-bolder text-gray-700"></p>
+    
+    <!--begin::Button-->
+    <a href="#" id="next_btn" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary me-3 pe-3">Next<i class="las la-chevron-right fs-4 ms-2"></i></a>
+    <!--end::Button-->
+{% endblock %}
+
+{% block subheader-button %}
+
+    <div class="col-4 me-3"> 
+        <select id="select_wand" class="form-select form-select-sm form-select-solid text-dark fw-bold" data-control="select2" data-placeholder="Select an option" data-hide-search="true">
+            <option value="null">Edit Wand</option>     
+        </select>
+    </div>
+
+    <a href="#" id="init_finalize_shift_btn" class="btn btn-sm btn-success me-3 fw-bolder" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app">Finalize</a>
+
+    <div class="me-3">
+        <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal" data-bs-target="#model_filter">
+        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
+            </svg>
+        </span>Filter</a>
+    </div>
+
+    <button class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="popover" data-bs-trigger="focus" data-bs-html="true" title="Actions" data-bs-content='<a href="#" id="lock_shift_btn" class="btn btn-sm btn-primary me-3 ps-3"><i class="bi bi-lock-fill fs-4"></i>Lock</a><a href="#" id="unlock_shift_btn" class="btn btn-sm btn-primary me-2 ps-3"><i class="bi bi-unlock-fill fs-4"></i>Unlock</a>'>
+        Actions
+    </button>
+
+{% endblock %}
+
+{% block body %}
+
+<div class="row align-center" id="loading_div">
+	<div class="d-flex justify-content-center">
+		<img src="{% static "assets/media/loading_icon/calander.gif"%}" alt="funny GIF" class="h-350px w-350px">
+	</div>
+    <div class="d-flex justify-content-center mt-0">
+		<blockquote class="blockquote">
+			<p class="lead text-primary"><cite id="check_status_title" title="Checking status">Loading ...</cite></p>
+		</blockquote>
+	</div>
+</div>
+
+
+
+<div class="hover-scroll" id="shift_table_div" style="border:dashed #6c757d 1px;border-radius:6px;max-height: 640px;">
+    
+</div>
+
+<!--begin::Accordion-->
+<div class="accordion mt-5" id="kt_accordion_1">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="kt_accordion_1_header_2">
+            <button class="accordion-button btn btn-sm btn-outline btn-outline-dashed fs-4 fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_2" aria-expanded="false" aria-controls="kt_accordion_1_body_2">
+            Shift Summary
+            </button>
+        </h2>
+        <div id="kt_accordion_1_body_2" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_2" data-bs-parent="#kt_accordion_1">
+            <div class="hover-scroll pe-1" id="shift_table_count_div" style="border-right:dashed #6c757d 1px;border-left:dashed #6c757d 1px;border-bottom:dashed #6c757d 1px;border-radius:6px;max-height: 479px; width:99.95%;">
+    
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Accordion-->
+
+
+<div class="modal fade" tabindex="-1" id="model_member_info">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div id="member_shift_info_container">
+                <div class="modal-header">
+                    <div class="d-flex align-items-center flex-grow-1">
+                        <div class="symbol symbol-45px me-5">
+                            <img id="member_pic_src" src="" alt="" />
+                        </div>
+                        <div class="d-flex flex-column">
+                            <a href="#" class="text-gray-900 text-hover-primary fs-6 fw-bolder" id="member_name_lbl"></a>
+                            <span class="text-gray-400 fw-bold" id="member_work_group"></span>
+                        </div>
+                    </div>
+                    <div class="card-toolbar">
+                        <button type="button" class="btn btn-sm btn-light">
+                            Preferred Shift : <span class="text-dark" id="shift_pref_lbl"></span>
+                        </button>
+                        <button type="button" class="btn btn-sm btn-light">
+                            Preferred Weekoff : <span class="text-dark" id="pref_weekoff_lbl"></span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-3 me-10" style="border:dashed #6c757d 1px;border-radius:10px;">
+                            <table class="table table-row-dashed table-row-gray-600 gt-5 gb-5">
+                                <thead>
+                                    <tr style="text-align: center;">
+                                        <th>Planned Leaves</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="text-gray-600 fw-6" style="text-align: center;" id="planned_leave_div">
+                                    
+                                </tbody>
+                            </table>     
+                        </div>
+                        <div class="col-6">
+                            <p>Last Month Shift Plan:
+                            <div style="border:dashed #6c757d 1px;border-radius:10px;height:93px;">
+                                <table class="table table-row-dashed table-row-gray-600 gt-5 gb-5 table_history">
+                                    <thead class="text-start fw-bolder text-gray-900 fw-bolder text-uppercase gs-0">
+                                        <tr id="lshift_day_date">
+                                            
+                                        </tr>    
+                                    </thead>
+                                    <tbody class="text-gray-600 fw-bolder">
+                                        <tr id="lshift_day_shift">
+                                            
+                                        </tr>   
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!--begin::Text-->
+                            <div class="mt-20">
+                            <h6>Comment:</h6>
+                            <div class="p-5 rounded bg-light-info text-dark fw-bold mw-lg-400px text-start" data-kt-element="message-text" id="member_cmd_lbl"></div>
+                            </div>
+                            <!--end::Text-->
+                        </div>          
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_filter">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="mb-10">
+                    <label class="form-label fw-bold">Group:</label>
+                    <div>
+                        <select id="group_dropdown_btn" class="form-select form-select-lg form-select-solid" data-control="select2" data-placeholder="Select Work Group" data-allow-clear="false" multiple="multiple" data-col-index="3">
+                            
+                        </select>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="reset" id="reset_filter_btn" class="btn btn-sm btn-light btn-active-light-primary me-2" data-kt-menu-dismiss="true">Reset</button>
+                <button type="submit" id="apply_filter_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_actions">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body d-flex align-content-center flex-wrap justify-content-center">
+
+                <div class="mb-10">
+                    <a href="#" class="btn btn-sm btn-primary me-3 ps-3">Lock Shift</a>
+
+                    <a href="#" class="btn btn-sm btn-primary me-3 ps-3">Unlock Shift</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}
+
+{% block js_block %}
+<script src="{% static "assets/js/common_functions.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/csrfsafe.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_dom.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/admin/wand_click.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/admin/get_user_info.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/admin/finalize_shift.js"%}"></script>
+{% endblock %}

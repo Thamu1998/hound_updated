@@ -1,0 +1,194 @@
+{%  extends 'base.html' %}
+{% load tags %}
+{% load static %}
+
+{% block css_block %}
+
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+
+{% endblock %}
+
+{% block body %}
+<!--begin::Row-->
+<div class="row g-5 g-xl-10 mb-xl-10">
+    <input class="form-control form-control-solid ps-15" hidden placeholder="Pick date rage" id="kt_daterangepicker_end_date" />
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-0">
+        <div id="kt_sliders_widget_2_slider" class="card card-flush carousel carousel-custom carousel-stretch slide mb-8" data-bs-ride="carousel" data-bs-interval="7500" style="height:285px">
+            <div class="card-header pt-5">
+                <h4 class="card-title d-flex align-items-start flex-column">
+                    <span class="card-label fw-bold text-gray-800">Availability Report</span>
+                    <span class="text-gray-400 mt-1 fw-bold fs-7">Yesterday</span>
+                </h4>
+                <div class="card-toolbar">
+                    <ol class="p-0 m-0 carousel-indicators carousel-indicators-bullet carousel-indicators-active-success">
+                        <li data-bs-target="#kt_sliders_widget_2_slider" data-bs-slide-to="0" class="active ms-1"></li>
+                        <li data-bs-target="#kt_sliders_widget_2_slider" data-bs-slide-to="1" class="ms-1"></li>
+                    </ol>
+                </div>
+            </div>
+            <div class="card-body pt-6">
+                <div class="carousel-inner">
+                    <div class="carousel-item active show">
+                        <div class="d-flex align-items-center mb-13">
+                            <div class="symbol symbol-100px symbol-circle me-5">
+                                <span class="symbol-label bg-light-danger">
+                                    <span class="svg-icon svg-icon-3x svg-icon-success fw-bolder">
+                                        <span id="prod_availablity_precentage" class="fs-2 fw-bolder text-gray-400"></span>&nbsp;<i class="bi bi-percent fs-2 fw-bolder"></i>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="m-0">
+                                <h4 class="fw-bold text-gray-800 mb-5">Production</h4>
+
+                                <div class="d-flex d-grid gap-5">
+
+                                    <div class="d-flex flex-column flex-shrink-0 me-0">
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7 mb-10">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Systems&nbsp;
+                                            <span id="prod_system_count" class="badge badge-primary"></span>
+                                        </span>
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Systems down&nbsp;
+                                            <span id="prod_down_system_count" class="badge badge-primary"></span>
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-shrink-0">
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Minutes Down&nbsp;
+                                            <span id="prod_minutes_down_count" class="badge badge-primary">12321</span>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="prod_view_btn" class="mb-1"></div>
+                    </div>
+
+                    <div class="carousel-item">
+                        <div class="d-flex align-items-center mb-13">
+                            <div class="symbol symbol-100px symbol-circle me-5">
+                                <span class="symbol-label bg-light-danger">
+                                    <span class="svg-icon svg-icon-3x svg-icon-success fw-bolder">
+                                        <span id="non_prod_availablity_precentage" class="fs-2 fw-bolder text-gray-400"></span>&nbsp;<i class="bi bi-percent fs-2 fw-bolder"></i>
+                                    </span>
+                                </span>
+                            </div>
+
+                            <div class="m-0">
+                                <h4 class="fw-bold text-gray-800 mb-5">Non-Production</h4>
+                                <div class="d-flex d-grid gap-5">
+
+                                    <div class="d-flex flex-column flex-shrink-0 me-0">
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7 mb-10">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Systems&nbsp;
+                                            <span id="non_prod_system_count" class="badge badge-primary">890</span>
+                                        </span>
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Systems down&nbsp;
+                                            <span id="non_prod_down_system_count" class="badge badge-primary">890</span>
+                                        </span>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-shrink-0">
+                                        <span class="d-flex align-items-center text-gray-600 fw-bold fs-7">
+                                            <span class="svg-icon svg-icon-6 svg-icon-gray-600 me-2">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                                    <rect opacity="0.3" x="2" y="2" width="20" height="20" rx="5" fill="currentColor" />
+                                                    <path d="M11.9343 12.5657L9.53696 14.963C9.22669 15.2733 9.18488 15.7619 9.43792 16.1204C9.7616 16.5789 10.4211 16.6334 10.8156 16.2342L14.3054 12.7029C14.6903 12.3134 14.6903 11.6866 14.3054 11.2971L10.8156 7.76582C10.4211 7.3666 9.7616 7.42107 9.43792 7.87962C9.18488 8.23809 9.22669 8.72669 9.53696 9.03696L11.9343 11.4343C12.2467 11.7467 12.2467 12.2533 11.9343 12.5657Z" fill="currentColor" />
+                                                </svg>
+                                            </span>
+                                            Minutes Down&nbsp;
+                                            <span id="non_prod_minutes_down_count" class="badge badge-primary">12321</span>
+                                        </span>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+                        <div id="non_prod_view_btn" class="mb-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card card-flush bgi-no-repeat bgi-size-contain bgi-position-x-end bg-p" style="height:285px;background-color: #F1416C;background-image:url('/static/assets/media/svg/shapes/wave-bg-red.svg')">
+            
+            <div class="card-header pt-5">
+                <div class="d-flex flex-center rounded-circle h-80px w-80px" style="border: 1px dashed rgba(255, 255, 255, 0.4);background-color: #F1416C">
+                    <i class="bi bi-back text-white fs-2qx lh-0"></i>
+                </div>
+            </div>
+            
+            <div class="card-body d-flex align-items-end mb-3">
+                <div class="d-flex align-items-center">
+                    <span data-kt-countup="true" data-kt-countup-value="{{count|open_events_count}}" class="fs-4hx text-white fw-bold me-10">{{dsfdsf|open_events_count}}</span>
+                    <a href="{{'url'|open_events_count}}" class="fw-bolder fs-2 text-white">
+                        <span class="d-block">Open</span>
+                        <span class="">Events</span>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="col-lg-6 col-xl-6 col-xxl-4 mb-md-5 mb-xl-0" id="availablity_chart">
+    </div> 
+
+</div>
+<!--end::Row-->
+
+{% endblock %}
+
+{% block js_block %}
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/percent.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="{% static "assets/js/widgets.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/daily_availability/dashboard.js"%}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,128 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/css/pages/roster/shifts.css"%}" rel="stylesheet" type="text/css" />
+<link  href="{% static "assets/plugins/custom/jkanban/jkanban.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+<select id="team_dropdown_btn" class="form-select form-select-sm form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Team" data-allow-clear="false" data-col-index="3"></select>
+{% endblock %}
+
+{% block subheader-button %}
+
+<div class="me-3">
+    <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal" data-bs-target="#model_shift_status">Update Shift Status</a>
+</div>
+
+<div class="me-3">
+    <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal" data-bs-target="#model_apply_leave">Update Leave</a>
+</div>
+
+{% endblock %}
+
+{% block body %}
+<div id="holiday_info_div"></div>
+
+<div class="row" id="data_div"></div>
+
+<div class="modal fade" tabindex="-1" id="model_avitity">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title" id="shift_model_title">Model</h3>
+            </div>
+            <div class="modal-body">
+
+                <div id="kt_docs_jkanban_rich"></div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_shift_status">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body"> 
+
+                <div class="form-floating mb-7">
+                    <select class="form-select form-select-solid" data-dropdown-parent="#model_shift_status" placeholder="Select an option" data-placeholder="Select Member" id="user_shift_status_list_dropdown">
+                        <option></option>
+                            {%for usr in user_list%}
+                                <option value="{{usr.username}}">{{usr.username}} - {{usr.name}}</option>
+                            {%endfor%}
+                    </select>
+                </div>
+
+                <!--begin::Input-->
+                <div class="flex-grow-1">
+                    <select id="shift_status_dropdown" class="form-select form-select-solid mb-5" aria-label="Select example" data-placeholder="Select Status" data-dropdown-parent="#model_shift_status" data-control="select2" data-allow-clear="false">
+                        <option></option>
+                    </select>
+                </div>
+                <!--end::Input-->
+
+                <div class="mb-0">
+                    <input class="form-control form-control-solid" placeholder="Pick a Date" id="kt_shift_status_date"/>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" id="update_shift_status_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_apply_leave">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="form-floating mb-7">
+                    <select class="form-select form-select-solid" data-dropdown-parent="#model_apply_leave" placeholder="Select an option" data-placeholder="Select Member" id="user_list_dropdown">
+                        <option></option>
+                            {%for usr in user_list%}
+                                <option value="{{usr.username}}">{{usr.username}} - {{usr.name}}</option>
+                            {%endfor%}
+                    </select>
+                </div>
+
+                <!--begin::Input-->
+                <div class="flex-grow-1">
+                    <select id="leave_dropdown" class="form-select form-select-solid mb-5" aria-label="Select example" data-placeholder="Select Leave" data-dropdown-parent="#model_apply_leave" data-control="select2" data-allow-clear="false">
+                        <option></option>
+                    </select>
+                </div>
+                <!--end::Input-->
+
+                <div class="mb-0">
+                    <input class="form-control form-control-solid" placeholder="Pick a Leave date" id="kt_leave_data"/>
+                </div>
+
+            </div>
+
+            <div class="modal-footer">
+                <button type="submit" id="update_leave_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Update</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block js_block %}
+<script src="{% static "assets/plugins/custom/jkanban/jkanban.bundle.js"%}"></script>
+<script type="text/javascript">
+    var current_user_team = "{{user.team.code}}"
+</script>
+<script src="{% static "assets/js/pages/roster/shift_dom.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/daily_shift.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/kanban_activity.js"%}"></script>
+{% endblock %}

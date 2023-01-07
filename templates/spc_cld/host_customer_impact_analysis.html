@@ -1,0 +1,168 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/css/pages/spc_cld/customer_impact.css"%}" rel="stylesheet" type="text/css" />
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+{% endblock %}
+
+{% block subheader-button %}
+<!--begin::Button-->
+<a href="#" id="customise_btn" class="btn btn-sm btn-primary me-3" data-bs-toggle="modal" data-bs-target="#kt_model_customise"><i class="bi bi-funnel-fill fs-4 me-2"></i>Customise</a>
+<!--end::Button-->
+{% endblock %}
+
+{% block body %}
+
+<div>
+
+    <input type="text" id="host_name_search" class="form-control form-control-lg form-control-solid px-15 input-border-color" 
+        name="HostNames"
+        value="{{ host_names }}"
+        placeholder="Search by Host Name"/>
+    
+    <span id="search_icon" class="position-absolute span-search">
+        <i class="bi bi-search search_icon i-search"></i>
+    </span>
+
+</div>
+
+<div class="col-xl-12 order-1 d-flex flex-row-auto mt-10 cards-div">
+    <div class="card bg-primary hoverable card-xl-stretch mb-xl-8 cards">
+        <div class="card-body">
+            <span class="svg-icon svg-icon-gray-100 svg-icon-3x ms-n1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-boxes" viewBox="0 0 16 16">
+                    <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+                </svg>
+            </span>
+            <div id="impacted_systems" class="text-gray-100 fw-bolder fs-2 mb-2 mt-5">0</div>
+            <div class="fw-bold text-gray-100 fw-bolder fs-6">No. Impacted Systems</div>
+        </div>
+    </div>
+
+    <div class="card white hoverable card-xl-stretch mb-xl-8 cards">
+        <div class="card-body">
+            <span class="svg-icon svg-icon-gray-100 svg-icon-3x ms-n1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-building" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M14.763.075A.5.5 0 0 1 15 .5v15a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5V14h-1v1.5a.5.5 0 0 1-.5.5h-9a.5.5 0 0 1-.5-.5V10a.5.5 0 0 1 .342-.474L6 7.64V4.5a.5.5 0 0 1 .276-.447l8-4a.5.5 0 0 1 .487.022zM6 8.694 1 10.36V15h5V8.694zM7 15h2v-1.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 1 .5.5V15h2V1.309l-7 3.5V15z"/>
+                    <path d="M2 11h1v1H2v-1zm2 0h1v1H4v-1zm-2 2h1v1H2v-1zm2 0h1v1H4v-1zm4-4h1v1H8V9zm2 0h1v1h-1V9zm-2 2h1v1H8v-1zm2 0h1v1h-1v-1zm2-2h1v1h-1V9zm0 2h1v1h-1v-1zM8 7h1v1H8V7zm2 0h1v1h-1V7zm2 0h1v1h-1V7zM8 5h1v1H8V5zm2 0h1v1h-1V5zm2 0h1v1h-1V5zm0-2h1v1h-1V3z"/>
+                </svg>
+            </span>
+            <div id="impacted_business_types" class="text-black-100 fw-bolder fs-2 mb-2 mt-5">-</div>
+            <div class="fw-bold text-black-100 fw-bolder fs-6">Business Types involved</div>
+        </div>
+    </div>
+
+    <div class="card bg-primary hoverable card-xl-stretch mb-xl-8 cards">
+        <div class="card-body">
+            <span class="svg-icon svg-icon-gray-100 svg-icon-3x ms-n1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-boxes" viewBox="0 0 16 16">
+                    <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+                </svg>
+            </span>
+            <div id="non_impacted_systems" class="text-gray-100 fw-bolder fs-2 mb-2 mt-5">0</div>
+            <div class="fw-bold text-gray-100 fw-bolder fs-6">No. Non-Impacted Systems</div>
+        </div>
+    </div>
+
+    <div class="card white hoverable card-xl-stretch mb-xl-8 cards">
+        <div class="card-body">
+            <span class="svg-icon svg-icon-gray-100 svg-icon-3x ms-n1">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-boxes" viewBox="0 0 16 16">
+                    <path d="M7.752.066a.5.5 0 0 1 .496 0l3.75 2.143a.5.5 0 0 1 .252.434v3.995l3.498 2A.5.5 0 0 1 16 9.07v4.286a.5.5 0 0 1-.252.434l-3.75 2.143a.5.5 0 0 1-.496 0l-3.502-2-3.502 2.001a.5.5 0 0 1-.496 0l-3.75-2.143A.5.5 0 0 1 0 13.357V9.071a.5.5 0 0 1 .252-.434L3.75 6.638V2.643a.5.5 0 0 1 .252-.434L7.752.066ZM4.25 7.504 1.508 9.071l2.742 1.567 2.742-1.567L4.25 7.504ZM7.5 9.933l-2.75 1.571v3.134l2.75-1.571V9.933Zm1 3.134 2.75 1.571v-3.134L8.5 9.933v3.134Zm.508-3.996 2.742 1.567 2.742-1.567-2.742-1.567-2.742 1.567Zm2.242-2.433V3.504L8.5 5.076V8.21l2.75-1.572ZM7.5 8.21V5.076L4.75 3.504v3.134L7.5 8.21ZM5.258 2.643 8 4.21l2.742-1.567L8 1.076 5.258 2.643ZM15 9.933l-2.75 1.571v3.134L15 13.067V9.933ZM3.75 14.638v-3.134L1 9.933v3.134l2.75 1.571Z"/>
+                </svg>
+            </span>
+            <div id="ha_systems" class="text-black-100 fw-bolder fs-2 mb-2 mt-5">0</div>
+            <div class="fw-bold text-black-100 fw-bolder fs-6">No. Systems to check HA status</div>
+        </div>
+    </div>
+</div>
+
+<div class="col-xl-12 order-1 d-flex flex-row-auto mt-10 legend-card-div">
+
+    <div class="d-flex align-items-center me-15">
+        <span class="bullet h-15px w-25px me-5 red-bullet"></span> Impacted Systems
+    </div>
+
+    <div class="d-flex align-items-center me-15">
+        <span class="bullet h-15px w-25px me-5 green-bullet"></span> Non-Impacted Systems
+    </div>
+
+    <div class="d-flex align-items-center me-15">
+        <span class="bullet h-15px w-25px me-5 yellow-bullet"></span> Systems to check HA status
+    </div>
+
+    <div class="d-flex align-items-center me-15">
+        <span class="bullet h-15px w-25px me-5 gray-bullet"></span> Inactive systems
+    </div>
+</div>
+
+<div class="card card-flush shadow-sm mt-10">
+  
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol" style="width: -webkit-fill-available;border-bottom: 1px solid #dddbdb;">
+                
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size tr-align">
+                    <th class="HostName">Host Name</th>
+                    <th class="HostType">Host Type</th>
+                    <th class="SID">SID</th>
+                    <th class="SystemNumber">System Number</th>
+                    <th class="BusinessType">Business Type</th>
+                    <th class="SystemRole">System Role</th>
+                    <th class="DataCenter">Data Center</th>
+                    <th class="LifeCycleStatus">Life Cycle Status</th>
+                    <th class="CustomerName">Customer Name</th>               
+                </tr>
+                </thead>
+                <tbody id="TableBody" class="text-gray-800 fw-bold fs-5">
+                </tbody>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+
+<!--begin::MODEL-ADD-CATEGORY-->
+<div class="modal fade" id="kt_model_customise">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-gray-700" id="event_id_title">Customise</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="bi bi-x-lg"></i>
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body">
+                
+                <div class="mb-10">
+                    <h5 class="modal-title text-gray-700" id="business_title">Non-Impacted Business Types</h5>
+                    <input class="form-control" id="business_type_tagify"/>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::MODEL-ADD-CATEGORY-->
+
+{% endblock %}
+
+{% block js_block %}
+<script src="{% static "assets/js/pages/spc_cld/host_customer_impact_analysis.js"%}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,172 @@
+.shiftTable {
+    border-collapse: collapse;
+}
+
+.shiftTable td{
+    border-left: 1px dashed #6c757d;
+    border: 1px dashed #6c757d;
+    font-weight: normal;
+    text-align: center;
+    background-color: white;
+    height: 30px; 
+    vertical-align: middle;
+}
+
+.shiftTable th{
+    border-bottom: 0px solid #6c757d;
+    border-right: 1px dashed #6c757d;
+    word-spacing: 100vw;
+    text-align: center;
+    position: sticky;
+    z-index: 0;
+    top: 0;
+    border-radius: 1px;
+    vertical-align: middle;
+}
+
+.shiftTable td:not(:first-child):hover {
+    cursor: pointer;
+    opacity: 0.7;
+}
+
+.shiftTable thead tr th:first-child,
+.shiftTable tbody tr th p:first-child {
+  width: 90px;
+  min-width: 90px;
+  max-width: 90px;
+  overflow:hidden; 
+  text-overflow: ellipsis;
+  white-space:nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.shiftTable_counter {
+    border-collapse: collapse;
+}
+
+.shiftTable_counter td{
+    border-left: 1px dashed #6c757d;
+    border-bottom: 1px dashed #6c757d;
+    font-weight: normal;
+    text-align: center;
+    background-color: white;
+    height: 30px; 
+    vertical-align: middle;
+}
+
+.shiftTable_counter th{
+    border-bottom: 0px solid #6c757d;
+    border-right: 1px dashed #6c757d;
+    word-spacing: 100vw;
+    text-align: center;
+    background-color: #e9ecef;
+    position: sticky;
+    z-index: 0;
+    top: 0;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.shiftTable_counter th:last-child{
+    border-right: 0px dashed #6c757d;
+}
+
+
+.shiftTable_counter thead tr th:first-child,
+.shiftTable_counter tbody tr th:first-child {
+  width: 120px;
+  min-width: 120px;
+  max-width: 120px;
+  overflow:initial;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.shiftTable_counter thead tr th:first-child,
+.shiftTable_counter tbody tr td:first-child {
+    background-color: #e9ecef;
+}
+
+.table_history {
+    border-collapse: collapse;
+}
+
+.table_history td{
+    border-left: 1px dashed #6c757d;
+    border-bottom: 1px dashed #6c757d;
+    font-weight: normal;
+    text-align: center;
+    background-color: white;
+    height: 30px; 
+    vertical-align: middle;
+    border-radius: 4px;
+}
+
+.table_history th{
+    border-bottom: 0px solid #6c757d;
+    border-right: 1px dashed #6c757d;
+    word-spacing: 100vw;
+    text-align: center;
+    background-color: #e9ecef;
+    position: sticky;
+    z-index: 0;
+    top: 0;
+    border-radius: 4px;
+    vertical-align: middle;
+}
+
+.table_history th:last-child{
+    border-right: 0px;
+}
+
+
+.table_history thead tr th:first-child,
+.table_history tbody tr th:first-child {
+  overflow:initial;
+  white-space: nowrap;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+.pane-hScroll {
+    overflow: auto;
+    width: 100%;
+}
+
+.pane-vScroll {
+    overflow-y: auto;
+    overflow-x: hidden;
+    height:60%;
+    border:solid #6c757d 1px;
+    border-radius:6px;
+}
+
+.pane-vScroll_cound {
+
+    overflow-y: auto;
+    overflow-x: hidden;
+    height:10%;
+    border:solid #6c757d 1px;
+    border-radius:6px;
+}
+
+.good {
+    background-color:#3dccc7!important;
+}
+
+.ok {
+    background-color: #e9c46a !important;
+}
+
+.bad {
+    background-color: #ff8fa3 !important;
+}
+
+.member_click_pointer {
+    cursor: pointer;
+    opacity: 0.7;
+}
+

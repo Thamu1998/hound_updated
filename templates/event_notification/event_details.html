@@ -1,0 +1,934 @@
+{% extends 'base.html' %} 
+{% load static %} 
+{% block subheader %}
+<div class="toolbar" id="kt_toolbar">
+  <!--begin::Container-->
+  <div id="kt_toolbar_container" class="container-fluid d-flex flex-stack">
+    <!--begin::Page title-->
+    <div data-kt-swapper="true" data-kt-swapper-mode="prepend" data-kt-swapper-parent="{default: '#kt_content_container', 'lg': '#kt_toolbar_container'}" class="page-title d-flex flex-column align-items-start me-3 mb-5 mb-lg-0">
+      <!--begin::Title-->
+      <h1 class="d-flex align-items-center text-dark fw-bolder fs-3 mb-0">{% block page_title %}{% endblock %}</h1>
+      <!--end::Title-->
+      <!--begin::Breadcrumb-->
+      <ul class="breadcrumb breadcrumb-separatorless fw-bold fs-7 pt-1">
+        {% block subheader-item %}
+        <!--begin::Item-->										
+        <li class="breadcrumb-item text-muted">
+          <a href="/" class="text-muted text-hover-primary">Home</a>
+        </li>
+        <!--end::Item-->
+        <!--begin::Item-->
+        <li class="breadcrumb-item">
+          <span class="bullet bg-gray-300 w-5px h-2px"></span>
+        </li>
+        <!--end::Item-->
+        <!--begin::Item-->
+        <li class="breadcrumb-item text-dark">Customer Event Notification</li>
+        <!--end::Item-->
+        {% endblock %}
+      </ul>
+      <!--end::Breadcrumb-->
+    </div>
+    <!--end::Page title-->
+    <!--begin::Actions-->
+    <div class="d-flex">
+      {% block subheader-button %}
+      <!--begin::Wrapper-->
+      <div class="fs-10 me-2" >
+        <!--begin::Menu-->
+        <!-- <a href="#" class="btn btn-sm btn-flex btn-light btn-active-primary fw-bolder" >
+        Filter</a> -->
+        <!-- <div class="col-md-3 "  style="margin-left: 950px;"> -->
+          <input class="form-control form-control-solid" placeholder="DateTime Range in UTC" id="kt_daterangepicker_2"/>
+          
+      </div>
+      <!--end::Wrapper-->
+      <!--begin::Button-->
+       <!-- <a href="#" class="btn btn-sm btn-primary btn-hover-scale" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">Search</a> -->
+      <!-- <button type="button" class="btn btn-sm btn-primary btn-hover-scale" id="search" onclick="button()">Search</button> -->
+      <!-- <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#kt_modal_create_app" id="kt_toolbar_primary_button">Create</a> -->
+      <!-- <button id="search" class="btn btn-primary">Search</button>&nbsp; -->
+      <button type="button" class="btn btn-primary fw-bolder me-3" id="search">Search</button>
+      <!--end::Button-->
+
+      <div>
+      <a title="Table Settings" href="#" id="kt_drawer_example_basic_button" class="btn btn-icon btn-primary fw-bolder me-3">
+        <i class="las la-cube fs-2qx"></i>
+    </a>
+      </div>
+
+      {% endblock %}
+    </div>
+    <!--end::Actions-->							
+  </div>
+  <!--end::Container-->
+</div>
+{% endblock %} 
+{% block css_block %}
+<!-- PAGE SPECIFIC CSS -->
+{% endblock %} 
+
+{% block body %}
+<!-- BODY CONTENT HERE -->
+ <!--begin::Accordion-->
+ <div class="accordion" id="kt_accordion_1">
+
+  <div class="accordion-item">
+      <h2 class="accordion-header" id="kt_accordion_1_header_3">
+          <button class="accordion-button fs-4 fw-bold collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#kt_accordion_1_body_3" aria-expanded="false" aria-controls="kt_accordion_1_body_3">
+          Event Creation Graph
+          </button>
+      </h2>
+      <div id="kt_accordion_1_body_3" class="accordion-collapse collapse" aria-labelledby="kt_accordion_1_header_3" data-bs-parent="#kt_accordion_1">
+          <div class="accordion-body">
+            <div id="chartdiv" style="height:450px;"></div>
+          </div>
+      </div>
+  </div>
+</div>
+<!--end::Accordion-->
+
+        <div class="card card-flush shadow-sm row g-10 g-xl-8 mt-15">
+  
+          <div class="card-body py-5">
+              <!--begin::Section-->
+              <div class="p-0">
+                  <!--begin::Datatable-->
+                  <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                      <thead>
+                      <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                          <th class="EventID">EventID</th>
+                          <th class="BundleID">BundleID</th>
+                          <th class="TenantID">TenantID</th>
+                          <th class="CustomerID">CustomerID</th>
+                          <th class="SystemRole">SystemRole</th>
+                          <th class="DataCenter">DataCenter</th>
+                          <th class="TenantRole">TenantRole</th>
+                          <th  class="ServiceStatus">ServiceStatus</th>
+                          <th class="CurrentTemplateName">CurrentTemplateName</th>
+                          <th class="CreatedBy">CreatedBy</th>
+                          <th class="StartDateTime">StartDateTime</th>
+                          <th class="EndDateTime">EndDateTime</th>
+                          <th class="CreationDateTime">CreationDateTime</th>
+                          <th class="EventName">EventName</th>
+                          <th class="Status">Status</th>
+                          <th class="EndDate">EndDate</th>
+                          <th class="EndTime">EndTime</th>
+                          <th class="JiraTicket">JiraTicket</th>
+                          <th class="NTDBEmailStatus">NTDBEmailStatus</th>
+                          <th class="Phase">Phase</th>
+                          <th class="StartDate">StartDate</th>
+                          <th class="StartTime">StartTime</th>
+                          <th class="TestMode">TestMode</th>
+                          <th class="NotificationType">NotificationType</th>
+                          <th class="IsSLARelevant">IsSLARelevant</th>
+                      </tr>
+                      </thead>
+                      <tbody class="text-gray-600 fw-bold fs-5">
+                      </tbody>
+                      <tfoot>
+                          <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                            <th>EventID</th>
+                            <th>BundleID</th>
+                            <th>TenantID</th>
+                            <th>CustomerID</th>
+                            <th>SystemRole</th>
+                            <th>DataCenter</th>
+                            <th>TenantRole</th>
+                            <th>ServiceStatus</th>
+                            <th>CurrentTemplateName</th>
+                            <th>CreatedBy</th>
+                            <th>StartDateTime</th>
+                            <th>EndDateTime</th>
+                            <th>CreationDateTime</th>
+                            <th>EventName</th>
+                            <th>Status</th>
+                            <th>EndDate</th>
+                            <th>EndTime</th>
+                            <th>JiraTicket</th>
+                            <th>NTDBEmailStatus</th>
+                            <th>Phase</th>
+                            <th>StartDate</th>
+                            <th>StartTime</th>
+                            <th>TestMode</th>
+                            <th>NotificationType</th>
+                            <th>IsSLARelevant</th>
+                          </tr>
+                      </tfoot>
+                  </table>
+                  <!--end::Datatable-->
+              </div>
+              <!--end::Section-->
+          </div>
+      </div>
+
+      <!--begin::table setting draw-->
+<div id="kt_drawer_example_basic" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_basic_button" data-kt-drawer-close="#kt_drawer_example_basic_close" data-kt-drawer-width="500px">
+    
+  <!--begin: toggle column -->
+  <div class="kt-portlet__body">
+      <div class="card card-flush">
+          <div class="card-header">
+              <h3 class="card-title">Table Column Toggle</h3>
+          </div>
+          <div class="card-body py-5">
+              <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+            
+              </div>
+          </div>
+      </div>
+      
+  </div>
+  <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+      <!--end::body-->
+{% endblock %}
+
+{% block js_block %}
+<!-- PAGE SPECIFIC JAVASCRIPT -->
+<script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/hierarchy.js"></script>
+<script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<!-- <script src="{% static "assets/js/custom_datatable_function.js"%}"></script> -->
+<!-- <script src="{% static "assets/js/pages/system_js_functions/excel_download.js"%}" type="text/javascript"></script> -->
+<script src="{% static "assets/js/pages/system_js_functions/datatable_initiate.js"%}" type="text/javascript"></script>
+
+<script>
+function generate_toggle_pill(){
+
+var toggle_pill = ""
+
+$('.table_header th').each(function (index) { 
+ 
+   var is_show = $(this).attr('is_show')
+   
+   var column_name = $(this).text()
+    
+   if (is_show=="false"){
+
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-primary font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-plus fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+    else
+    {
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-danger font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-times fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+
+});
+
+$("#toggle_pill").html(toggle_pill)
+
+};
+
+$( "#search" ).click(function() {
+  var content = $('#kt_daterangepicker_2').data('daterangepicker').startDate;
+  var enddate = $('#kt_daterangepicker_2').data('daterangepicker').endDate;
+  var DateTimeRange = content +'-'+ enddate
+  // alert(DateTimeRange);
+  $.ajax({
+    url : "/event/api/new/" +DateTimeRange ,
+    dataType : "json",
+    type : "GET",
+    success: function(data) {
+      console.log(data)
+      generate_toggle_pill();
+            $('#kt_datatable_example_1').DataTable({
+              
+              data : data,
+              columns: [
+              {'data' :'EventID'},
+              { 'data' :'BundleID'},
+              {'data' :'TenantID'},
+              {'data' :'CustomerID'},
+              {'data' :'SystemRole'},
+              { 'data' :'DataCenter'},
+              { 'data' :'TenantRole',
+                'render': function (TenantRole){
+                  if(TenantRole == '01'){
+                      return 'Administration';
+                  }
+                  else if(TenantRole == '02'){
+                    return 'Template';
+                  }
+                  else if(TenantRole == '03'){
+                    return 'Stock';
+                  }
+                  else if(TenantRole == '04'){
+                    return 'Production';
+                  }
+                  else if(TenantRole == '05'){
+                    return 'Reference';
+                  }
+                  else if(TenantRole == '06'){
+                    return 'Development';
+                  }
+                  else if(TenantRole == '07'){
+                    return 'Test';
+                  }
+                  else if(TenantRole == '08'){
+                    return 'Partner Development';
+                  }
+                  else if(TenantRole == '11'){
+                    return 'Technical';
+                  }
+                  else{
+                    return 'N/A';
+                  }
+                }
+            },
+              { 'data' :'ServiceStatus',
+              'render': function (ServiceStatus){
+                if(ServiceStatus == '1'){
+                    return '<span class="badge badge-warning">' + 'Degradation' + '</span>';
+                }
+                else if(ServiceStatus == '2'){
+                  return '<span class="badge badge-warning">' + 'Disruption' + '</span>';
+                }
+                else{
+                  return 'None';
+                }
+            }},
+              { 'data' :'CurrentTemplateName',
+                'render' : function(CurrentTemplateName){
+                  if(CurrentTemplateName == 'Maintenance_Completed' || CurrentTemplateName == 'Solution_Notifications' || CurrentTemplateName == 'Downtime_Notification_Init_Resol')
+                  {
+                    return '<span class="badge badge-light-success">' + CurrentTemplateName + '</span>';
+                  }
+
+                  else if(CurrentTemplateName == 'Downtime_Notifications')
+                  {
+                    return '<span class="badge badge-danger">' + CurrentTemplateName + '</span>';
+
+                  }
+
+                  else{
+                    return '<span class="badge badge-danger">' + CurrentTemplateName + '</span>';
+                  }
+                  }
+            },
+              { 'data' :'CreatedBy'},
+              { 
+                'data' :'StartDateTime',
+                'render': function (StartDateTime) {
+                  if(!StartDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(StartDateTime.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+              },
+              { 'data' :'EndDateTime',
+                 'render': function (EndDateTime) {
+                  if(!EndDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(EndDateTime.substr(6)));
+                    var month = date.getMonth() + 1;
+                    var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+            },
+              { 'data' :'CreationDateTime',
+              'render': function (CreationDateTime) {
+                  if(!CreationDateTime){
+                    return 'N/A';
+                  }
+                  else{
+                    var date = new Date(parseInt(CreationDateTime.substr(6)));
+                  var month = date.getMonth() + 1;
+                  var formattedDate = date.getDate() + "-" + month + "-" + date.getFullYear();
+
+                  var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+                  var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
+                  // var seconds = date.getSeconds();
+                  var formattedTime = hours + ":" + minutes;
+
+                  formattedDate = formattedDate + " " + formattedTime;
+
+                  return formattedDate;
+                  }
+                  
+                }
+            },{ 'data':'EventName'},
+              { 'data' :'NTDBEmailStatus'},
+              { 'data' :'Status'},
+              { 'data' :'EndDate'},
+              { 'data' :'EndTime'},
+              { 'data' :'JiraTicket'},
+              { 'data' :'Phase'},
+              { 'data' :'StartDate'},
+              { 'data' :'StartTime'},
+              { 'data' :'TestMode'},
+              { 'data' :'NotificationType'},
+              { 'data' :'IsSLARelevant'}
+              ]
+            });
+      
+    }
+  })
+});
+</script>
+
+<script>
+$("#kt_daterangepicker_2").daterangepicker({
+    timePicker: true,
+    startDate: moment().startOf("hour"),
+    endDate: moment().startOf("hour").add(32, "hour"),
+    locale: {
+        format: "YYYY-MM-DD hh:mm A"
+    }
+});
+</script>
+
+
+<script>
+    am5.ready(function() {
+    
+    // Create root element
+    // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+    var root = am5.Root.new("chartdiv");
+    
+    // Set themes
+    // https://www.amcharts.com/docs/v5/concepts/themes/
+    root.setThemes([
+      am5themes_Animated.new(root)
+    ]);
+    
+    var data = {
+      value: 0,
+      children: [
+        {
+          name: "Flora",
+          children: [
+            {
+              name: "Black Tea",
+              value: 1
+            },
+            {
+              name: "Floral",
+              children: [
+                {
+                  name: "Chamomile",
+                  value: 1
+                },
+                {
+                  name: "Rose",
+                  value: 1
+                },
+                {
+                  name: "Jasmine",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Fruity",
+          children: [
+            {
+              name: "Berry",
+              children: [
+                {
+                  name: "Blackberry",
+                  value: 1
+                },
+                {
+                  name: "Raspberry",
+                  value: 1
+                },
+                {
+                  name: "Blueberry",
+                  value: 1
+                },
+                {
+                  name: "Strawberry",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Dried Fruit",
+              children: [
+                {
+                  name: "Raisin",
+                  value: 1
+                },
+                {
+                  name: "Prune",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Other Fruit",
+              children: [
+                {
+                  name: "Coconut",
+                  value: 1
+                },
+                {
+                  name: "Cherry",
+                  value: 1
+                },
+                {
+                  name: "Pomegranate",
+                  value: 1
+                },
+                {
+                  name: "Pineapple",
+                  value: 1
+                },
+                {
+                  name: "Grape",
+                  value: 1
+                },
+                {
+                  name: "Apple",
+                  value: 1
+                },
+                {
+                  name: "Peach",
+                  value: 1
+                },
+                {
+                  name: "Pear",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Citrus Fruit",
+              children: [
+                {
+                  name: "Grapefruit",
+                  value: 1
+                },
+                {
+                  name: "Orange",
+                  value: 1
+                },
+                {
+                  name: "Lemon",
+                  value: 1
+                },
+                {
+                  name: "Lime",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Sour/Fermented",
+          children: [
+            {
+              name: "Sour",
+              children: [
+                {
+                  name: "Sour Aromatics",
+                  value: 1
+                },
+                {
+                  name: "Acetic Acid",
+                  value: 1
+                },
+                {
+                  name: "Butyric Acid",
+                  value: 1
+                },
+                {
+                  name: "Isovaleric Acid",
+                  value: 1
+                },
+                {
+                  name: "Citric Acid",
+                  value: 1
+                },
+                {
+                  name: "Malic Acid",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Alcohol/Fremented",
+              children: [
+                {
+                  name: "Winey",
+                  value: 1
+                },
+                {
+                  name: "Whiskey",
+                  value: 1
+                },
+                {
+                  name: "Fremented",
+                  value: 1
+                },
+                {
+                  name: "Overripe",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Green/Vegetative",
+          children: [
+            {
+              name: "Olive Oil",
+              value: 1
+            },
+            {
+              name: "Raw",
+              value: 1
+            },
+            {
+              name: "Green/Vegetative",
+              children: [
+                {
+                  name: "Under-ripe",
+                  value: 1
+                },
+                {
+                  name: "Peapod",
+                  value: 1
+                },
+                {
+                  name: "Fresh",
+                  value: 1
+                },
+                {
+                  name: "Dark Green",
+                  value: 1
+                },
+                {
+                  name: "Vegetative",
+                  value: 1
+                },
+                {
+                  name: "Hay-like",
+                  value: 1
+                },
+                {
+                  name: "Herb-like",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Beany",
+              value: 1
+            }
+          ]
+        },
+        {
+          name: "Other",
+          children: [
+            {
+              name: "Papery/Musty",
+              children: [
+                {
+                  name: "Stale",
+                  value: 1
+                },
+                {
+                  name: "Cardboard",
+                  value: 1
+                },
+                {
+                  name: "Papery",
+                  value: 1
+                },
+                {
+                  name: "Woody",
+                  value: 1
+                },
+                {
+                  name: "Moldy/Damp",
+                  value: 1
+                },
+                {
+                  name: "Musty/Dusty",
+                  value: 1
+                },
+                {
+                  name: "Musty/Earthy",
+                  value: 1
+                },
+                {
+                  name: "Animalic",
+                  value: 1
+                },
+                {
+                  name: "Meaty Brothy",
+                  value: 1
+                },
+                {
+                  name: "Phenolic",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Chemical",
+              children: [
+                {
+                  name: "Bitter",
+                  value: 1
+                },
+                {
+                  name: "Salty",
+                  value: 1
+                },
+                {
+                  name: "Medicinal",
+                  value: 1
+                },
+                {
+                  name: "Petroleum",
+                  value: 1
+                },
+                {
+                  name: "Skunky",
+                  value: 1
+                },
+                {
+                  name: "Rubber",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Roasted",
+          children: [
+            {
+              name: "Pipe Tobacco",
+              value: 1
+            },
+            {
+              name: "Tobacco",
+              value: 1
+            },
+            {
+              name: "Burnt",
+              children: [
+                {
+                  name: "Acrid",
+                  value: 1
+                },
+                {
+                  name: "Ashy",
+                  value: 1
+                },
+                {
+                  name: "Smoky",
+                  value: 1
+                },
+                {
+                  name: "Brown, Roast",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Cereal",
+              children: [
+                {
+                  name: "Grain",
+                  value: 1
+                },
+                {
+                  name: "Malt",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Spices",
+          children: [
+            {
+              name: "Pungent",
+              value: 1
+            },
+            {
+              name: "Pepper",
+              value: 1
+            },
+            {
+              name: "Brown Spice",
+              children: [
+                {
+                  name: "Anise",
+                  value: 1
+                },
+                {
+                  name: "Nutmeg",
+                  value: 1
+                },
+                {
+                  name: "Cinnamon",
+                  value: 1
+                },
+                {
+                  name: "Clove",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Nutty/Cocoa",
+          children: [
+            {
+              name: "Nutty",
+              children: [
+                {
+                  name: "Peanuts",
+                  value: 1
+                },
+                {
+                  name: "Hazelnut",
+                  value: 1
+                },
+                {
+                  name: "Almond",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Cocoa",
+              children: [
+                {
+                  name: "Chocolate",
+                  value: 1
+                },
+                {
+                  name: "Dark Chocolate",
+                  value: 1
+                }
+              ]
+            }
+          ]
+        },
+        {
+          name: "Sweet",
+          children: [
+            {
+              name: "Brown Sugar",
+              children: [
+                {
+                  name: "Molasses",
+                  value: 1
+                },
+                {
+                  name: "Maple Syrup",
+                  value: 1
+                },
+                {
+                  name: "Caramelized",
+                  value: 1
+                },
+                {
+                  name: "Honey",
+                  value: 1
+                }
+              ]
+            },
+            {
+              name: "Vanilla",
+              value: 1
+            },
+            {
+              name: "Vanillin",
+              value: 1
+            },
+            {
+              name: "Overall Sweet",
+              value: 1
+            },
+            {
+              name: "Sweet Aromatics",
+              value: 1
+            }
+          ]
+        }
+      ]
+    };
+    
+    // Create wrapper container
+    var container = root.container.children.push(am5.Container.new(root, {
+      width: am5.percent(100),
+      height: am5.percent(100),
+      layout: root.verticalLayout
+    }));
+    
+    // Create series
+    // https://www.amcharts.com/docs/v5/charts/hierarchy/#Adding
+    var series = container.children.push(am5hierarchy.ForceDirected.new(root, {
+      singleBranchOnly: false,
+      downDepth: 2,
+      topDepth: 1,
+      initialDepth: 1,
+      valueField: "value",
+      categoryField: "name",
+      childDataField: "children",
+      idField: "name",
+      linkWithField: "linkWith",
+      manyBodyStrength: -10,
+      centerStrength: 0.8
+    }));
+    
+    series.get("colors").setAll({
+      step: 2
+    });
+    
+    series.links.template.set("strength", 0.5);
+    
+    series.data.setAll([data]);
+    
+    series.set("selectedDataItem", series.dataItems[0]);
+    
+    
+    // Make stuff animate on load
+    series.appear(1000, 100);
+    
+    }); // end am5.ready()
+    </script>
+
+{% endblock %}

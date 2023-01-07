@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+{%  extends 'pingdom/base.html' %}
+{% load static %}
+
+{% block body %}
+
+<div class="row align-center" id="loading_div">
+	<div class="d-flex justify-content-center">
+		<img src="{% static "assets/media/loading_icon/globe.gif"%}" alt="funny GIF" class="h-600px w-600px">
+	</div>
+	<div class="d-flex justify-content-center mt-0">
+		<blockquote class="blockquote">
+			<p class="lead text-primary"><cite id="check_status_title" title="Checking status">Checking status ...</cite></p>
+		</blockquote>
+	</div>
+	
+</div>
+
+<div class="row mb-5" id="up_card_div"></div>
+
+<div id="dc_info_down_card_div" class="scrolling-wrapper row flex-row flex-nowrap mt-0 pb-4 pt-0"></div>
+
+<div class="row mt-1" id="down_card_div"></div>
+
+{% comment %} <div class="row mt-1" id="chart_card">								
+	<div class="mt-10" id="chartdiv"></div>
+</div>	 {% endcomment %}
+
+
+
+<!--begin::MODEL-DCINFO-UP-->
+<div class="modal fade" tabindex="-1" id="model_up_dc_info">
+	<div class="modal-dialog modal-dialog-scrollable modal-xl">
+		<div class="modal-content" id="model_up_system_info_block">
+			<div class="modal-header">
+				<h5 class="modal-title" id="dc_up_overview_title_h5">Overview</h5>
+				<div id="dc_up_view_btn_div"></div>
+			</div>
+			<div class="modal-body" id="dc_info_up_body"></div>
+		</div>
+	</div>
+</div>
+<!--end::MODEL-DC_INFO-UP-->
+
+<!--begin::MODEL-DCINFO-DOWN-->
+<div class="modal fade" tabindex="-1" id="model_down_dc_info">
+	<div class="modal-dialog modal-dialog-scrollable modal-xl">
+		<div class="modal-content" id="model_down_dc_info_block">
+			<div class="modal-header">
+				<h5 class="modal-title" id="down_dc_overview_title_h5">Overview</h5>
+				<div id="dc_down_view_btn_div"></div>
+			</div>
+			<div class="modal-body" id="dc_info_down_body">
+				<div class="row">
+					<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-5">
+						<div id="dc_info_card"></div>
+					</div>
+					<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-7">								
+						<!--begin::comment textarea-->
+						<div id="dc_down_comment"></div>
+						<textarea id="comment_dc" class="form-control form-control form-control-solid mt-5" placeholder="Enter your comment here" data-kt-autosize="true"></textarea>
+						<input type="hidden" id="dc_cmd" value="">
+						<div class="row">
+							<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+								<input class="form-control form-control-solid mt-5 expiry_date_field" placeholder="Comment Expire Date" id="expiry_date_comment_dc"/>
+							</div>
+							<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+								<button type="button" class="btn btn-primary me-10 mt-5" id="update_cmd_dc_btn">
+									<span class="indicator-label">
+										Update Comment
+									</span>
+									<span class="indicator-progress">
+										Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+									</span>
+								</button>
+							</div>
+						</div>
+						<!--end::comment textarea-->
+					</div>
+				</div>
+				<div id="dc_info_table" class="mb-5 mt-5"></div>
+			</div>
+		</div>
+	</div>
+</div>
+<!--end::MODEL-DC_INFO-DOWN-->
+
+<!--begin::MODEL-SYSTEM_INFO-DOWN-->
+<div class="modal fade" tabindex="-1" id="model_down_system_info">
+	<div class="modal-dialog modal-dialog-scrollable modal-xl">
+		<div class="modal-content" id="model_down_system_info_block">
+			<div class="modal-header">
+				
+				<h5 class="modal-title" id="system_down_overview_title_h5">Overview</h5>
+				
+				<div id="sys_view_btn_div"></div>
+				
+			</div>
+			<div class="modal-body">
+				
+				<div id="system_info_table" class="mb-5"></div>
+
+				<div class="row">		
+					<div class="col-md-4 col-lg-4 col-xl-4 col-xxl-5">
+						<div id="host_info_table" class="mb-5"></div>
+					</div>
+				</div>
+				<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-12">								
+					<!--begin::comment textarea-->
+					<div id="system_down_comment"></div>
+					<textarea id="comment_sid" class="form-control form-control form-control-solid mt-5" placeholder="Enter your comment here" data-kt-autosize="true"></textarea>
+					<input type="hidden" id="sid_cmd" value="">
+					<div class="row">
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-3">
+							<input class="form-control form-control-solid mt-5 expiry_date_field" placeholder="Comment Expire Date" id="expiry_date_comment_sid"/>
+						</div>
+						<div class="col-md-6 col-lg-6 col-xl-6 col-xxl-4">
+							<button type="button" class="btn btn-primary me-10 mt-5" id="update_cmd_sid_btn">
+								<span class="indicator-label">
+									Update Comment
+								</span>
+								<span class="indicator-progress">
+									Please wait... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+								</span>
+							</button>
+						</div>
+					</div>
+					<!--end::comment textarea-->
+				</div>
+			</div>
+
+			</div>
+		</div>
+	</div>
+</div>
+<!--end::MODEL-SYSTEM_INFO-DOWN-->
+
+{% endblock %}

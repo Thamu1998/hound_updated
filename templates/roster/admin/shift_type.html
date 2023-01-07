@@ -1,0 +1,304 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ Shift Type
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+<!--begin::Button-->
+<a href="#" class="btn btn-sm btn-primary me-3" data-bs-toggle="modal" data-bs-target="#kt_model_create">Create</a>
+<!--end::Button-->
+{% endblock %}
+
+{% block body %}
+
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+    
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">                    
+                    <th class="id">ID</th>
+                    <th class="code">Code</th>
+                    <th class="name">Name</th>
+                    <th class="color">Color</th>
+                    <th class="text_color">Text Color</th>
+                    <th class="is_allow_in_preference">Is allow in preference</th>
+                    <th class="is_allow_in_dashboard">Is allow in dashboard</th>
+                    <th class="is_leave">Is leave</th>
+                    <th class="is_include_counter">Include in Count</th>
+                    <th class="time_info">Time Info</th>
+                    <th class="location">Location</th>
+                    <th class="normal_claim">Claim</th>
+                    <th class="holiday_claim">Holiday Claim</th>
+                    <th class="ordering">Ordering</th>
+                    <th>Action</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                        <th>ID</th>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Color</th>
+                        <th>Text Color</th>
+                        <th>Is allow in preference</th>
+                        <th>Is allow in dashboard</th>
+                        <th>Is leave</th>
+                        <th>Include in Count</th>
+                        <th>Time Info</th>
+                        <th>Location</th>
+                        <th>Claim</th>
+                        <th>Holiday Claim</th>
+                        <th>Ordering</th>
+                        <th>Action</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+<!--begin::EDIT-MODEL-->
+<div class="modal fade" tabindex="-1" id="kt_model_view">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-gray-700">Shift Info</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body">
+                <div class="form-floating mb-7">                           
+                    <input type="text"  class="form-control form-control-solid kt-input" id="shift_code_input" placeholder=" ">
+                    <label for="shift_code_input">Shift Code</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="text" class="form-control form-control-solid kt-input" id="shift_name_input" placeholder=" ">
+                    <label for="shift_name_input">Shift Name</label>
+                </div>
+                <div class="row">
+                    <div class="col-7 form-floating mb-7">
+                            <input type="text" class="form-control form-control-solid kt-input" id="shift_color_input" placeholder=" ">
+                            <label for="shift_color_input">Shift Color</label>                    
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                            <div></div>
+                            <!--begin::Link-->
+                            <a href="https://coolors.co/palettes/trending" target="_blank" class="link-primary">Click here to select color hex value.</a>
+                            <!--end::Link-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <div class="col-4">
+                        <p id="color_box" class="active p-3 fw-bold fw-6"></p>
+                    </div>
+                </div>
+                <div class="form-floating mb-7">
+                    <select class="form-select form-select-solid kt-input" id="shift_text_color_input" aria-label="Floating label select example">
+                        <option value="white">White</option>
+                        <option value="black">Black</option>
+                    </select>
+                    <label for="shift_text_color_input">Shift Text Color</label>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid mb-5">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_allow_in_preference"/>
+                            <label class="form-check-label" for="checkbox_is_allow_in_preference">
+                                Is allow in preference
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_allow_in_dashboard"/>
+                            <label class="form-check-label" for="checkbox_is_allow_in_dashboard">
+                                Is allow in dashboard
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_leave"/>
+                            <label class="form-check-label" for="checkbox_is_leave">
+                                Is Leave
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_include_counter"/>
+                            <label class="form-check-label" for="checkbox_is_include_counter">
+                                Include in counter
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="text" class="form-control form-control-solid kt-input" id="shift_time_info_input" placeholder=" ">
+                    <label for="shift_time_info_input">Time Info</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="ordering_input" placeholder=" ">
+                    <label for="ordering_input">Ordering</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="normal_claim_input" placeholder=" ">
+                    <label for="normal_claim_input">Claim</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="holiday_claim_input" placeholder=" ">
+                    <label for="holiday_claim_input">Holiday Claim</label>
+                </div>
+            </div>
+
+            <div id="shift_info_footer" class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::EDIT-MODEL-->
+
+<!--begin::CREATE-MODEL-->
+<div class="modal fade" tabindex="-1" id="kt_model_create">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-gray-700">Create Shift Type</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body">
+                <div class="form-floating mb-7">                           
+                    <input type="text"  class="form-control form-control-solid kt-input" id="shift_code_input_cr" placeholder=" ">
+                    <label for="shift_code_input_cr">Shift Code</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="text" class="form-control form-control-solid kt-input" id="shift_name_input_cr" placeholder=" ">
+                    <label for="shift_name_input_cr">Shift Name</label>
+                </div>
+                <div class="row">
+                    <div class="col-7 form-floating mb-7">
+                            <input type="text" class="form-control form-control-solid kt-input" id="shift_color_input_cr" placeholder=" ">
+                            <label for="shift_color_input_cr">Shift Color</label>                    
+                        <!--begin::Wrapper-->
+                        <div class="d-flex flex-stack flex-wrap gap-3 fs-base fw-semibold mb-8">
+                            <div></div>
+                            <!--begin::Link-->
+                            <a href="https://coolors.co/palettes/trending" target="_blank" class="link-primary">Click here to select color hex value.</a>
+                            <!--end::Link-->
+                        </div>
+                        <!--end::Wrapper-->
+                    </div>
+                    <div class="col-4">
+                        <p id="color_box_cr" class="active p-3 fw-bold fw-6"></p>
+                    </div>
+                </div>
+                <div class="form-floating mb-7">
+                    <select class="form-select form-select-solid kt-input" id="shift_text_color_input_cr" aria-label="Floating label select example">
+                        <option value="white">White</option>
+                        <option value="black">Black</option>
+                    </select>
+                    <label for="shift_text_color_input_cr">Shift Text Color</label>
+                </div>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid mb-5">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_allow_in_preference_cr"/>
+                            <label class="form-check-label" for="checkbox_is_allow_in_preference_cr">
+                                Is allow in preference
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_allow_in_dashboard_cr"/>
+                            <label class="form-check-label" for="checkbox_is_allow_in_dashboard_cr">
+                                Is allow in dashboard
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_leave_cr"/>
+                            <label class="form-check-label" for="checkbox_is_leave_cr">
+                                Is Leave
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="form-check form-switch form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" value="" id="checkbox_is_include_counter_cr"/>
+                            <label class="form-check-label" for="checkbox_is_include_counter_cr">
+                                Include in counter
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="text" class="form-control form-control-solid kt-input" id="shift_time_info_input_cr" placeholder=" ">
+                    <label for="shift_time_info_input_cr">Time Info</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="ordering_input_cr" placeholder=" ">
+                    <label for="ordering_input_cr">Ordering</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="normal_claim_input_cr" placeholder=" ">
+                    <label for="normal_claim_input_cr">Claim Amount</label>
+                </div>
+                <div class="form-floating mb-7">                           
+                    <input type="number" class="form-control form-control-solid kt-input" id="holiday_claim_input_cr" placeholder=" ">
+                    <label for="holiday_claim_input_cr">Holiday Claim</label>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" id="create_shift_btn" code="" class="btn btn-primary">Create</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::CREATE-MODEL-->
+
+{% endblock %}
+
+{% block js_block %}
+<script>var admin_location = "{{admin_location}}";  var tabel_name = "{{tabel_name}}";var default_query_filter = "{{default_query_filter}}"; var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}""></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_type/shift_type_datatable.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_type/datatable_initiate.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_type/view_shift_type_info.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_type/shift_type_action.js"%}" type="text/javascript"></script>
+{% endblock %}

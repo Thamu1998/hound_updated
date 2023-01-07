@@ -1,0 +1,361 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+
+<!--begin::Button-->
+<a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-4 me-2"></i> Filter</a>
+<!--end::Button-->
+
+<!--begin::Trigger-->
+<a id="export_excel" href="" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+    <span class="svg-icon svg-icon-primary svg-icon-1x">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="0" y="0" width="24" height="24"/>
+                <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+            </g>
+        </svg>
+        <!--end::Svg Icon-->
+    </span>Export
+</a>
+
+<a title="Table Settings" href="#" id="kt_drawer_example_basic_button" class="btn btn-icon btn-sm btn-primary me-3">
+    <i class="las la-cube fs-2qx"></i>
+</a>
+{% endblock %}
+
+{% block body %}
+<style>
+    div.scrollmenu {
+      overflow: auto;
+      white-space: nowrap;
+    }
+    
+    div.scrollmenu a {
+      display: inline-block;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+    }
+    
+    div.scrollmenu a:hover {
+      background-color: #777;
+    }
+    </style>
+<div class="row">
+<div class="col-6 card card-bordered mb-5">
+    <div class="card-header"><h3 class="card-title">Possible vs Utilized Tenants</h3></div>
+    <div class="card-body">
+        <div class="scrollmenu">
+            <div id="cluster_available_vs_possible_chart" style="height: 350px;"></div>
+        </div>
+    </div>
+</div>
+<div class="col-6 card card-bordered mb-5">
+    <div class="card-header"><h3 class="card-title">Available vs Utilized Memory</h3></div>
+    <div class="card-body">
+        <div class="scrollmenu">
+            <div id="cluster_available_vs_utilized_mem_chart" style="height: 350px;"></div>
+        </div>
+    </div>
+</div>
+</div>
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+  
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                    <th class="DB_SYSTEM_NUMBER_STR">System Number</th>
+                    <th class="DB_NAME">SID</th>
+                    <th class="DataCenterID">DataCenter</th>
+                    <th class="BUSINESS_TYPE">Business Type</th>
+                    <th class="BUSINESS_TYPE_DB_DESCRIPTION">Business Type Description</th>
+                    <th class="LifeCycleStatus">SPC LifeCycle</th>
+                    <th class="SYSTEM_ROLE">System Role</th>
+                    <th class="EUAccess">Is EUDP</th>                   
+                    <th class="NETWORKSEGMENT_ID">NetworkSegmentID</th>
+                    <th class="ADDITIONAL_TENANTS_POSSIBLE">Possible Tenants</th>
+                    <th class="ADDITIONAL_TENANTS_POSSIBLE_MEM">Possible Tenants by Memory</th>
+                    <th class="ADDITIONAL_TENANTS_POSSIBLE_CPU">Possible Tenants by CPU</th>
+                    <th class="MAX_ADDITIONAL_TENANTS_POSSIBLE_MEM">Possible Tenants  Memory</th>
+                    <th class="MAX_ADDITIONAL_TENANTS_POSSIBLE_CPU">Possible Tenants by Memory</th>
+                    <th class="BUSINESS_TENANTS_COUNT">Business Tenants</th>
+                    <th class="ONSTOCK_TENANTS_COUNT">Onstock Tenants</th>
+                    <th class="TORN_DOWN_TENANTS_COUNT">Torn Down Tenants</th>
+                    <th class="MAX_TENANT_DENSITY_PER_TB">Max Tenant Density Per Tb</th>
+                    <th class="MAX_TENANTS_PER_CLUSTER">Max Tenants Per Cluster</th>
+                    <th class="CLUSTER_AVAILABLE_MEM">Cluster Available Mem</th>
+                    <th class="CLUSTER_UTILIZATION_MEM">Cluster Utilization Mem</th>
+                    <th class="GLOBAL_ALLOCATION_LIMIT">Global Allocation Limit</th>
+                    <th class="PHYSICAL_MEMORY_SIZE">Physical Memory Size</th>
+                    <th class="BT_MEM_TENANT_FOOTPRINT">BT Mem Tenant Footprint</th>
+                    <th class="BT_MEM_TENANT_FOOTPRINT_CALC_DATE">BT Mem Tenant Footprint Calc Date</th>
+                    <th class="CLUSTER_MEM_TENANT_FOOTPRINT">Cluster Mem Tenant Footprint</th>
+                    <th class="PERCENTILE_VAL_RELATIVE_MEM">Percentile Val Relative Mem</th>
+                    <th class="CLUSTER_AVAILABLE_CPU">Cluster Available CPU</th>
+                    <th class="CLUSTER_UTILIZATION_CPU">Cluster Utilization CPU</th>
+                    <th class="HOST_CPU_THREADS">Host Cpu Threads</th>
+                    <th class="BT_CPU_TENANT_FOOTPRINT">BT Cpu Tenant Footprint</th>
+                    <th class="BT_CPU_TENANT_FOOTPRINT_CALC_DATE">BT Cpu Tenant Footprint Calc Date</th>
+                    <th class="CLUSTER_CPU_TENANT_FOOTPRINT">Cluster Cpu Tenant Footprint</th>
+                    <th class="PERCENTILE_VAL_RELATIVE_CPU">Percentile Val Relative Cpu</th>
+                    <th class="RESERVED_MOVE_OUT">Reserved Move Out</th>
+                    <th class="RESERVED_MOVE_IN">Reserved Move In</th>
+                    <th class="RESERVED_ONSTOCK_MOVE_OUT">Reserved Onstock Move Out</th>
+                    <th class="RESERVED_ONSTOCK_MOVE_IN">Reserved Onstock Move In</th>
+                    <th class="TM_CALC_TIMESTAMP">TM Calc Timestamp</th>
+                    <th class="LeadingProductPatchVersion">Leading Product PatchVersion</th>
+                    <th class="CMPTime">CMP Time</th>
+                    <th class="InfrastructureType">Infrastructure Type</th>
+                    <th class="CMPTemplateID">CMP TemplateID</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                        <th>System Number</th>
+                        <th>SID</th>
+                        <th>DataCenter</th>
+                        <th>Business Type</th>
+                        <th>Business Type Description</th>
+                        <th>SPC LifeCycle</th>
+                        <th>System Role</th>
+                        <th>Is EUDP</th>                   
+                        <th>NetworkSegmentID</th>
+                        <th>Possible Tenants</th>
+                        <th>Possible Tenants by Memory</th>
+                        <th>Possible Tenants by CPU</th>
+                        <th>Possible Tenants  Memory</th>
+                        <th>Possible Tenants by Memory</th>
+                        <th>Business Tenants</th>
+                        <th>Onstock Tenants</th>
+                        <th>Torn Down Tenants</th>
+                        <th>Max Tenant Density Per Tb</th>
+                        <th>Max Tenants Per Cluster</th>
+                        <th>Cluster Available Mem</th>
+                        <th>Cluster Utilization Mem</th>
+                        <th>Global Allocation Limit</th>
+                        <th>Physical Memory Size</th>
+                        <th>BT Mem Tenant Footprint</th>
+                        <th>BT Mem Tenant Footprint Calc Date</th>
+                        <th>Cluster Mem Tenant Footprint</th>
+                        <th>Percentile Val Relative Mem</th>
+                        <th>Cluster Available CPU</th>
+                        <th>Cluster Utilization CPU</th>
+                        <th>Host Cpu Threads</th>
+                        <th>BT Cpu Tenant Footprint</th>
+                        <th>BT Cpu Tenant Footprint Calc Date</th>
+                        <th>Cluster Cpu Tenant Footprint</th>
+                        <th>Percentile Val Relative Cpu</th>
+                        <th>Reserved Move Out</th>
+                        <th>Reserved Move In</th>
+                        <th>Reserved Onstock Move Out</th>
+                        <th>Reserved Onstock Move In</th>
+                        <th>TM Calc Timestamp</th>
+                        <th>Leading Product PatchVersion</th>
+                        <th>CMP Time</th>
+                        <th>Infrastructure Type</th>
+                        <th>CMP TemplateID</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+<!--begin::search draw-->
+<div id="kt_drawer_example_advanced" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '300px'}">
+    <div class="card card-px-1">
+        <div class="card-header card-header-stretch">
+            <div class="card-toolbar">
+                <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#app_tab">Filter</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="app_tab" role="tabpanel">
+                    <div class="hover-scroll h-800px px-5">
+                        <div class="card-body-" id="search_form">                                
+                            <div class="form-group">
+                                <div class="form-floating mb-7">                                
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="0" />
+                                    <label for="floatingPassword">System Number</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="1" />
+                                    <label for="floatingPassword">SID</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Data Center" data-allow-clear="true" multiple="multiple" data-col-index="2">
+                                        {%for dc in data_center%}
+                                        <option value="{{dc.code}}">{{dc.code}} - {{dc.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Business Type" data-allow-clear="true" multiple="multiple" data-col-index="3">
+                                        {%for zcode in business_type%}
+                                        <option value="{{zcode.code}}">{{zcode.code}} - {{zcode.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Business Type" data-allow-clear="true" multiple="multiple" data-col-index="4">
+                                        {%for zcode in business_type_desc%}
+                                        <option value="{{zcode}}">{{zcode}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input SCODE" data-control="select2" data-placeholder="Select System Status" data-allow-clear="true" multiple="multiple" data-col-index="5">
+                                        {%for scode in system_status%}
+                                            <option value="{{scode}}">{{scode}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select System Role" data-allow-clear="true" multiple="multiple" data-col-index="6">
+                                        {%for role in system_role%}
+                                        <option value="{{role}}">{{role}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="7">
+                                        <option selected value="">Both</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <label for="floatingSelect">EU Access</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Network Segment" data-allow-clear="true" multiple="multiple" data-col-index="8">
+                                        {%for value in network_segment%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Version Number" data-allow-clear="true" multiple="multiple" data-col-index="39">
+                                        {%for value in patch_version%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select CMP Time" data-allow-clear="true" multiple="multiple" data-col-index="40">
+                                        {%for value in cmp_time%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input SCODE" data-control="select2" data-placeholder="Infrastructure Type" data-allow-clear="true" multiple="multiple" data-col-index="41">
+                                        {%for scode in infra_type%}
+                                            <option value="{{scode}}">{{scode}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select CMP Template" data-allow-clear="true" multiple="multiple" data-col-index="42">
+                                        {%for value in cmp_template%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade show" id="infra_tab" role="tabpanel">
+                    <div class="hover-scroll h-800px px-5">
+                        <div class="card-body-" id="search_form">                                
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" style="margin-right: 30px;" class="btn btn-light" id="m_reset">Reset</button>
+            <button type="button" class="btn btn-primary float-right" id="m_search">Search</button>
+        </div>
+    </div>
+</div>
+<!--end::search draw-->
+
+<!--begin::table setting draw-->
+<div id="kt_drawer_example_basic" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_basic_button" data-kt-drawer-close="#kt_drawer_example_basic_close" data-kt-drawer-width="500px">
+    
+    <!--begin: toggle column -->
+    <div class="kt-portlet__body">
+        <div class="card card-flush">
+            <div class="card-header">
+                <h3 class="card-title">Table Column Toggle</h3>
+            </div>
+            <div class="card-body py-5">
+                <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+              
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+{% endblock %}
+
+{% block js_block %}
+<script>var tabel_name = "{{tabel_name}}";var default_query_filter = "{{default_query_filter}}"; var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}"></script>
+<script src="{% static "assets/js/pages/system_js_functions/excel_download.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/spc_cld/cluster_datatable.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/spc_cld/cluster_page_widget.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/system_js_functions/datatable_initiate_cluster.js"%}" type="text/javascript"></script>
+{% endblock %}

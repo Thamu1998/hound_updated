@@ -1,0 +1,51 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ Same customer system in different network
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+<input type="text" id="search_box_input" class="form-control form-control-solid" placeholder="Search Here"/>
+{% endblock %}
+
+{% block body %}
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+
+    <div class="card-body py-5">
+        <!--begin::Datatable-->
+        <table id="kt_datatable_customer_nw" class="table table-row-dashed table-rounded border border-gray-300 table-row-bordered table-row-gray-300 gy-7 gs-7">
+            <thead>
+                <tr class="text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size" align="center">                    
+                    <th> Customer ID</th>
+                    <th>Customer Name</th>
+                    <th>Network Segment</th>
+                    <th>No.System</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-600 fw-bold fs-5" id="tabel_body">
+                
+            </tfoot>
+        </table>
+        <!--end::Datatable-->
+    </div>
+</div>
+<!--end::body-->
+{% endblock %}
+
+{% block js_block %}
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/ashl1/datatables-rowsgroup/fbd569b8768155c7a9a62568e66a64115887d7d0/dataTables.rowsGroup.js"></script>
+<script src="{% static "assets/js/pages/spc_cld/customer_in_diff_nw.js"%}" type="text/javascript"></script>
+
+
+{% endblock %}

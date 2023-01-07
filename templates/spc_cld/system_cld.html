@@ -1,0 +1,505 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+
+<!--begin::Button-->
+<a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-4 me-2"></i> Filter</a>
+<!--end::Button-->
+
+<!--begin::Trigger-->
+<a id="export_excel" href="" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+    <span class="svg-icon svg-icon-primary svg-icon-1x">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="0" y="0" width="24" height="24"/>
+                <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+            </g>
+        </svg>
+        <!--end::Svg Icon-->
+    </span>Export
+</a>
+
+<a title="Table Settings" href="#" id="kt_drawer_example_basic_button" class="btn btn-icon btn-sm btn-primary me-3">
+    <i class="las la-cube fs-2qx"></i>
+</a>
+{% endblock %}
+
+{% block body %}
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+  
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                    <th class="SystemNumber show">System Number</th>
+                    <th class="sid">SID</th>
+                    <th class="LifeCycleStatus">Status</th>
+                    <th class="SystemRole">System Role</th>
+                    <th class="DBSystemID">DB SID</th>
+                    <th class="BusinessType">Business Type</th>
+                    <th is_show="false" class="CustomerID">Customer ID</th>
+                    <th class="CustomerName">Customer Name</th>
+                    <th class="CustomerTenantMainURL">Main URL</th>
+                    <th class="DataCenterID">Data center</th>
+                    <th class="NetworkSegmentID">NetworkSegment</th>
+                    <th is_show="false" class="LeadingProductPPMS">PPMS</th>
+                    <th is_show="false" class="LeadingProductVersionPPMS">Product Version PPMS</th>
+                    <th class="HasSharedDBTenant">Shared DB Tenant</th>
+                    <th class="EUAccess">EU Access</th>
+                    <th is_show="false" class="DatabaseHostFQDN">DatabaseHostFQDN</th>
+                    <th class="DatabaseHost">Database Host</th>
+                    <th class="WebdispatcherFarmName">Web-dispatcher</th>
+                    <th class="ApplicationHost">Application Host</th>
+                    <th is_show="false" class="ApplicationHostFQDN">ApplicationHostFQDN</th>
+                    <th is_show="false" class="LeadingProductName">Product Name</th>
+                    <th class="LeadingProductPatchVersion">Version</th>
+                    <th is_show="false" class="LeadingProductSupportPackage">Support Package</th>
+                    <th is_show="false" class="LeadingProductVersionNumber">Version Number</th>
+                    <th class="CMPTemplateID">CMP-Template-ID</th>
+                    <th class="InfrastructureType">Infrastructure Type</th>
+                    <th class="DRActiveSystem">DRActiveSystem</th>
+                    <th class="DRSystemType">DRSystemType</th>
+                    <th class="DRSystemNumber">DRSystemNumber</th>
+                    <th class="ApplicationDRType">ApplicationDRType</th>
+                    <th class="DataBaseDRType">DataBaseDRType</th>
+                    <th class="HAActiveSystem">HAActiveSystem</th>
+                    <th class="HASystemType">HASystemType</th>
+                    <th class="HASystemNumber">HASystemNumber</th>
+                    <th class="ApplicationHAType">ApplicationHAType</th>
+                    <th class="DataBaseHAType">DataBaseHAType</th>
+                    <th class="CreationDateTime">CreationDateTime</th>
+                    <th class="cpu_max">CPU MAX</th>
+                    <th class="cpu_avg">CPU AVG</th>
+                    <th class="cpu_pre">CPU PRE</th>
+                    <th class="memory_max">MEMORY MAX</th>
+                    <th class="memory_avg">MEMORY AVG</th>
+                    <th class="memory_pre">MEMORY PRE</th>
+                    <th class="EntityLastChangedOn">EntityLastChangedOn</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                    <th>System Number</th>
+                    <th>SID</th>
+                    <th>LifeCycleStatus</th>
+                    <th>SystemRole</th>
+                    <th>DBSystemID</th>
+                    <th>BusinessType</th>
+                    <th>CustomerID</th>
+                    <th>CustomerName</th>
+                    <th>CustomerTenantMainURL</th>
+                    <th>DataCenterID</th>
+                    <th>NetworkSegmentID</th>
+                    <th>LeadingProductPPMS</th>
+                    <th>LeadingProductVersionPPMS</th>
+                    <th>HasSharedDBTenant</th>
+                    <th>EUAccess</th>
+                    <th>DatabaseHostFQDN</th>
+                    <th>DatabaseHost</th>
+                    <th>WebdispatcherFarmName</th>
+                    <th>ApplicationHost</th>
+                    <th>ApplicationHostFQDN</th>
+                    <th>LeadingProductName</th>
+                    <th>LeadingProductPatchVersion</th>
+                    <th>LeadingProductSupportPackage</th>
+                    <th>LeadingProductVersionNumber</th>
+                    <th>CMPTemplateID</th>
+                    <th>InfrastructureType</th>
+                    <th>DRActiveSystem</th>
+                    <th>DRSystemType</th>
+                    <th>DRSystemNumber</th>
+                    <th>ApplicationDRType</th>
+                    <th>DataBaseDRType</th>
+                    <th>HAActiveSystem</th>
+                    <th>HASystemType</th>
+                    <th>HASystemNumber</th>
+                    <th>ApplicationHAType</th>
+                    <th>DataBaseHAType</th>
+                    <th>CreationDateTime</th>
+                    <th>CPU MAX</th>
+                    <th>CPU AVG</th>
+                    <th>CPU PRE</th>
+                    <th>MEMORY MAX</th>
+                    <th>MEMORY AVG</th>
+                    <th>MEMORY PRE</th>
+                    <th>EntityLastChangedOn</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+<!--begin::search draw-->
+<div id="kt_drawer_example_advanced" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '350px'}">
+    <div class="card card-px-1">
+        <div class="card-header card-header-stretch">
+            <div class="card-toolbar">
+                <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#app_tab">Application</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#infra_tab">Infrastructure</a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" data-bs-toggle="tab" href="#version_tab">Version</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+
+                <div class="tab-pane fade show active" id="app_tab" role="tabpanel">
+                    <div class="hover-scroll h-800px px-5">
+                        <div class="card-body-" id="search_form">                                
+                            <div class="form-group">
+                                <div class="form-floating mb-7">                                
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="0" />
+                                    <label for="floatingPassword">System Number</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="1" />
+                                    <label for="floatingPassword">SID</label>
+                                </div>   
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input SCODE" data-control="select2" data-placeholder="Select System Status" data-allow-clear="true" multiple="multiple" data-col-index="2">
+                                        {%for scode in system_status%}
+                                            <option value="{{scode}}">{{scode}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select System Role" data-allow-clear="true" multiple="multiple" data-col-index="3">
+                                        {%for role in system_role%}
+                                        <option value="{{role}}">{{role}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                                
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="4" />
+                                    <label for="floatingPassword">DB-SID</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Business Type" data-allow-clear="true" multiple="multiple" data-col-index="5">
+                                        {%for zcode in business_type%}
+                                        <option value="{{zcode.code}}">{{zcode.code}} - {{zcode.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                           
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="6">
+                                    <label for="floatingPassword">Customer ID</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                            
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="7">
+                                    <label for="floatingPassword">Customer Name</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                            
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="8">
+                                    <label for="floatingPassword">Main URL</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="13">
+                                        <option selected value="">Both</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <label for="floatingSelect">Shared DB</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="14">
+                                        <option selected value="">Both</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <label for="floatingSelect">EU Access</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Product Name" data-allow-clear="true" multiple="multiple" data-col-index="20">
+                                        {%for value in product_name%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select CMP Template" data-allow-clear="true" multiple="multiple" data-col-index="24">
+                                        {%for value in cmp_template%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="26">
+                                        <option selected value="">Both</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <label for="floatingSelect">DR Active System</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select DR System Type" data-allow-clear="true" multiple="multiple" data-col-index="27">
+                                        {%for value in DRSystemType%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                            
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="28">
+                                    <label for="floatingPassword">DR System Number</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Application DR Type" data-allow-clear="true" multiple="multiple" data-col-index="29">
+                                        {%for value in ApplicationDRType%}
+                                        <option value="{{value.code}}">{{value.code}} - {{value.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select DataBase DR Type" data-allow-clear="true" multiple="multiple" data-col-index="30">
+                                        {%for value in DataBaseDRType%}
+                                        <option value="{{value.code}}">{{value.code}} - {{value.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="31">
+                                        <option selected value="">Both</option>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                    <label for="floatingSelect">HA Active System</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select HA System Type" data-allow-clear="true" multiple="multiple" data-col-index="32">
+                                        {%for value in HASystemType%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                            
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="33">
+                                    <label for="floatingPassword">HA System Number</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Application HA Type" data-allow-clear="true" multiple="multiple" data-col-index="34">
+                                        {%for value in ApplicationHAType%}
+                                        <option value="{{value.code}}">{{value.code}} - {{value.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select DataBase HA Type" data-allow-clear="true" multiple="multiple" data-col-index="35">
+                                        {%for value in DataBaseHAType%}
+                                        <option value="{{value.code}}">{{value.code}} - {{value.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tab-pane fade" id="infra_tab" role="tabpanel">
+                    <div class="hover-scroll h-800px px-5">
+                        <div class="card-body-" id="search_form">                                
+                            <div class="form-group">
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Data Center" data-allow-clear="true" multiple="multiple" data-col-index="9">
+                                        {%for dc in data_center%}
+                                        <option value="{{dc.code}}">{{dc.code}} - {{dc.description}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Network Segment" data-allow-clear="true" multiple="multiple" data-col-index="10">
+                                        {%for value in network_segment%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="15" />
+                                    <label for="floatingPassword">Database Host FQDN</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="16" />
+                                    <label for="floatingPassword">Database Host</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Web-Dispatcher" data-allow-clear="true" multiple="multiple" data-col-index="17">
+                                        {%for value in webdispatcher%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="18" />
+                                    <label for="floatingPassword">Application Host</label>
+                                </div>
+
+                                <div class="form-floating mb-7">                               
+                                    <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="19" />
+                                    <label for="floatingPassword">Application Host FQDN</label>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Infra Type" data-allow-clear="true" multiple="multiple" data-col-index="25">
+                                        {%for value in infra_type%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-pane fade" id="version_tab" role="tabpanel">
+                    <div class="hover-scroll h-800px px-5">
+                        <div class="card-body-" id="search_form">                                
+                            <div class="form-group">
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Product PPMS" data-allow-clear="true" multiple="multiple" data-col-index="11">
+                                        {%for value in product_ppms%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Product Version PPMS" data-allow-clear="true" multiple="multiple" data-col-index="12">
+                                        {%for value in product_version_ppms%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                                
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Product Version" data-allow-clear="true" multiple="multiple" data-col-index="21">
+                                        {%for value in patch_version%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Support Package" data-allow-clear="true" multiple="multiple" data-col-index="22">
+                                        {%for value in support_package%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                                <div class="form-floating mb-7">
+                                    <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Select Version Number" data-allow-clear="true" multiple="multiple" data-col-index="23">
+                                        {%for value in version_number%}
+                                        <option value="{{value}}">{{value}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" style="margin-right: 30px;" class="btn btn-light" id="m_reset">Reset</button>
+            <button type="button" class="btn btn-primary float-right" id="m_search">Search</button>
+        </div>
+    </div>
+</div>
+<!--end::search draw-->
+
+<!--begin::table setting draw-->
+<div id="kt_drawer_example_basic" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_basic_button" data-kt-drawer-close="#kt_drawer_example_basic_close" data-kt-drawer-width="500px">
+    
+    <!--begin: toggle column -->
+    <div class="kt-portlet__body">
+        <div class="card card-flush">
+            <div class="card-header">
+                <h3 class="card-title">Table Column Toggle</h3>
+            </div>
+            <div class="card-body py-5">
+                <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+              
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+{% endblock %}
+
+{% block js_block %}
+<script>var tabel_name = "{{tabel_name}}";var default_query_filter = "{{default_query_filter}}"; var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}"></script>
+<script src="{% static "assets/js/pages/system_js_functions/excel_download.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/spc_cld/system_datatable.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/system_js_functions/datatable_initiate.js"%}" type="text/javascript"></script>
+{% endblock %}

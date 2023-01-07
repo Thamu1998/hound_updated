@@ -1,0 +1,121 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ Shift Preferences
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+
+{% endblock %}
+
+{% block body %}
+
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+    
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                    <th class="id">ID</th>
+                    <th class="member">Member</th>
+                    <th class="shift">Shift</th>
+                    <th class="shift_name">Shift</th>
+                    <th class="weekoff">Weekoff</th>
+                    <th>Update</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                        <th>ID</th>
+                        <th>Member</th>
+                        <th>Shift</th>
+                        <th>Shift</th>
+                        <th>Weekoff</th>
+                        <th>Update</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+
+<!--begin::EDIT-MODEL-->
+<div class="modal fade" tabindex="-1" id="kt_model_view">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title text-gray-700">Update Preferences</h5>
+
+                <!--begin::Close-->
+                <div class="btn btn-icon btn-sm btn-active-light-primary ms-2" data-bs-dismiss="modal" aria-label="Close">
+                    <span class="svg-icon svg-icon-2x"></span>
+                </div>
+                <!--end::Close-->
+            </div>
+
+            <div class="modal-body">
+                <div class="input-group mb-5" id="user_card_div">
+                    
+                </div>
+
+                <div class="form-floating mb-7">
+                    <select id="dropdown_shift" class="form-select form-select-lg form-select-solid kt-input SCODE" data-control="select2" data-placeholder="Teams" data-allow-clear="true">
+                        {%for st in shift_type%}
+                            <option value="{{st.id}}">{{st.name}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+
+                <div class="form-floating mb-7">
+                    <select id="dropdown_weekoff" class="form-select form-select-lg form-select-solid kt-input SCODE" data-control="select2" data-placeholder="Teams" data-allow-clear="true">
+                        <option value="1,2">Monday and Tuesday</option>
+                        <option value="2,3">Tuesday and Wednesday</option>
+                        <option value="3,4">Wednesday and Thursday</option>
+                        <option value="4,5">Thursday and Friday</option>
+                        <option value="5,6">Friday and Saturday</option>
+                        <option value="6,7">Saturday and Sunday</option>
+                        <option value="7,1">Sunday and Monday</option>
+                    </select>
+                </div>
+
+            </div>
+
+            <div id="preference_info_footer" class="modal-footer">
+                
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::EDIT-MODEL-->
+
+
+{% endblock %}
+
+{% block js_block %}
+<script>var admin_location = "{{admin_location}}";  var tabel_name = "{{tabel_name}}";var default_query_filter = "{{default_query_filter}}"; var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}""></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_preferences/shift_preferences_datatable.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_preferences/view_shift_preferences_info.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_preferences/shift_preferences_action.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/admin/shift_preferences/datatable_initiate.js"%}" type="text/javascript"></script>
+{% endblock %}

@@ -1,0 +1,396 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+
+<!--begin::Button-->
+
+
+<a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-4 me-2"></i> Filter</a>
+<!--end::Button-->
+
+<!--begin::Trigger-->
+<a id="export_excel" href="" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+    <span class="svg-icon svg-icon-primary svg-icon-1x">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="0" y="0" width="24" height="24"/>
+                <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+            </g>
+        </svg>
+        <!--end::Svg Icon-->
+    </span>Export
+</a>
+
+<a title="Table Settings" href="#" id="kt_drawer_example_basic_button" class="btn btn-icon btn-sm btn-primary me-3">
+    <i class="las la-cube fs-2qx"></i>
+</a>
+{% endblock %}
+
+{% block body %}
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+  
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                    <th class="EventID">EventID</th>
+                    <th class="BundleID">BundleID</th>
+                    <th class="CreationDateTime">CreationDateTime</th>
+                    <th class="TenantID">TenantID</th>
+                    <th class="CustomerID">CustomerID</th>
+                    <th class="SystemRole">SystemRole</th>
+                    <th  class="ServiceStatus">ServiceStatus</th>
+                    <th class="DataCenter">DataCenter</th>
+                    <!-- <th class="SLO">SLO Breach Date</th>
+                    <th class="SLO">SLA Breach Date</th>
+                    <th class="Action">Action</th> -->
+                    <th class="Status">Status</th>
+                    <th class="JiraTicket">JiraTicket</th>
+                    <th class="TenantRole">TenantRole</th>
+                    <th class="CurrentTemplateName">CurrentTemplateName</th>
+                    <th class="CreatedBy">CreatedBy</th>
+                    <th class="StartDateTime">StartDateTime</th>
+                    <th class="EndDateTime">EndDateTime</th>
+                    <th class="EventName">EventName</th>
+                    <th class="EndDate">EndDate</th>
+                    <th class="EndTime">EndTime</th>
+                    <th class="NTDBEmailStatus">NTDBEmailStatus</th>
+                    <th class="Phase">Phase</th>
+                    <th class="StartDate">StartDate</th>
+                    <th class="StartTime">StartTime</th>
+                    <th class="TestMode">TestMode</th>
+                    <th class="NotificationType">NotificationType</th>
+                    <th class="IsSLARelevant">IsSLARelevant</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                            <th>EventID</th>
+                            <th>BundleID</th>
+                            <th>CreationDateTime</th>
+                            <th>TenantID</th>
+                            <th>CustomerID</th>
+                            <th>SystemRole</th>
+                            <th>ServiceStatus</th>
+                            <th>DataCenter</th>
+                            <!-- <th>SLO Breach Date</th>
+                            <th>SLA Breach Date</th>
+                            <th>Action</th> -->
+                            <th>Status</th>
+                            <th>JiraTicket</th>
+                            <th>TenantRole</th>
+                            <th>CurrentTemplateName</th> 
+                            <th>CreatedBy</th>
+                            <th>StartDateTime</th>
+                            <th>EndDateTime</th>
+                            <th>EventName</th>
+                            <th>EndDate</th>
+                            <th>EndTime</th>
+                            <th>NTDBEmailStatus</th>
+                            <th>Phase</th>
+                            <th>StartDate</th>
+                            <th>StartTime</th>
+                            <th>TestMode</th>
+                            <th>NotificationType</th>
+                            <th>IsSLARelevant</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+<!--begin::search draw-->
+<div id="kt_drawer_example_advanced" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '300px'}">
+    <div class="card card-px-1">
+        <div class="card-header card-header-stretch">
+            <div class="card-toolbar">
+                <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" data-bs-toggle="tab" href="#app_tab">Application</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="tab-content" id="myTabContent">
+                <div class="tab-pane fade show active" id="app_tab" role="tabpanel">
+                    <div class="card-body-" id="search_form">                                
+                        <div class="form-group">
+                            <div class="mb-10">
+                                <label class="form-label fw-bold">DateTimeRange in UTC:</label>
+                                    <div class="d-flex mb-0">
+                                        <input class="form-control form-control-solid" placeholder="DateTime Range in UTC" id="kt_daterangepicker_2"/>
+                                    </div>
+                              </div>
+                              <div class="mb-10">
+                                <!--begin::Label-->
+                                <label class="form-label fw-bold">Service Status:</label>
+                                <!--end::Label-->
+                                <!--begin::Options-->
+                                <div class="d-flex">
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                    <input class="form-check-input" type="checkbox" value="1" />
+                                    <span class="form-check-label">Disruption</span>
+                                  </label>
+                                  <!--end::Options-->
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="2" checked="checked" />
+                                    <span class="form-check-label">Degradation</span>
+                                  </label>
+                                  <!--end::Options-->
+                                </div>
+                                <!--end::Options-->
+                              </div>
+                              <!--end::Input group-->
+                              <!--begin::Input group-->
+                              <div class="mb-10">
+                                <!--begin::Label-->
+                                <label class="form-label fw-bold">Tenant Role:</label>
+                                <!--end::Label-->
+                                <!--begin::Switch-->
+                                <div class="d-flex">
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                    <input class="form-check-input" type="checkbox" value="1" />
+                                    <span class="form-check-label">Production</span>
+                                  </label>
+                                  <!--end::Options-->
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="2" checked="checked" />
+                                    <span class="form-check-label">Non-Production</span>
+                                  </label>
+                                  <!--end::Options-->
+                                </div>
+                                <!--end::Switch-->
+                              </div>
+                              <div class="mb-10">
+                                <!--begin::Label-->
+                                <label class="form-label fw-bold">SLA & SLO</label>
+                                <!--end::Label-->
+                                <!--begin::Switch-->
+                                <div class="d-flex">
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                                    <input class="form-check-input" type="checkbox" value="1" />
+                                    <span class="form-check-label">SLO</span>
+                                  </label>
+                                  <!--end::Options-->
+                                  <!--begin::Options-->
+                                  <label class="form-check form-check-sm form-check-custom form-check-solid">
+                                    <input class="form-check-input" type="checkbox" value="2" checked="checked" />
+                                    <span class="form-check-label">SLA</span>
+                                  </label>
+                                  <!--end::Options-->
+                                </div>
+                                <!--end::Switch-->
+                              </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            <button type="button" style="margin-right: 30px;" class="btn btn-light" id="m_reset">Reset</button>
+            <button type="button" class="btn btn-primary float-right" id="m_search">Search</button>
+        </div>
+    </div>
+</div>
+<!--end::search draw-->
+
+
+<!--begin::table setting draw-->
+<div id="kt_drawer_example_basic" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_basic_button" data-kt-drawer-close="#kt_drawer_example_basic_close" data-kt-drawer-width="500px">
+    
+    <!--begin: toggle column -->
+    <div class="kt-portlet__body">
+        <div class="card card-flush">
+            <div class="card-header">
+                <h3 class="card-title">Table Column Toggle</h3>
+            </div>
+            <div class="card-body py-5">
+                <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+              
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+{% endblock %}
+
+{% block js_block %}
+
+<script>var tabel_name = '1';var default_query_filter = '2'; var query_api_url = '3'</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}"></script>
+// <script src="{% static "assets/js/pages/system_js_functions/excel_download.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/system_js_functions/datatable_initiate.js"%}" type="text/javascript"></script> 
+
+<script>
+    $("#kt_daterangepicker_2").daterangepicker({
+    timePicker: true,
+    opens: 'center',
+    autoApply: true,
+    startDate: moment().startOf("hour"),
+    endDate: moment().startOf("hour").add(32, "hour"),
+    locale: {
+        format: "M/DD hh:mm A"
+    }
+});
+</script>
+
+<script>
+    function generate_toggle_pill(){
+
+var toggle_pill = ""
+
+$('.table_header th').each(function (index) { 
+ 
+   var is_show = $(this).attr('is_show')
+   
+   var column_name = $(this).text()
+    
+   if (is_show=="false"){
+
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-primary font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-plus fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+    else
+    {
+        toggle_pill = toggle_pill+'<button type="button" class="btn btn-light-danger font-weight-bold btn-pill topmorgin" data-column="'+index+'"><i class="fas fa-times fs-4 me-2"></i> '+column_name+' </button>&nbsp;';
+    }
+
+});
+
+$("#toggle_pill").html(toggle_pill)
+
+};
+
+jQuery(document).ready(function() {
+
+generate_toggle_pill();
+
+var URL = '/event/api';
+
+var columnDef = ['EventID','BundleID','CreationDateTime' ,'TenantID','CustomerID' ,'SystemRole' ,'ServiceStatus','DataCenter', 'Status' ,'JiraTicket','TenantRole' ,'CurrentTemplateName' 
+,'CreatedBy' ,'StartDateTime','EndDateTime','EventName' ,'EndDate' ,'EndTime','NTDBEmailStatus','Phase','StartDate' ,'StartTime','TestMode ','NotificationType','IsSLARelevant']
+
+var colums = [
+                        {data: 'EventID', name: 'EventID'},
+                        {data: 'BundleID', name: 'BundleID'},
+                        {data: 'CreationDateTime', name: 'CreationDateTime'},
+                        {data: 'TenantID', name: 'TenantID'},
+                        {data: 'CustomerID', name: 'CustomerID'},
+                        {data: 'SystemRole', name: 'SystemRole'},
+                        {data: 'ServiceStatus', name: 'ServiceStatus'},
+                        {data: 'DataCenter', name: 'DataCenter'},
+                        {data: 'Status', name: 'Status'},
+                        {data: 'JiraTicket', name: 'JiraTicket'},
+                        {data: 'TenantRole', name: 'TenantRole'},
+                        {data: 'CurrentTemplateName', name: 'CurrentTemplateName'},
+                        // {data: 'STARTDATE', name: 'SLO Breach Date'},
+                        // {data: 'STARTDATE', name: 'SLA Breach Date'},
+                        // {data: 'STARTDATE', name: 'ACTION'},
+                        {data: 'CreatedBy', name: 'CreatedBy'},
+                        {data: 'StartDateTime', name: 'StartDateTime'},                    
+                        {data: 'EndDateTime', name: 'EndDateTime'},                    
+                        {data: 'EventName', name: 'EventName'},
+                        {data: 'EndDate', name: 'EndDate'},
+                        {data: 'EndTime', name: 'EndTime'},
+                        {data: 'NTDBEmailStatus', name: 'NTDBEmailStatus'},
+                        {data: 'Phase', name: 'Phase'},
+                        {data: 'StartDate', name: 'StartDate'},
+                        {data: 'StartTime', name: 'StartTime'},
+                        {data: 'TestMode', name: 'TestMode'},
+                        {data: 'NotificationType', name: 'NotificationType'},
+                        {data: 'IsSLARelevant', name: 'IsSLARelevant'},
+                
+             ]
+
+var columnDefs = [
+                    { targets:'_all', className: 'dt-center'},                        
+                    // {targets:'EventID',},
+                    // {targets:'BundleID',},
+                    // {targets:'CreationDateTime',},
+                    // {targets:'TenantID',},
+                    // {targets:'CustomerID',},
+                    // {targets:'SystemRole',},
+                    // {targets:'ServiceStatus',},
+                    // {targets:'DataCenter',},
+                    // {targets:'Status',},
+                    // {targets:'JiraTicket',},
+                    // {targets:'TenantRole',},
+                    // {targets:'CurrentTemplateName',},
+                    // {targets:'CreatedBy',},
+                    // {targets:'StartDateTime',},
+                    // {targets:'EndDateTime',},
+                    // {targets:'EventName',},
+                    // {targets:'EndDate',},
+                    // {targets:'EndTime',},
+                    // {targets:'NTDBEmailStatus',},
+                    // {targets:'Phase',},
+                    // {targets:'StartDate',},
+                    // {targets:'StartTime',},
+                    // {targets:'TestMode',},
+                    // {targets:'NotificationType',},
+                    // {targets:'IsSLARelevant',},
+
+                    // {targets:'tic_life_cycle', render: system_lifecycle_status,},
+                    // {targets:'instance_type', render: instance_type,},
+                    // {targets: 'is_shared_db', render: yes_no_label,},
+                    // {targets: 'is_eudp', render: yes_no_label,},
+                    // {targets:'creation_datetime', render: convert_date,},
+                    // {targets:'lastChange_datetime', render: convert_date,},
+                    // {targets: 'system_os_name', visible:false,},
+                    // {targets: 'system_os_type', visible:false,},
+                    // {targets: 'usage_area', visible:false,},
+                    // {targets: 'main_url', visible:false,},
+                ]
+
+var sort_data = [[ 2, "desc" ]]
+
+rowGroup_data = null,
+
+KTDatatablesSearchOptionsAdvancedSearch.init(URL, columnDef, colums, columnDefs, sort_data, rowGroup_data , default_query_filter);
+
+// Execute a function when the user releases a key on the keyboard
+$(".kt-input").keyup(function(event) {
+    if (event.keyCode === 13) {
+        $("#m_search").click();
+    }
+});
+});
+</script>
+{% endblock %}

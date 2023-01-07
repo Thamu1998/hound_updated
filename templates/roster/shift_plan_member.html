@@ -1,0 +1,42 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/fullcalendar/fullcalendar.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ Leave Planner
+{% endblock %}
+
+
+
+{% block subheader-item %}
+
+{% endblock %}
+
+
+
+{% block subheader-button %}
+<a href="{% url 'roster:my_workday_plan_html'%}" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" >Workday Plan</a>
+{% endblock %}
+
+
+
+{% block body %}
+
+<div class="container card p-5">
+<div id="kt_docs_fullcalendar_selectable"></div>
+</div>
+{% endblock %}
+
+
+
+{% block js_block %}
+<script>
+    var inumber = "{{user.username}}"
+</script>
+<script src="{% static "assets/plugins/custom/fullcalendar/fullcalendar.bundle.js"%}"></script>
+<script src="{% static "assets/js/csrfsafe.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/roster/shift_plan_member.js"%}"></script>
+{% endblock %}

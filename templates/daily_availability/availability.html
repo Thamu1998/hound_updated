@@ -1,0 +1,233 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+{% endblock %}
+
+{% block subheader-button %}
+ <!--begin::Search-->
+ <div class="d-flex align-items-center position-relative my-1 mb-2 mb-md-0 pe-2">
+    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+    <span class="svg-icon svg-icon-1 position-absolute ms-3">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
+            <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
+        </svg>
+    </span>
+    <!--end::Svg Icon-->
+    <input type="text" data-kt-docs-table-filter="search" class="form-control form-control-solid w-200px ps-15" placeholder="Free text search" />
+</div>
+<!--end::Search-->
+
+<!--begin::Actions-->
+<div class="d-flex align-items-center py-1">
+    <!--begin::Wrapper-->
+    <div class="me-4">
+        <!--begin::Menu-->
+        <a href="#" data-bs-toggle="modal" data-bs-target="#kt_modal_1" class="btn btn-flex btn-primary btn-active-success fw-bolder" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+        <!--begin::Svg Icon | path: icons/duotune/general/gen031.svg-->
+        <span class="svg-icon svg-icon-5 svg-icon-gray-500 me-1">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M19.0759 3H4.72777C3.95892 3 3.47768 3.83148 3.86067 4.49814L8.56967 12.6949C9.17923 13.7559 9.5 14.9582 9.5 16.1819V19.5072C9.5 20.2189 10.2223 20.7028 10.8805 20.432L13.8805 19.1977C14.2553 19.0435 14.5 18.6783 14.5 18.273V13.8372C14.5 12.8089 14.8171 11.8056 15.408 10.964L19.8943 4.57465C20.3596 3.912 19.8856 3 19.0759 3Z" fill="black" />
+            </svg>
+        </span>
+        <!--end::Svg Icon-->Filter</a>
+        
+        <!--end::Menu-->
+    </div>
+    <!--end::Wrapper-->
+</div>
+<!--end::Actions-->
+{% endblock %}
+
+{% block body %}
+
+<!--begin::Row-->
+<div class="row g-5 g-xl-8">
+    <div class="col-xl-3">
+        <!--begin::Statistics Widget 5-->
+        <a href="#" class="card bg-body hoverable card-xl-stretch mb-xl-8">
+            <!--begin::Body-->
+            <div class="card-body">
+                <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                <span class="svg-icon svg-icon-primary svg-icon-3x ms-n1"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                    <path opacity="0.3" d="M21.6 11.2L19.3 8.89998V5.59993C19.3 4.99993 18.9 4.59993 18.3 4.59993H14.9L12.6 2.3C12.2 1.9 11.6 1.9 11.2 2.3L8.9 4.59993H5.6C5 4.59993 4.6 4.99993 4.6 5.59993V8.89998L2.3 11.2C1.9 11.6 1.9 12.1999 2.3 12.5999L4.6 14.9V18.2C4.6 18.8 5 19.2 5.6 19.2H8.9L11.2 21.5C11.6 21.9 12.2 21.9 12.6 21.5L14.9 19.2H18.2C18.8 19.2 19.2 18.8 19.2 18.2V14.9L21.5 12.5999C22 12.1999 22 11.6 21.6 11.2Z" fill="currentColor"/>
+                    <path d="M11.3 9.40002C11.3 10.2 11.1 10.9 10.7 11.3C10.3 11.7 9.8 11.9 9.2 11.9C8.8 11.9 8.40001 11.8 8.10001 11.6C7.80001 11.4 7.50001 11.2 7.40001 10.8C7.20001 10.4 7.10001 10 7.10001 9.40002C7.10001 8.80002 7.20001 8.4 7.30001 8C7.40001 7.6 7.7 7.29998 8 7.09998C8.3 6.89998 8.7 6.80005 9.2 6.80005C9.5 6.80005 9.80001 6.9 10.1 7C10.4 7.1 10.6 7.3 10.8 7.5C11 7.7 11.1 8.00005 11.2 8.30005C11.3 8.60005 11.3 9.00002 11.3 9.40002ZM10.1 9.40002C10.1 8.80002 10 8.39998 9.90001 8.09998C9.80001 7.79998 9.6 7.70007 9.2 7.70007C9 7.70007 8.8 7.80002 8.7 7.90002C8.6 8.00002 8.50001 8.2 8.40001 8.5C8.40001 8.7 8.30001 9.10002 8.30001 9.40002C8.30001 9.80002 8.30001 10.1 8.40001 10.4C8.40001 10.6 8.5 10.8 8.7 11C8.8 11.1 9 11.2001 9.2 11.2001C9.5 11.2001 9.70001 11.1 9.90001 10.8C10 10.4 10.1 10 10.1 9.40002ZM14.9 7.80005L9.40001 16.7001C9.30001 16.9001 9.10001 17.1 8.90001 17.1C8.80001 17.1 8.70001 17.1 8.60001 17C8.50001 16.9 8.40001 16.8001 8.40001 16.7001C8.40001 16.6001 8.4 16.5 8.5 16.4L14 7.5C14.1 7.3 14.2 7.19998 14.3 7.09998C14.4 6.99998 14.5 7 14.6 7C14.7 7 14.8 6.99998 14.9 7.09998C15 7.19998 15 7.30002 15 7.40002C15.2 7.30002 15.1 7.50005 14.9 7.80005ZM16.6 14.2001C16.6 15.0001 16.4 15.7 16 16.1C15.6 16.5 15.1 16.7001 14.5 16.7001C14.1 16.7001 13.7 16.6 13.4 16.4C13.1 16.2 12.8 16 12.7 15.6C12.5 15.2 12.4 14.8001 12.4 14.2001C12.4 13.3001 12.6 12.7 12.9 12.3C13.2 11.9 13.7 11.7001 14.5 11.7001C14.8 11.7001 15.1 11.8 15.4 11.9C15.7 12 15.9 12.2 16.1 12.4C16.3 12.6 16.4 12.9001 16.5 13.2001C16.6 13.4001 16.6 13.8001 16.6 14.2001ZM15.4 14.1C15.4 13.5 15.3 13.1 15.2 12.9C15.1 12.6 14.9 12.5 14.5 12.5C14.3 12.5 14.1 12.6001 14 12.7001C13.9 12.8001 13.8 13.0001 13.7 13.2001C13.6 13.4001 13.6 13.8 13.6 14.1C13.6 14.7 13.7 15.1 13.8 15.4C13.9 15.7 14.1 15.8 14.5 15.8C14.8 15.8 15 15.7 15.2 15.4C15.3 15.2 15.4 14.7 15.4 14.1Z" fill="currentColor"/>
+                    </svg></span>
+                </span>
+                <!--end::Svg Icon-->
+                <div class="text-primary fw-bolder fs-2 mb-2 mt-5">{{availability_persentage}}</div>
+                <div class="fw-bolder text-primary">Availability</div>
+            </div>
+            <!--end::Body-->
+        </a>
+        <!--end::Statistics Widget 5-->
+    </div>
+    <div class="col-xl-3">
+        <!--begin::Statistics Widget 5-->
+        <a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
+            <!--begin::Body-->
+            <div class="card-body">
+                <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="white" class="bi bi-hdd-rack-fill" viewBox="0 0 16 16">
+                        <path d="M2 2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h1v2H2a2 2 0 0 0-2 2v1a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-1a2 2 0 0 0-2-2h-1V7h1a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H2zm.5 3a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm2 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm-2 7a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zm2 0a.5.5 0 1 1 0-1 .5.5 0 0 1 0 1zM12 7v2H4V7h8z"/>
+                      </svg>
+                </span>
+                <!--end::Svg Icon-->
+                <div class="text-white fw-bolder fs-2 mb-2 mt-5">{{total_no_system}}</div>
+                <div class="fw-bolder text-white">Total number of Systems</div>
+            </div>
+            <!--end::Body-->
+        </a>
+        <!--end::Statistics Widget 5-->
+    </div>
+    <div class="col-xl-3">
+        <!--begin::Statistics Widget 5-->
+        <a href="#" class="card bg-body hoverable card-xl-stretch mb-xl-8">
+            <!--begin::Body-->
+            <div class="card-body">
+                <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                <span class="svg-icon svg-icon-primary svg-icon-3x ms-n1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="white">
+                        <path opacity="0.3" d="M20.9 12.9C20.3 12.9 19.9 12.5 19.9 11.9C19.9 11.3 20.3 10.9 20.9 10.9H21.8C21.3 6.2 17.6 2.4 12.9 2V2.9C12.9 3.5 12.5 3.9 11.9 3.9C11.3 3.9 10.9 3.5 10.9 2.9V2C6.19999 2.5 2.4 6.2 2 10.9H2.89999C3.49999 10.9 3.89999 11.3 3.89999 11.9C3.89999 12.5 3.49999 12.9 2.89999 12.9H2C2.5 17.6 6.19999 21.4 10.9 21.8V20.9C10.9 20.3 11.3 19.9 11.9 19.9C12.5 19.9 12.9 20.3 12.9 20.9V21.8C17.6 21.3 21.4 17.6 21.8 12.9H20.9Z" fill="currentColor"/>
+                        <path d="M16.9 10.9H13.6C13.4 10.6 13.2 10.4 12.9 10.2V5.90002C12.9 5.30002 12.5 4.90002 11.9 4.90002C11.3 4.90002 10.9 5.30002 10.9 5.90002V10.2C10.6 10.4 10.4 10.6 10.2 10.9H9.89999C9.29999 10.9 8.89999 11.3 8.89999 11.9C8.89999 12.5 9.29999 12.9 9.89999 12.9H10.2C10.4 13.2 10.6 13.4 10.9 13.6V13.9C10.9 14.5 11.3 14.9 11.9 14.9C12.5 14.9 12.9 14.5 12.9 13.9V13.6C13.2 13.4 13.4 13.2 13.6 12.9H16.9C17.5 12.9 17.9 12.5 17.9 11.9C17.9 11.3 17.5 10.9 16.9 10.9Z" fill="currentColor"/>
+                    </svg>
+                </span>
+                <!--end::Svg Icon-->
+                <div class="text-primary fw-bolder fs-2 mb-2 mt-5">{{total_downtime_min}}</div>
+                <div class="fw-bolder text-primary">Total downtime in minutes</div>
+            </div>
+            <!--end::Body-->
+        </a>
+        <!--end::Statistics Widget 5-->
+    </div>
+    <div class="col-xl-3">
+        <!--begin::Statistics Widget 5-->
+        <a href="#" class="card bg-primary hoverable card-xl-stretch mb-xl-8">
+            <!--begin::Body-->
+            <div class="card-body">
+                <!--begin::Svg Icon | path: icons/duotune/general/gen032.svg-->
+                <span class="svg-icon svg-icon-white svg-icon-3x ms-n1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                        <path opacity="0.5" d="M13 14.4V3.00003C13 2.40003 12.6 2.00003 12 2.00003C11.4 2.00003 11 2.40003 11 3.00003V14.4H13Z" fill="currentColor"/>
+                        <path d="M5.7071 16.1071C5.07714 15.4771 5.52331 14.4 6.41421 14.4H17.5858C18.4767 14.4 18.9229 15.4771 18.2929 16.1071L12.7 21.7C12.3 22.1 11.7 22.1 11.3 21.7L5.7071 16.1071Z" fill="currentColor"/>
+                    </svg>
+                </span>
+                <!--end::Svg Icon-->
+                <div class="text-white fw-bolder fs-2 mb-2 mt-5">{{total_no_system_down}}</div>
+                <div class="fw-bolder text-white">Number of systems down</div>
+            </div>
+            <!--end::Body-->
+        </a>
+        <!--end::Statistics Widget 5-->
+    </div>
+</div>
+
+<!--begin::Modal-->
+<div class="modal fade" tabindex="-1" id="kt_modal_1">
+    <div class="modal-dialog w-500px">
+        <div class="modal-content">
+            <div class="modal-body">
+                <!--begin::Input group-->
+                <div class="d-flex align-items-center position-relative my-1 mb-10">
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                    <span class="svg-icon svg-icon-1 position-absolute ms-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"/>
+                            <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"/>
+                            <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <input class="form-control form-control-solid ps-15" placeholder="Pick date rage" id="kt_daterangepicker_report_date" />
+                </div>
+                <!--end::Input group-->
+                 <!--begin::Input group-->
+                 <div class="mb-10">
+                    <!--begin::Label-->
+                    <label class="form-label fw-bold">System Type:</label>
+                    <!--end::Label-->
+                    <!--begin::Options-->
+                    <div class="d-flex">
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid me-5">
+                            <input class="form-check-input" type="checkbox" id="isProd" value="PROD" checked="checked"/>
+                            <span class="form-check-label">Production</span>
+                        </label>
+                        <!--end::Options-->
+                        <!--begin::Options-->
+                        <label class="form-check form-check-sm form-check-custom form-check-solid">
+                            <input class="form-check-input" type="checkbox" id="isnonProd" value="NON_PROD" />
+                            <span class="form-check-label">Non-Production</span>
+                        </label>
+                        <!--end::Options-->
+                    </div>
+                    <!--end::Options-->
+                </div>
+                <!--end::Input group-->
+                <!--begin::Actions-->
+                <div class="d-flex justify-content-end">
+                    <button type="button" class="btn btn-sm btn-light btn-active-light-primary me-2" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" id="load_report_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
+                </div>
+                <!--end::Actions-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::Modal-->
+<!--end::Row-->
+
+<div class="card card-flush shadow-sm">
+  
+    <div class="card-body py-5">
+        
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">
+                    <th class="report_date show">Date</th>
+                    <th style="overflow-x: auto;white-space: nowrap;" class="dc">Data Center</th>
+                    <th class="sid">System</th>
+                    <th class="system_type">System Type</th>
+                    <th style="overflow-x: auto;white-space: nowrap;" class="system_role">System Role</th>
+                    <th class="customer">Customer</th>
+                    <th class="availablity">Availability</th>
+                    <th class="downtime_in_min">Downtime</th>
+                    <th style="overflow-x: auto;white-space: nowrap;" class="outage_type">Outage Type</th>
+                    <th class="category">Category</th>
+                    <th class="subcategory">SubCategory</th>
+                    <th class="rca_category">RCACategory</th>
+                    <th class="reason">Reason</th>
+                    <th class="ticket">Ticket</th>
+                    <th class="system_type_desc">DEC</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+
+{% endblock %}
+
+{% block js_block %}
+<script>var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/pages/daily_availability/availability.js"%}" type="text/javascript"></script>
+{% endblock %}

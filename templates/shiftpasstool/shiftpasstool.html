@@ -1,0 +1,1448 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+
+
+{% endblock %}
+
+{% block page_title %}
+{{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+
+
+{% endblock %}
+
+{% block subheader-button %}
+
+<!-- <div class="me-3">
+    <a href="#" id="kt_drawer_example_advanced_button"  class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder"
+        >Select Date & Shift</a>
+</div> -->
+
+
+
+
+<style>
+    #swap_request_from_tbody_outages {
+        white-space: nowrap;
+        overflow-x: scroll !important;
+}
+   #swap_request_from_tbody{
+        white-space: nowrap;
+        overflow-x: scroll !important;
+}
+#host_list_tbody{
+        white-space: nowrap;
+        overflow-x: scroll !important;
+}
+#host_list_tbody_infra{
+        white-space: nowrap;
+        overflow-x: scroll !important;
+}
+
+</style>
+
+
+<a href="#" class="btn btn-sm btn-primary me-3" data-bs-toggle="modal" data-bs-target="#model_open"> Select Date &
+    Shift</a>
+
+{% endblock %}
+
+{% block body %}
+<div id="holiday_info_div"></div>
+
+<div class="row" id="data_div"></div>
+
+
+
+<div class="modal fade" tabindex="-1" id="model_open">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="card-body">
+                    <div class="form-floating">
+                        <label for="Shift_dropdown">Select Shift</label>
+                        <select id="Shift_dropdown" class="form-select form-select-solid mb-5"
+                            data-placeholder="Select Shift" data-dropdown-parent="#model_apply_leave">
+                            <option></option>
+                            <option>Morning</option>
+                            <option>Afternoon</option>
+                            <option>Night</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-0">
+                        <input type='date' class="form-control form-control-solid" placeholder="Pick date"
+                            id="kt_date" />
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="submit" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<!-- <div id="kt_drawer_example_advanced" class="bg-white card" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-width="500px">
+    <div class="card-header card-header-stretch">
+        <div class="card-toolbar">
+            <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#date_filter">Filter</a>
+                </li>
+            
+            </ul>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="form-floating">
+            <label for="Shift_dropdown">Select Shift</label>
+            <select id="Shift_dropdown" class="form-select form-select-solid mb-5"
+                data-placeholder="Select Shift" data-dropdown-parent="#model_apply_leave" >
+                <option></option>
+                <option>Morning</option>
+                <option>Afternoon</option>
+                <option>Night</option>
+            </select>
+        </div>
+
+        <div class="mb-0">
+            <input type='date' class="form-control form-control-solid" placeholder="Pick date" id="kt_date" />
+        </div>
+
+        <div class="modal-footer">
+            <button type="submit" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                data-bs-dismiss="modal">Submit</button>
+        </div>
+    </div>
+</div> -->
+
+
+<!--begin::Row-->
+
+
+
+
+
+   
+        <div class="card card-flush" style="min-height:325px;">
+            <div class="row g-5 g-xl-10 mt-1">
+            <div class="col-6">
+               <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-dark">Queue Status Chart</span>
+
+                </h3>
+                <div class="modal-footer">
+                    <!-- <button type="button" id="create_work_group_request_btn" code="" class="btn btn-primary">Create
+                    Ticket</button> -->
+                </div>
+
+                <!-- <div >
+
+            </div> -->
+
+                <div class="me-3" id="hideUpdate">
+
+
+                </div>
+            </div>
+            <div class="card-body" id="floating_chart"></div>
+            <!-- <div class="card-body" id="chart_widget_1"> </div> -->
+
+        </div>
+        <!-- <div class="col-1" style="background-color: aliceblue;">
+
+        </div> -->
+        <div class="col-6">
+            <div class="card card-flush" style="min-height:325px;">
+                <!-- <div class="card-header border-0 pt-5" id="Update_button_comment">
+                    
+                    
+                    <div class="modal-footer">
+    
+                    </div>
+                </div> -->
+    
+    
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-dark">Technical Note</span>
+    
+                    </h3>
+                    <div class="modal-footer">
+                        <!-- <button type="button" id="create_work_group_request_btn" code="" class="btn btn-primary">Create
+                            Ticket</button> -->
+                    </div>
+    
+                    <!-- <div >
+        
+                    </div> -->
+    
+                    <div class="me-3" id="Update_button_comment">
+    
+    
+                    </div>
+                </div>
+    
+                <div class="card-body" id="update_notes">
+                    <!-- <textarea class="form-control" rows="7" cols="70" name="comment" id="comment_id" style="font-size: initial;background: aliceblue;"></textarea><br><br>
+                    <button type="submit" id="submit_cmd_btn_notes" class="btn btn-sm btn-primary">Submit</button> -->
+    
+                </div>
+    
+                <!-- <div class="card-footer">
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+  
+</div><br><br>
+<!--end::Row-->
+
+
+<div class="card">
+    <div class="row g-5 g-xl-10 mt-1">
+        <div class="col" id="ShiftKanban">
+        </div>
+    </div>
+    <div class="row g-5 g-xl-10 mt-1">
+        <div class="col" id="ShiftKanban1">
+        </div>
+    </div>
+</div>
+
+
+
+<!--begin::Row-->
+<div class="row g-5 g-xl-10 mt-1">
+
+
+
+    <div class="card card-flush" style="min-height:280px;">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder text-dark">Outage</span>
+
+            </h3>
+            <div class="modal-footer">
+                <!-- <button type="button" id="create_work_group_request_btn" code="" class="btn btn-primary">Create
+                    Ticket</button> -->
+            </div>
+
+            <div class="me-3">
+
+                <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                    data-bs-target="#model_create_token" id="create_work_group_request_btn">create ticket</a>
+            </div>
+        </div>
+        <div class="card-body" style="overflow-x: scroll;">
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7" >
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-muted">
+                                <th style="min-width: 200px;">Ticket ID</th>
+                                <th style="min-width: 200px;">Cause</th>
+                                <th class="text-center" style="min-width: 200px;">Customer Impact</th>
+                                <th class="text-center" style="min-width: 200px;">Action Required</th>
+                                <th class="text-center" style="min-width: 100px;">Status</th>
+                                <th class="text-center" class="min-w-100px" style="min-width: 100px;">Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="swap_request_from_tbody_outages">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<!--end::Row-->
+
+<!--begin::Row-->
+<div class="row g-5 g-xl-10 mt-1">
+
+    <div class="card card-flush" style="min-height:280px;">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder text-dark">Follow-up Tickets</span>
+
+            </h3>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                    data-bs-target="#model_create_token1" id="create_work_group_request_btn">create ticket</a>
+            </div>
+        </div>
+        <div class="card-body" style="overflow-x: scroll;">
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-muted">
+                                <th style="min-width: 200px;">Ticket ID</th>
+                                <th style="min-width: 200px;">Description</th>
+                                <th style="min-width: 200px;text-align: center;">Action Taken</th>
+                                <th style="min-width: 200px;text-align: center;">Action Required</th>
+                                <th style="min-width: 100px;text-align: center;">Status</th>
+                                <th style="min-width: 100px;text-align: center;">Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="swap_request_from_tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+<!-- Host List -->
+
+<div class="row g-5 g-xl-10 mt-1">
+
+    <div class="card card-flush" style="min-height:280px;">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder text-dark">Weeekend Activity</span>
+
+            </h3>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                    data-bs-target="#model_host_list" id="create_work_group_request_btn">create</a>
+            </div>
+        </div>
+        <div class="card-body" style="overflow-x: scroll;">
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-muted">
+                                <th style="min-width: 200px;text-align: center;">Region</th>
+                                <th style="min-width: 200px;">Ticket ID</th>
+                                <!-- <th style="">Planned_type</th> -->
+                                <th style="min-width: 200px;">Description</th>
+                                <th style="min-width: 200px;">Pre Check</th>
+                                <th style="min-width: 200px;text-align: center;">CR ID</th>
+                                <th style="width:380px;min-width: 200px;text-align: center;">CMP Date&Time</th>
+                                <!-- <th style="">Shift</th> -->
+                                <th style="min-width: 100px;text-align: center;">Status</th>
+                                <th style="min-width: 100px;">Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="host_list_tbody">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+
+
+<!-- Host List Infra -->
+
+<div class="row g-5 g-xl-10 mt-1">
+
+    <div class="card card-flush" style="min-height:280px;">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder text-dark">SM Infra</span>
+
+            </h3>
+            <div class="modal-footer">
+                <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                    data-bs-target="#model_host_list_infra" id="create_work_group_request_btn">create</a>
+            </div>
+        </div>
+        <div class="card-body" style="overflow-x: scroll;">
+
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-muted">
+                                <!-- <th style="">Region</th> -->
+                                <th style="min-width: 200px;">Ticket ID</th>
+                                <!-- <th style="">Planned_type</th> -->
+                                <th >Description</th>
+                                <!-- <th style="">CR ID</th> -->
+                                <th style="width:380px;;min-width: 200px;">Implementation Period</th>
+                                <!-- <th style="">Shift</th> -->
+                                <th style="min-width: 100px;text-align: center;">Status</th>
+                                <th style="min-width: 100px;text-align: center;">Actions
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody id="host_list_tbody_infra">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_create_token">
+    <!-- <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+           
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingTicket" placeholder="Ticket Id">
+                            <label for="floatingTicket">Ticket Id</label>
+                        </div>
+
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingCause" placeholder="Cause">
+                            <label for="floatingCause">Cause</label>
+                        </div>
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingCustomerImp"
+                                placeholder="Customer Impact">
+                            <label for="floatingCustomerImp">Customer Impact</label>
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingActionReq"
+                                placeholder="Action Required">
+                            <label for="floatingActionReq">Action Required</label>
+                        </div>
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            
+
+                            <label for="floatingStatus">Status</label>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                id="floatingStatus">
+                                <option selected></option>
+                                <option value="New">New</option>
+                                <option value="InProgress">InProgress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+
+
+                <div class="modal-footer">
+
+                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                        data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" id="submit_button" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                        data-bs-dismiss="modal">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+
+
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+
+                <form id="submit_button" class="form" action="#">
+
+                    <div class="mb-13 text-center">
+
+                        <h1 class="mb-3">Create Outage</h1>
+
+                        
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">Ticket ID</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="Ticket ID"></i>
+                            </label>
+
+                            <input type="text" class="form-control" id="floatingTicket" placeholder="Ticket ID">
+                        </div>
+
+
+
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Status" id="floatingStatus">
+                                <option value="">Select a Status...</option>
+                                <option value="New">New</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Cause</label>
+
+                            <textarea class="form-control" rows="3" cols="40" id="floatingCause" placeholder="Cause"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Customer Impact</label>
+
+                            <textarea class="form-control" rows="3" cols="40" id="floatingCustomerImp"
+                                placeholder="Customer Impact"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Action Required</label>
+                            <textarea class="form-control" rows="3" cols="40" id="floatingActionReq"
+                                placeholder="Action Required"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+
+
+
+
+                    </div>
+
+                    <div class="text-center">
+                        <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal">Submit</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+</div>
+
+<!-- SPC TOKEN -->
+<div class="modal fade" tabindex="-1" id="model_create_token1">
+
+    <!-- <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingTicket_spc" placeholder="Ticket Id">
+                            <label for="floatingTicket">Ticket Id</label>
+                        </div>
+
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingCause_spc" placeholder="Cause">
+                            <label for="floatingCause">Cause</label>
+                        </div>
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingCustomerImp_spc"
+                                placeholder="Customer Impact">
+                            <label for="floatingCustomerImp"> Action Taken</label>
+                        </div>
+
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingActionReq_spc"
+                                placeholder="Action Required">
+                            <label for="floatingActionReq">Action Required</label>
+                        </div>
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+
+                            <label for="floatingStatus">Status</label>
+                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
+                                id="floatingStatus_spc">
+                                <option selected></option>
+                                <option value="New">New</option>
+                                <option value="InProgress">InProgress</option>
+                            </select>
+                        </div>
+
+
+
+                    </div>
+
+                </div><br>
+
+               
+
+                <div class="modal-footer">
+
+
+                    <button type="submit" id="close_button_spc" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                    data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" id="submit_button_spc" class="btn btn-sm btn-primary"
+                        data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </div> -->
+
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+
+                <form id="submit_button_spc" class="form" action="#">
+
+                    <div class="mb-13 text-center">
+
+                        <h1 class="mb-3">Create SPC Ticket</h1>
+
+                        <div class="text-gray-400 fw-bold fs-5">If you need more info, please check
+                            <a href="" class="fw-bolder link-primary">Support Guidelines</a>.
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">Ticket ID</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="Ticket ID"></i>
+                            </label>
+
+                            <input type="text" class="form-control" id="floatingTicket_spc" placeholder="Ticket ID">
+                        </div>
+
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Status" id="floatingStatus_spc">
+                                <option value="">Select a Status...</option>
+                                <option value="New">New</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Cause</label>
+                            <textarea class="form-control" rows="3" cols="40" id="floatingCause_spc" placeholder="Cause"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+
+                    </div>
+
+
+                    <div class="row g-9 mb-8">
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Action Taken</label>
+                            <textarea class="form-control" rows="3" cols="40" id="floatingCustomerImp_spc"
+                                placeholder="Customer Impact"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Action Required</label>
+                            <textarea class="form-control" rows="3" cols="40" id="floatingActionReq_spc"
+                                placeholder="Action Required"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal">Submit</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+<div class="modal fade" tabindex="-1" id="model_chart">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingAlerts" placeholder="Alerts">
+                            <label for="floatingAlerts">Alerts</label>
+                        </div>
+
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingManualIncidents"
+                                placeholder="Manual Incidents">
+                            <label for="floatingManualIncidents">Manual Incidents</label>
+                        </div>
+
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingProblems" placeholder="Problems">
+                            <label for="floatingProblems">Problems</label>
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingServiceRequest"
+                                placeholder="Service Request">
+                            <label for="floatingServiceRequest">Service Request</label>
+                        </div>
+
+                    </div>
+                </div><br>
+
+                <div class="modal-footer">
+
+                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                        data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" id="submit_button_chart" class="btn btn-sm btn-primary"
+                        data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
+                </div>
+                <!-- <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" 
+                     id="" >Submit</a> -->
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ChartData Update -->
+<div class="modal fade" tabindex="-1" id="model_chart_update">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-body">
+
+
+                <div class="row mt-3">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingAlerts_update" placeholder="Alerts">
+                            <label for="floatingAlerts">Alerts</label>
+                        </div>
+
+                    </div>
+                </div><br>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingManualIncidents_update"
+                                placeholder="Manual Incidents">
+                            <label for="floatingManualIncidents">Manual Incidents</label>
+                        </div>
+
+                    </div>
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingProblems_update" placeholder="Problems">
+                            <label for="floatingProblems">Problems</label>
+                        </div>
+
+                    </div>
+
+                </div><br>
+
+                <div class="row">
+                    <div class="col">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="floatingServiceRequest_update"
+                                placeholder="Service Request">
+                            <label for="floatingServiceRequest">Service Request</label>
+                        </div>
+
+                    </div>
+                </div><br>
+
+                <div class="modal-footer">
+
+                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                        data-bs-dismiss="modal">Close</button>
+
+                    <button type="submit" id="submit_button_chart_update" class="btn btn-sm btn-primary"
+                        data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
+                </div>
+                <!-- <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" 
+                     id="" >Submit</a> -->
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create Host list Model -->
+<div class="modal fade" tabindex="-1" id="model_host_list">
+
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+
+                <form class="form" action="#">
+
+                    <div class="mb-13 text-center">
+
+                        <h1 class="mb-3">Create Ticket</h1>
+
+                       
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+                        <div class="col-md-6 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">Ticket ID</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="Ticket ID"></i>
+                            </label>
+
+                            <input type="text" class="form-control" id="floatingTid" placeholder="Ticket ID">
+                        </div>
+
+                        <div class="col-md-6 fv-row">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">CMP Date&Time</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="CMP Date&Time"></i>
+                            </label>
+
+                            <input type="text" class="form-control" id="floatingCmpDate" placeholder="CMP Date&Time">
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Planned Type</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Type" id="floatingPlanned">
+                                <option value="">Select a Type...</option>
+                                <option value="S4H">S4H</option>
+                                <option value="IBP">IBP</option>
+                                <option value="BYD/C4C">BYD/C4C</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Region</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Region" id="floatingRegion">
+                                <option value="">Select a Region...</option>
+                                <option value="EMEA">EMEA</option>
+                                <option value="APJ">APJ</option>
+                                <option value="AMER">AMER</option>
+                                <option value="MENA">MENA</option>
+                                <option value="OTHERS">OTHERS</option>
+                            </select>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Description</label>
+
+                            <textarea class="form-control" rows="3" cols="40" id="floatingSubject"
+                                placeholder="Description" style="font-size: initial;background: aliceblue;"></textarea>
+
+                        </div>
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+                        <div>
+                            <label class="required fs-6 fw-bold mb-2">Precheck Status</label>
+
+                            <textarea class="form-control" rows="3" cols="40" id="floatingComment"
+                                placeholder="Precheck Status"
+                                style="font-size: initial;background: aliceblue;"></textarea>
+
+                        </div>
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">CR ID</label>
+                            <input type="text" class="form-control" id="floatingCR" placeholder="CR ID">
+
+
+                        </div>
+
+                        <div class="col-md-6 fv-row">
+
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Status" id="floatingHostStatus">
+                                <option value="">Select a Status...</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="New">New</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+
+
+                        </div>
+
+
+                        <!-- <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">CR Approval</label>
+                            <input type="text" class="form-control" id="floatingCRApproval" placeholder="CR Approval">
+
+                        </div> -->
+
+                    </div>
+
+                    <!-- <div class="row g-9 mb-8"> -->
+
+                    <!-- <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Resource</label>
+                            <input type="text" class="form-control" id="floatingResource" placeholder="Resource">
+
+                        </div> -->
+
+
+
+
+                    <!-- </div> -->
+
+                    <div class="text-center">
+                        <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal" id="submit_button_hostList">Submit</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+</div>
+
+
+<!-- Create Infra host list  -->
+
+<div class="modal fade" tabindex="-1" id="model_host_list_infra">
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
+
+                <form class="form" action="#">
+
+                    <div class="mb-13 text-center">
+
+                        <h1 class="mb-3">Create Infra Ticket</h1>
+
+                        
+
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row">
+
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">Ticket ID</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="Ticket ID"></i>
+                            </label>
+
+                            <input type="text" class="form-control" id="floatingTid_infra" placeholder="Ticket ID">
+
+                        </div>
+
+                        <div class="col-md-6 fv-row">
+
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Status" id="floatingHostStatus_infra">
+                                <option value="">Select a Status...</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="New">New</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
+
+
+                        </div>
+
+
+                    </div>
+
+
+                    <div class="d-flex flex-column mb-8 fv-row">
+
+                        <label class="required fs-6 fw-bold mb-2">Implementation Period</label>
+                        <input type="text" class="form-control" id="floatingImplementation"
+                            placeholder="Implementation Period">
+
+
+                    </div>
+
+                    <div class="d-flex flex-column mb-8 fv-row">
+
+                        <label class="required fs-6 fw-bold mb-2">Description</label>
+                        <!-- <input type="text" class="form-control" id="floatingSubject_infra"
+                        placeholder="Subject"> -->
+
+                        <textarea class="form-control" rows="3" cols="40" id="floatingSubject_infra"
+                            placeholder="Description" style="font-size: initial;background: aliceblue;"></textarea>
+                    </div>
+
+
+
+
+
+
+                    <div class="text-center">
+                        <button type="reset" class="btn btn-light me-3" onclick="cancelModel()">Cancel</button>
+                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal" id="submit_button_hostList_infra">Submit</button>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+
+
+
+
+<div id="cancelModelView" data-bs-backdrop="static" class="" tabindex="-1">
+
+</div>
+
+
+
+<div class="modal fade" tabindex="-1" id="updateToken">
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="floatingTickets">
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<div class="modal fade" tabindex="-1" id="updateToken_spa">
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="floatingTickets_spa">
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="viewToken_spa">
+    <div class="modal-dialog" style="margin-left: 10%;margin-top:8%">
+        <div class="modal-content" style="width: 266%;height: 40vh;">
+            <div class="modal-body" id="viewTickets_spa">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" tabindex="-1" id="viewToken_outages">
+    <div class="modal-dialog" style="margin-left: 10%;margin-top:8%">
+        <div class="modal-content" style="width: 266%;height: 40vh;">
+            <div class="modal-body" id="viewTickets_outages">
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="updateViewHost">
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost">
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+<div class="modal fade" tabindex="-1" id="updateViewHost_infra">
+
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
+
+                </div>
+
+            </div>
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost_infra">
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- <div class="container">
+    <button class="btn btn-primary mt-5" >Create Ticket</button>
+    <div class="popup  text-center" id="popup">
+
+        
+
+        
+
+        
+    </div>
+</div> -->
+
+<!--end::Row-->
+
+{% endblock %}
+
+{% block js_block %}
+
+
+<script src="{% static "assets/js/pages/shiftpasstool/shiftpasstool.js"%}"></script>
+<script src="{% static "assets/js/pages/shiftpasstool/shiftpasstool_chart.js"%}"></script>
+<script src="{% static "assets/js/pages/shiftpasstool/shiftpasstool_create.js"%}"></script>
+
+{% endblock %}

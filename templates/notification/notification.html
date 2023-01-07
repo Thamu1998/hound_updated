@@ -1,0 +1,473 @@
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/plugins/custom/datatables/datatables.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+<p class="m-0 p-0"><span id="from_datetime" class="fw-bolder fs-5 text-gray-700"></span>&nbsp;&nbsp; to &nbsp;&nbsp;<span class="fw-bolder fs-5 text-gray-700" id="to_datetime"></span></p>
+{% endblock %}
+
+{% block subheader-button %}
+
+<!--begin::Button-->
+<a href="#" id="kt_drawer_example_advanced_button" class="btn btn-sm btn-primary me-3" ><i class="bi bi-funnel-fill fs-4 me-2"></i> Filter</a>
+<!--end::Button-->
+
+<!--begin::Trigger-->
+<a id="export_excel_btn" href="#" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+    <span class="svg-icon svg-icon-primary svg-icon-1x">
+        <!--begin::Svg Icon | path:assets/media/svg/icons/Design/PenAndRuller.svg-->
+        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <rect x="0" y="0" width="24" height="24"/>
+                <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"/>
+                <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"/>
+                <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "/>
+            </g>
+        </svg>
+        <!--end::Svg Icon-->
+    </span>Export
+</a>
+
+<a title="Table Settings" href="#" id="kt_drawer_table_setting_button" class="btn btn-icon btn-sm btn-primary me-3">
+    <i class="las la-cube fs-2qx"></i>
+</a>
+{% endblock %}
+
+{% block body %}
+<style>
+    div.scrollmenu {
+      overflow: auto;
+      white-space: nowrap;
+    }
+    
+    div.scrollmenu a {
+      display: inline-block;
+      color: white;
+      text-align: center;
+      padding: 14px;
+      text-decoration: none;
+    }
+    
+    div.scrollmenu a:hover {
+      background-color: #777;
+    }
+    </style>
+<div class="row">
+    <div class="col-6 card card-bordered mb-5">
+        <div class="card ">
+            <div class="card-header card-header-stretch">
+                <h3 class="card-title">Intermediate RCA</h3>
+                <div class="card-toolbar">
+                    <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab_intermidiate_slo">SLO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab_intermidiate_sla">SLA</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active scrollmenu" id="tab_intermidiate_slo" role="tabpanel">
+                        <div id="chart_intermidiate_slo" style="height: 350px;"></div>
+                    </div>
+        
+                    <div class="tab-pane fade scrollmenu" id="tab_intermidiate_sla" role="tabpanel">
+                        <div id="chart_intermidiate_sla" style="height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-6 card card-bordered mb-5">
+        <div class="card ">
+            <div class="card-header card-header-stretch">
+                <h3 class="card-title">Final RCA</h3>
+                <div class="card-toolbar">
+                    <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                        <li class="nav-item">
+                            <a class="nav-link active" data-bs-toggle="tab" href="#tab_final_slo">SLO</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" data-bs-toggle="tab" href="#tab_final_sla">SLA</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="myTabContent">
+                    <div class="tab-pane fade show active scrollmenu" id="tab_final_slo" role="tabpanel">
+                        <div id="chart_final_slo" style="height: 350px;"></div>
+                    </div>
+        
+                    <div class="tab-pane fade scrollmenu" id="tab_final_sla" role="tabpanel">
+                        <div id="chart_final_sla" style="height: 350px;"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--begin::body-->
+<div class="card card-flush shadow-sm">
+    <div class="card-body py-5">
+        <!--begin::Section-->
+        <div class="p-0">
+            <!--begin::Datatable-->
+            <table id="kt_datatable_example_1" class="table align-middle table-row-dashed fs-6 gy-5 chart_scrol">
+                <thead>
+                <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0 table_header h1-font-size">                    
+                    <th class="EventID">EventID</th>
+                    <th is_show="false" class="NotificationID">Notification ID</th>
+                    <th class="NotificationSubType">Notification Sub Type</th>
+                    <th class="SentToCustomerOn">Sent To Customer On</th>
+                    <th class="IsInterRcaSloExpired">Is Intermediate RCA SLO Breached</th>
+                    <th class="IsInterRcaSlaExpired">Is Intermediate RCA SLA Breached</th>
+                    <th class="IsInterRcaSend">Is Intermediate RCA Send</th>
+                    <th class="IsFinalRcaSloExpired">Is Final RCA SLO Breached</th>
+                    <th class="IsFinalRcaSlaExpired">Is Final RCA SLA Breached</th>
+                    <th class="IsFinalRcaSend">Is Final RCA Send</th>
+                    <th is_show="false" class="CurrentTemplateName">Current Template Name</th>
+                    <th is_show="false" class="EventName">Event Name</th>
+                    <th class="Phase">Phase</th>
+                    <th is_show="false" class="BundleID">BundleID</th>
+                    <th is_show="false" class="CreatedBy">Created By</th>
+                    <th class="StartDateTime">Start DateTime</th>
+                    <th class="EndDateTime">End DateTime</th>
+                    <th class="DataCenterID">Data center</th>
+                    <th class="NotificationType">Notification Type</th>
+                    <th class="Status">Status</th>
+                    <th class="SystemRoles">System Roles</th>
+                    <th class="ServiceStatus">Service Status</th>
+                    <th class="CreationDateTime">Creation DateTime</th>
+                    <th class="IsStartTimeRevised">IsStart Time Revised</th>
+                    <th class="IsSLARelevant">Is SLA Relevant</th>
+                    <th class="IsServiceStatusRevised">Is Service Status Revised</th>
+                    <th class="IsEndTimeRevised">Is EndTime Revised</th>
+                    <th class="isProd">Is Prod</th>
+                </tr>
+                </thead>
+                <tbody class="text-gray-600 fw-bold fs-5">
+                </tbody>
+                <tfoot>
+                    <tr class="text-start text-gray-400 fw-bolder fs-6 text-uppercase gs-0">
+                        <th>EventID</th>
+                        <th>Notification ID</th>
+                        <th>Notification Sub Type</th>
+                        <th>Sent To Customer On</th>
+                        <th>Is Intermediate RCA SLO Breached</th>
+                        <th>Is Intermediate RCA SLA Breached</th>
+                        <th>Is Intermediate RCA Send</th>
+                        <th>Is Final RCA SLO Breached</th>
+                        <th>Is Final RCA SLA Breached</th>
+                        <th>Is Final RCA Send</th>
+                        <th>Current Template Name</th>
+                        <th>Event Name</th>
+                        <th>Phase</th>
+                        <th>BundleID</th>
+                        <th>Created By</th>
+                        <th>Start DateTime</th>
+                        <th>End DateTime</th>
+                        <th>Data center</th>
+                        <th>Notification Type</th>
+                        <th>Status</th>
+                        <th>System Roles</th>
+                        <th>Service Status</th>
+                        <th>Creation DateTime</th>
+                        <th>IsStart Time Revised</th>
+                        <th>Is SLA Relevant</th>
+                        <th>Is Service Status Revised</th>
+                        <th>Is EndTime Revised</th>
+                        <th>Is Prod</th>
+                    </tr>
+                </tfoot>
+            </table>
+            <!--end::Datatable-->
+        </div>
+        <!--end::Section-->
+    </div>
+</div>
+<!--end::body-->
+
+<!--begin::search draw-->
+<div id="kt_drawer_example_advanced" class="bg-white card" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-width="500px">
+    <div class="card-header card-header-stretch">
+        <div class="card-toolbar">
+            <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
+                <li class="nav-item">
+                    <a class="nav-link active" data-bs-toggle="tab" href="#date_filter">Filter</a>
+                </li>
+                {% comment %} <li class="nav-item">
+                    <a class="nav-link" data-bs-toggle="tab" href="#table_filter">Table Filter</a>
+                </li> {% endcomment %}
+            </ul>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="date_filter" role="tabpanel">
+                <!--begin::Input group-->
+                <div class="d-flex align-items-center position-relative my-1 mb-10">
+                    <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
+                    <span class="svg-icon svg-icon-1 position-absolute ms-3">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <path opacity="0.3" d="M21 22H3C2.4 22 2 21.6 2 21V5C2 4.4 2.4 4 3 4H21C21.6 4 22 4.4 22 5V21C22 21.6 21.6 22 21 22Z" fill="currentColor"/>
+                            <path d="M6 6C5.4 6 5 5.6 5 5V3C5 2.4 5.4 2 6 2C6.6 2 7 2.4 7 3V5C7 5.6 6.6 6 6 6ZM11 5V3C11 2.4 10.6 2 10 2C9.4 2 9 2.4 9 3V5C9 5.6 9.4 6 10 6C10.6 6 11 5.6 11 5ZM15 5V3C15 2.4 14.6 2 14 2C13.4 2 13 2.4 13 3V5C13 5.6 13.4 6 14 6C14.6 6 15 5.6 15 5ZM19 5V3C19 2.4 18.6 2 18 2C17.4 2 17 2.4 17 3V5C17 5.6 17.4 6 18 6C18.6 6 19 5.6 19 5Z" fill="currentColor"/>
+                            <path d="M8.8 13.1C9.2 13.1 9.5 13 9.7 12.8C9.9 12.6 10.1 12.3 10.1 11.9C10.1 11.6 10 11.3 9.8 11.1C9.6 10.9 9.3 10.8 9 10.8C8.8 10.8 8.59999 10.8 8.39999 10.9C8.19999 11 8.1 11.1 8 11.2C7.9 11.3 7.8 11.4 7.7 11.6C7.6 11.8 7.5 11.9 7.5 12.1C7.5 12.2 7.4 12.2 7.3 12.3C7.2 12.4 7.09999 12.4 6.89999 12.4C6.69999 12.4 6.6 12.3 6.5 12.2C6.4 12.1 6.3 11.9 6.3 11.7C6.3 11.5 6.4 11.3 6.5 11.1C6.6 10.9 6.8 10.7 7 10.5C7.2 10.3 7.49999 10.1 7.89999 10C8.29999 9.90003 8.60001 9.80003 9.10001 9.80003C9.50001 9.80003 9.80001 9.90003 10.1 10C10.4 10.1 10.7 10.3 10.9 10.4C11.1 10.5 11.3 10.8 11.4 11.1C11.5 11.4 11.6 11.6 11.6 11.9C11.6 12.3 11.5 12.6 11.3 12.9C11.1 13.2 10.9 13.5 10.6 13.7C10.9 13.9 11.2 14.1 11.4 14.3C11.6 14.5 11.8 14.7 11.9 15C12 15.3 12.1 15.5 12.1 15.8C12.1 16.2 12 16.5 11.9 16.8C11.8 17.1 11.5 17.4 11.3 17.7C11.1 18 10.7 18.2 10.3 18.3C9.9 18.4 9.5 18.5 9 18.5C8.5 18.5 8.1 18.4 7.7 18.2C7.3 18 7 17.8 6.8 17.6C6.6 17.4 6.4 17.1 6.3 16.8C6.2 16.5 6.10001 16.3 6.10001 16.1C6.10001 15.9 6.2 15.7 6.3 15.6C6.4 15.5 6.6 15.4 6.8 15.4C6.9 15.4 7.00001 15.4 7.10001 15.5C7.20001 15.6 7.3 15.6 7.3 15.7C7.5 16.2 7.7 16.6 8 16.9C8.3 17.2 8.6 17.3 9 17.3C9.2 17.3 9.5 17.2 9.7 17.1C9.9 17 10.1 16.8 10.3 16.6C10.5 16.4 10.5 16.1 10.5 15.8C10.5 15.3 10.4 15 10.1 14.7C9.80001 14.4 9.50001 14.3 9.10001 14.3C9.00001 14.3 8.9 14.3 8.7 14.3C8.5 14.3 8.39999 14.3 8.39999 14.3C8.19999 14.3 7.99999 14.2 7.89999 14.1C7.79999 14 7.7 13.8 7.7 13.7C7.7 13.5 7.79999 13.4 7.89999 13.2C7.99999 13 8.2 13 8.5 13H8.8V13.1ZM15.3 17.5V12.2C14.3 13 13.6 13.3 13.3 13.3C13.1 13.3 13 13.2 12.9 13.1C12.8 13 12.7 12.8 12.7 12.6C12.7 12.4 12.8 12.3 12.9 12.2C13 12.1 13.2 12 13.6 11.8C14.1 11.6 14.5 11.3 14.7 11.1C14.9 10.9 15.2 10.6 15.5 10.3C15.8 10 15.9 9.80003 15.9 9.70003C15.9 9.60003 16.1 9.60004 16.3 9.60004C16.5 9.60004 16.7 9.70003 16.8 9.80003C16.9 9.90003 17 10.2 17 10.5V17.2C17 18 16.7 18.4 16.2 18.4C16 18.4 15.8 18.3 15.6 18.2C15.4 18.1 15.3 17.8 15.3 17.5Z" fill="currentColor"/>
+                        </svg>
+                    </span>
+                    <!--end::Svg Icon-->
+                    <input class="form-control form-control-solid ps-15" placeholder="Pick date rage" id="kt_daterangepicker_end_date" />
+                </div>
+                <!--end::Input group-->
+                <div class="form-floating mb-7">
+                    <select id="service_status_dropdown" class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Service Type" data-allow-clear="true" >
+                        <option value=""></option>
+                        {%for value in ServiceStatus%}
+                        <option value="{{value.code}}">{{value.description}}</option>
+                        {%endfor%}
+                    </select>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="is_prod_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Production</label>
+                </div>
+
+                <div class="form-floating mb-7">
+                    <select id="IsInterRcaSloExpired_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Intermediate RCA SLO Breached</label>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="IsInterRcaSlaExpired_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Intermediate RCA SLA Breached</label>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="IsInterRcaSend_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Intermediate RCA Send</label>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="IsFinalRcaSloExpired_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Final RCA SLO Breached</label>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="IsFinalRcaSlaExpired_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="True">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Final RCA SLA Breached</label>
+                </div>
+                <div class="form-floating mb-7">
+                    <select id="IsFinalRcaSend_dropdown" class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example">
+                        <option selected value="">Both</option>
+                        <option value="true">Yes</option>
+                        <option value="False">No</option>
+                    </select>
+                    <label for="floatingSelect">Is Final RCA Send</label>
+                </div>
+
+                <!--begin::Actions-->
+                <div class="d-flex justify-content-end">
+                    <button type="submit" id="load_notification_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true">Apply</button>
+                </div>
+                <!--end::Actions-->
+            </div>
+            <div class="tab-pane fade" id="table_filter" role="tabpanel">
+                <div class="col-12" id="search_form">                                
+                    <div class="form-group">
+                        <div class="form-floating mb-7">                                
+                            <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="0" />
+                            <label for="floatingPassword">Event ID</label>
+                        </div>
+                        <div class="form-floating mb-7">                                
+                            <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="1" />
+                            <label for="floatingPassword">Notification ID</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="3">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">November</option>
+                                <option value="11">October</option>
+                                <option value="12">December</option>
+                            </select>
+                            <label for="floatingSelect">Sent To Customer On</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Notification Sub Type" data-allow-clear="true" multiple="multiple" data-col-index="2">
+                                {%for value in NotificationSubType%}
+                                <option value="{{value.code}}">{{value.description}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Notification Phase" data-allow-clear="true" multiple="multiple" data-col-index="12">
+                                {%for value in Phase%}
+                                <option value="{{value.code}}">{{value.description}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <div class="form-floating mb-7">                                
+                            <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="17" />
+                            <label for="floatingPassword">Data center</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="16">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">November</option>
+                                <option value="11">October</option>
+                                <option value="12">December</option>
+                            </select>
+                            <label for="floatingSelect">Start DateTime</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="17">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">November</option>
+                                <option value="11">October</option>
+                                <option value="12">December</option>
+                            </select>
+                            <label for="floatingSelect">End DateTime</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Notification Type" data-allow-clear="true" multiple="multiple" data-col-index="18">
+                                {%for value in NotificationType%}
+                                <option value="{{value.code}}">{{value.description}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Notification Status" data-allow-clear="true" multiple="multiple" data-col-index="19">
+                                {%for value in Status%}
+                                <option value="{{value.code}}">{{value.description}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <div class="form-floating mb-7">                                
+                            <input type="text" class="form-control form-control-solid kt-input" id="floatingPassword" placeholder=" " data-col-index="20" />
+                            <label for="floatingPassword">System Roles</label>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-lg form-select-solid kt-input" data-control="select2" data-placeholder="Service Type" data-allow-clear="true" multiple="multiple" data-col-index="21">
+                                {%for value in ServiceStatus%}
+                                <option value="{{value.code}}">{{value.description}}</option>
+                                {%endfor%}
+                            </select>
+                        </div>
+                        <div class="form-floating mb-7">
+                            <select class="form-select form-select-solid kt-input" id="floatingSelect" aria-label="Floating label select example" data-col-index="22">
+                                <option value="">Select Month</option>
+                                <option value="1">January</option>
+                                <option value="2">February</option>
+                                <option value="3">March</option>
+                                <option value="4">April</option>
+                                <option value="5">May</option>
+                                <option value="6">June</option>
+                                <option value="7">July</option>
+                                <option value="8">August</option>
+                                <option value="9">September</option>
+                                <option value="10">November</option>
+                                <option value="11">October</option>
+                                <option value="12">December</option>
+                            </select>
+                            <label for="floatingSelect">Creation DateTime</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <button type="button" style="margin-right: 30px;" class="btn btn-light" id="m_reset">Reset</button>
+                    <button type="button" class="btn btn-primary float-right" id="m_search">Search</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--end::search draw-->
+
+<!--begin::table setting draw-->
+<div id="kt_drawer_table_setting" class="bg-white" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_table_setting_button" data-kt-drawer-close="#kt_drawer_table_setting_close" data-kt-drawer-width="500px">
+    
+    <!--begin: toggle column -->
+    <div class="kt-portlet__body">
+        <div class="card card-flush">
+            <div class="card-header">
+                <h3 class="card-title">Table Column Toggle</h3>
+            </div>
+            <div class="card-body py-5">
+                <div id="toggle_pill" class="kt-section__content kt-section__content--border">
+              
+                </div>
+            </div>
+        </div>
+        
+    </div>
+    <!--end: toggle column -->
+
+</div>
+<!--end::table setting draw-->
+{% endblock %}
+
+{% block js_block %}
+<script>var tabel_name = "{{tabel_name}}";var default_query_filter = "{{default_query_filter}}"; var query_api_url = "{{query_api_url}}"</script>
+<script src="{% static "assets/plugins/custom/datatables/datatables.bundle.js"%}"></script>
+<script src="{% static "assets/js/custom_datatable_function.js"%}"></script>
+<script src="{% static "assets/js/pages/notification/notification_datatable.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/notification/datatable_initiate.js"%}" type="text/javascript"></script>
+<script src="{% static "assets/js/pages/notification/chart.js"%}" type="text/javascript"></script>
+{% endblock %}
