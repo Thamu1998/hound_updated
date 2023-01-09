@@ -342,13 +342,13 @@ function get_activity_infra(data) {
                          ${textData}
                         </td>
 
-                    <td style="text-align:center">
+                    <td>
                         <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                             <label style="font-size: small;" class="text-muted fw-bold d-block">${item.floatingImplementation}</label>
                         </div>
                     </td>
 
-                    <td style="text-align:center">
+                    <td >
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                     ${color}
                     </div>
@@ -356,7 +356,7 @@ function get_activity_infra(data) {
 
 
                         
-                        <td style="text-align: center;">
+                        <td>
 
 
 
@@ -1201,7 +1201,7 @@ function updateHostListData(planned_start_date, shift) {
         "planned_type": $('#updatefloatingPlanned').val(),
         "floatingCmpDate": $('#updatefloatingCmpDate').val(),
         "floatingImplementation": $("floatingImplementation_update").val(),
-        "planned_start_date": planned_start_date,
+        "planned_start_date": request_data['selected_date'],
         "shift": request_data['shift'],
     })
 

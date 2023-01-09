@@ -41,6 +41,7 @@ class tracking_history(models.Model):
     shift = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
+    timerange=models.TimeField(blank=True,null=True)
 
 
 class master_tickets(models.Model):
@@ -66,6 +67,7 @@ class outage_tracking_history(models.Model):
     shift = models.CharField(max_length=20)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
+    timerange=models.TimeField(blank=True,null=True)
 
 
 class outage_master_tickets(models.Model):
@@ -114,6 +116,7 @@ class ActivityDB(models.Model):
     resource = models.TextField(null=True)
     shift = models.CharField(max_length=250, null=True)
     floatingCmpDate = models.TextField(null=True)
+    timerange=models.TimeField(blank=True,null=True)
 
     # def __str__(self):
     #     return self.planned_type
@@ -128,3 +131,4 @@ class sm_infra_activate(models.Model):
     ticket_id = models.CharField(max_length=250, null=True)
     shift = models.CharField(max_length=250, null=True)
     floatingImplementation = models.TextField(null=True)
+    timerange=models.TimeField(blank=True,null=True)

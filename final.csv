@@ -1,0 +1,5 @@
+,id,Ticket_ID,Subject,customer_impact,Action_Required,Status,created_date,date,shift,start_time,end_time,timerange
+0,37,112233,dasfsd,sdfsdaf,asdfdsf,New,2023-01-01 12:00:00+00:00,08-01-2023,morning,2023-01-01 12:00:00+00:00,2023-01-03 12:00:00+00:00,17:15.7
+1,38,112233,dasfsd,sdfsdaf,asdfdsf,Inprogress,2023-01-03 12:00:00+00:00,08-01-2023,Afternoon,2023-01-03 12:00:00+00:00,2023-01-05 12:00:00+00:00,14:18:56
+2,39,112233,dasfsd,sdfsdaf,asdfdsf,Waiting,2023-01-05 12:00:00+00:00,08-01-2023,Night,2023-01-05 12:00:00+00:00,2023-01-07 12:00:00+00:00,04:20:53
+3,40,112233,dasfsd,sdfsdaf,asdfdsf,Resolved,2023-01-07 12:00:00+00:00,08-01-2023,Afternoon,2023-01-07 12:00:00+00:00,2023-01-07 12:00:00+00:00,21:38.8
