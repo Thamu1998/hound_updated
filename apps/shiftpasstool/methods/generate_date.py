@@ -337,3 +337,11 @@ class Histories(object):
                    
 #                     if date[0] == today_date:
 #                         print(df1['pre_check_status'],"Insiide loop")
+
+# from django.core.mail import send_mail
+
+# subject = 'Hello'
+# message = '<p>This is an <strong>HTML</strong> message.</p>'
+# from_email = 'noreply@example.com'
+# recipient_list = ['recipient@example.com']
+# send_mail(subject, message, from_email, recipient_list, html_message=message)

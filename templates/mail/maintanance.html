@@ -1,0 +1,156 @@
+
+{%  extends 'email_base.html' %}
+{% load static %}
+{% block body %}
+    <!--begin::Body-->
+    <body  id="kt_body"  class="app-blank" >
+        <!--begin::Theme mode setup on page load-->
+        <script>
+            var defaultThemeMode = "light";
+            var themeMode;
+
+            if ( document.documentElement ) {
+                if ( document.documentElement.hasAttribute("data-theme-mode")) {
+                    themeMode = document.documentElement.getAttribute("data-theme-mode");
+                } else {
+                    if ( localStorage.getItem("data-theme") !== null ) {
+                        themeMode = localStorage.getItem("data-theme");
+                    } else {
+                        themeMode = defaultThemeMode;
+                    }
+                }
+
+                if (themeMode === "system") {
+                    themeMode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+                }
+
+                document.documentElement.setAttribute("data-theme", themeMode);
+            }
+        </script>
+
+        <!--begin::Root-->
+<div class="d-flex flex-column flex-root" id="kt_app_root">
+    <!--begin::Wrapper-->
+    <div class="d-flex flex-column flex-column-fluid">
+        <!--begin::Body-->
+        <div class="scroll-y flex-column-fluid px-10 py-10"
+            data-kt-scroll="true"
+            data-kt-scroll-activate="true"
+            data-kt-scroll-height="auto"
+            data-kt-scroll-dependencies="#kt_app_header_nav"
+            data-kt-scroll-offset="5px"
+            data-kt-scroll-save-state="true"
+            style="background-color:#D5D9E2; --kt-scrollbar-color: #d9d0cc; --kt-scrollbar-hover-color: #d9d0cc">
+        <!--begin::Email template-->
+		<style>
+            html,body {
+                padding:0;
+                margin:0;
+                font-family: Inter, Helvetica, "sans-serif";
+            }
+
+			a:hover {
+                color: #009ef7;
+            }
+        </style>
+
+        <div id="#kt_app_body_content" style="background-color:#D5D9E2; font-family:Arial,Helvetica,sans-serif; line-height: 1.5; min-height: 100%; font-weight: normal; font-size: 15px; color: #2F3044; margin:0; padding:0; width:100%;">
+            <div style="background-color:#ffffff; padding: 45px 0 34px 0; border-radius: 24px; margin:40px auto; max-width: 600px;">
+                <table align="center" border="0" cellpadding="0" cellspacing="0" width="100%" height="auto" style="border-collapse:collapse">
+                    <tbody>
+                        <tr>
+                            <td align="right" valign="center" style="text-align:right; padding-right: 55px">
+                                <p style="font-size: 14px;font-weight: 400;">INTERNAL</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="center" valign="center" style="text-align:center; padding-bottom: 10px">
+                                <!--begin:Email content-->
+                                <div style="margin-bottom:55px; text-align:left">
+                                    <!--begin:Logo-->
+                                    <div style="margin-bottom: 60px">
+                                        <div style="text-align:start;margin-left:45px;">
+                                            <a href="#" rel="noopener" target="_blank">
+                                                <img alt="Logo" src="https://{{ DOMAIN_NAME }}/static/assets/media/logos/logo_medium.png" style="height: 50px"/>
+                                            </a>
+                                        </div>
+                                        <div style="text-align:end;margin-top:-47px; margin-right:45px;">
+                                            <a href="#" rel="noopener" target="_blank">
+                                                <img alt="Logo" src="https://{{ DOMAIN_NAME }}/static/assets/media/logos/sap_best.png" style="height: 35px"/>
+                                            </a>
+                                        </div>
+                                    </div>
+                                    <!--end:Logo-->
+
+
+                                    <div style="font-size: 14px; text-align:center; font-weight: 500; margin:0 60px 36px 60px; font-family:Arial,Helvetica,sans-serif">
+                                        <p style="color:#181C32; font-size: 30px; font-weight:700; line-height:1.4; margin-bottom:6px">Release Notification <span style="color:#8e9aaf">{{release_id}}</span></p>
+                                    </div>
+                                    <!--end:Text-->
+
+
+                                     <div style="font-size:14px; text-align:left; font-weight:500; margin:0 60px 0px 60px; font-family:Arial,Helvetica,sans-serif">
+                                        <p style="color:#181C32; font-size: 18px; font-weight:600; margin-bottom:27px">
+                                            Dear Colleagues,
+                                        </p>
+
+                                        <p style="color:#3F4254; line-height:1.6">
+                                            Notifying you that an updated version of Hound is now available for use. This new release includes bug fixes and new features to improve your experience.
+                                        </p>
+                                    </div>
+                                    <!--end:Text-->
+
+
+                                    <!--begin:Items-->
+                                    <div style="display: flex; justify-content:center; flex-wrap: wrap; margin:0 40px 42px 40px">
+                                            {% for rel_noti in release_notifications %}
+                                                <!--begin:Item-->
+                                                <div style="width:220px; margin:18px 20px">
+
+                                                    <a href="https://{{ DOMAIN_NAME }}{{rel_noti.app_url}}" target="_blank"><img alt="" style="width:100%; border-radius:12px; margin-bottom:9px" src="https://{{ request.get_host }}/media/{{rel_noti.image}}"/></a>
+                                                    <a href="#" style="color:#181C32; font-size: 14px; font-weight:600; display:block; margin-bottom:9px">{{rel_noti.title}}</a>
+                                                    <a href="#" style="color:#5E6278; font-size: 10px; font-weight:600;display:block; margin-bottom:9px;">{{rel_noti.description}}</a>
+
+                                                </div>
+                                                <!--end:Item-->
+                                            {% endfor %}
+                                    </div>
+                                    <!--end:Items-->
+
+                                </div>
+                                <!--end:Email content-->
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td align="center" valign="center" style="font-size: 13px; text-align:center; padding: 0 10px 10px 10px; font-weight: 500; color: #A1A5B7; font-family:Arial,Helvetica,sans-serif">
+                                <p style="color:#181C32; font-size: 16px; font-weight: 600; margin-bottom:9px">It’s all about Insights!</p>
+                                <p style="margin-bottom:2px">For new requirements please create a <a href="https://jira.tools.sap/secure/CreateIssueDetails!init.jspa?pid=83335&issuetype=6&description=Problem%20Statement%20%E2%80%93%20,\\Business%20Impact%20%E2%80%93%20,\\Tools%20involved%20(if%20applicable)%20-%20,\\How%20frequently%20will%20the%20feature%20be%20used%20%E2%80%93%20,\\Key%20target%20audience/stakeholders%20%E2%80%93%20,\\Expected%20results%20%E2%80%93%20,\\Expected/Due%20Date%20-%20,\\&priority=2&customfield_15140=S4HCD-3204&assignee=I028705" rel="noopener" target="_blank" style="font-weight: 600;font-family:Arial,Helvetica,sans-serif">JIRA</a>&nbsp;</p>
+                                <p style="margin-bottom:4px">You may reach us at <a href="mailto:DL_61DD2ECFE678DB02995CE0A6@global.corp.sap" target="_blank" style="font-weight: 600">DL HOUND_CLOUD_OPS</a>.</p>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td align="left" valign="center" style="font-size: 8px; padding:0 15px; text-align:left; font-weight: 500; color: #A1A5B7;font-family:Arial,Helvetica,sans-serif">
+                                <p> SAP SE, Dietmar-Hopp-Allee 16, 69190 Walldorf, Germany</p>
+                                <p>Pflichtangaben/Mandatory Disclosure Statements: http://www.sap.com/about/legal/impressum.html Diese E-Mail kann Betriebs- oder Geschäftsgeheimnisse oder sonstige vertrauliche Informationen enthalten. Sollten Sie diese E-Mail irrtümlich erhalten haben, ist Ihnen eine Kenntnisnahme des Inhalts, eine Vervielfältigung oder Weitergabe der E-Mail ausdrücklich untersagt. Bitte benachrichtigen Sie uns und vernichten Sie die empfangene E-Mail. Vielen Dank.</p>
+                                <p>This e-mail may contain trade secrets or privileged, undisclosed, or otherwise confidential information. If you have received this e-mail in error, you are hereby notified that any review, copying, or distribution of it is strictly prohibited. Please inform us immediately and destroy the original transmittal. Thank you for your cooperation.</p>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!--end::Email template-->
+
+        </div>
+        <!--end::Body-->
+    </div>
+    <!--end::Wrapper-->
+
+ </div>
+<!--end::Root-->
+
+</body>
+<!--end::Body-->
+{% endblock %}

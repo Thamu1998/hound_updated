@@ -46,7 +46,9 @@ applicationurls = [
     path('uptime/', include('apps.uptime.urls')),
     path('roster/', include('apps.roster.urls')),
     path('notification/', include('apps.notification.urls')),
-    path('shiftpasstool/',include('shiftpasstool.urls'))
+    path('shiftpasstool/',include('shiftpasstool.urls')),
+    path('vulnerablity_dashboard/',include('apps.vulnerablity_dashboard.urls'))
+    # path('mail/',include('mail.urls'))
 ]
 
 schema_view = get_swagger_view(title=getattr(settings,'SWAGGER_SETTINGS',"Hound API Docs")["title"], patterns=applicationurls)

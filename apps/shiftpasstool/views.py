@@ -11,6 +11,7 @@ from django.db.models import Q, Count, Sum, Max, Avg
 import json
 import datetime
 from background_task import background
+from apps.shiftpasstool.methods.sendmail import send_mail_to_destination
 
 from apps.shiftpasstool.methods.ticket_history_maintain import ticket_handling
 from .serializers import master_tracking_serializer, outage_history_, outage_history_tickets_serializer, tracking_serializer, outage_master_tickets_serializer, tickets_notes_serializer, tickets_counts_serializer, Activity_table, sm_infra_activate_serializer
@@ -485,6 +486,7 @@ class set_Ticket_count(APIView):
         else:
             print(serializer.error_messages)
             print(serializer.errors)
+            return Response("Not created Ticket count")
 
     def put(self, request):
         # json_data=JSON_query(self.request.data)
@@ -518,7 +520,7 @@ class set_Ticket_count(APIView):
         else:
             self.post(self.request.data)
             # print("ELSEEEE")
-            pass
+            return Response("Ticket count POSTEd")
 
     def get(self, request):
         #
@@ -596,50 +598,53 @@ class sm_infra_activate_obj(APIView):
 class Get_sm_infra_activate(APIView):
 
     def get(self,request):
-        arr_query = []
-        query_all = sm_infra_activate.objects.all()
-        quer=query_all.values()
-        df_filter=pd.DataFrame(quer)
-        ticket=ticket_handling()
-        if len(self.request.GET) > 0:
-            req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
-            final_arr=[]
-            import numpy as np
-            for v in df_filter['ticket_id'].unique():
-                tic_new_df=df_filter[df_filter['ticket_id']==v]
-                # tic_new_df.replace({np.nan: None}, inplace = True)
-                res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=self.request.GET['shift'].lower(),filter_df=tic_new_df)
-                print()
-                if res is None:
-                    pass
-                else:
-                    if res != "NULL":
-                        
-                        print(type(res),res,"RESSSS")
-                        final_arr.append(res)
+        try:
+            arr_query = []
+            query_all = sm_infra_activate.objects.all()
+            quer=query_all.values()
+            df_filter=pd.DataFrame(quer)
+            ticket=ticket_handling()
+            if len(self.request.GET) > 0:
+                req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
+                final_arr=[]
+                import numpy as np
+                for v in df_filter['ticket_id'].unique():
+                    tic_new_df=df_filter[df_filter['ticket_id']==v]
+                    # tic_new_df.replace({np.nan: None}, inplace = True)
+                    res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=self.request.GET['shift'].lower(),filter_df=tic_new_df)
+                    print()
+                    if res is None:
+                        pass
+                    else:
+                        if res != "NULL":
+                            
+                            print(type(res),res,"RESSSS")
+                            final_arr.append(res)
+                    
                 
-            
-        else:
-            final_arr=[]
+            else:
+                final_arr=[]
 
-            for row in df_filter['ticket_id'].unique():
-                # req_date, shift,filter_df
-                filter_dataframe=df_filter[df_filter['ticket_id'] == row]
-                # filter_dataframe.to_csv('F:\\Hound\\final.csv')
-                SHIFT=select_date_time()
-                shift=SHIFT.f(hours=datetime.now().hour)
-                req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
-                print(req_date)
-                res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=shift.lower(),filter_df=filter_dataframe)
-                print(type(res))
-                if res is None:
-                    pass
-                else:
-                    if res != "NULL":
-                        
-                        print(type(res),res,"RESSSS")
-                        final_arr.append(res)
-        return Response(final_arr)
+                for row in df_filter['ticket_id'].unique():
+                    # req_date, shift,filter_df
+                    filter_dataframe=df_filter[df_filter['ticket_id'] == row]
+                    # filter_dataframe.to_csv('F:\\Hound\\final.csv')
+                    SHIFT=select_date_time()
+                    shift=SHIFT.f(hours=datetime.now().hour)
+                    req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
+                    print(req_date)
+                    res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=shift.lower(),filter_df=filter_dataframe)
+                    print(type(res))
+                    if res is None:
+                        pass
+                    else:
+                        if res != "NULL":
+                            
+                            print(type(res),res,"RESSSS")
+                            final_arr.append(res)
+            return Response(final_arr)
+        except:
+            return Response([])
 
 
 class Activity_db(APIView):
@@ -739,7 +744,17 @@ class Get_all_activity(APIView):
                         
                         print(type(res),res,"RESSSS")
                         final_arr.append(res)
+                        
         return Response(final_arr)
 
 
+class MailAPI_view(APIView):
+
+    def post(self,request):
+        # print(self.request.data)
+        # print(self.request.data['shiftpasschartjs']['sm_infra_data'])
+        email=send_mail_to_destination()
+        res=email.mail_content(json_data=self.request.data)
+        # print(res)
+        return Response(res)
         

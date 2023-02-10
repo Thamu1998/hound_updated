@@ -1,30 +1,46 @@
 var request_data = ""
 var json_ = { "plan": { "S1": { "ADHOC_ACTI_SM": [{ "name": "Soujit Dutta", "inumber": "I565970", "email": "soujit.dutta@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Mukunda Bobburi", "inumber": "I561013", "email": "mukunda.bobburi@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Shainy Blessiya", "inumber": "I563805", "email": "shainy.blessiya.thanumalayan@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }], "SHIFT_LEAD_SM": [{ "name": "Mahammad Vali", "inumber": "I507732", "email": "mahammad.vali.dudekula@sap.com", "task_name": "Global Shift Lead", "status": null }, { "name": "Netti Priyanka", "inumber": "I566275", "email": "netti.priyanka@sap.com", "task_name": "Global Shift Lead", "status": null }, { "name": "Abishek P", "inumber": "I506609", "email": "abishek.p@sap.com", "task_name": "Global Shift Lead", "status": null }] }, "M": {}, "S2": { "ADHOC_ACTI_SM": [{ "name": "Ravikiran Gavigowdanakoppalu", "inumber": "I534851", "email": "ravikiran.gavigowdanakoppalu.krishnegowda@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Garipelli Praveen", "inumber": "I575039", "email": "garipelli.praveen@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Soumya Panigrahy", "inumber": "I531821", "email": "soumya.panigrahy@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Mustaq Ahammed", "inumber": "I534600", "email": "mustaq.ahammed@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Arun Thilakan", "inumber": "I560718", "email": "arun.thilakan@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Chekuru Nimnitha", "inumber": "I558160", "email": "chekuru.nimnitha.reddy@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }] }, "S3": { "ADHOC_ACTI_SM": [{ "name": "Sumit Mehta", "inumber": "I508009", "email": "sumit.mehta@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Hussain Basha", "inumber": "I557969", "email": "hussain.basha.mallempalli@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Mohamed Nafees", "inumber": "I541752", "email": "mohamed.nafees.h@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Ipsita Mazumder", "inumber": "I558930", "email": "ipsita.mazumder@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }, { "name": "Aman Tanwar", "inumber": "I557995", "email": "aman.tanwar@sap.com", "task_name": "Adhoc activity server management Bangalore", "status": null }] }, "O": {} }, "meta": { "S1": { "name": "Morning Shift", "time_info": "00:30  - 09:30 UTC" }, "M": { "name": "Midnoon Shift", "time_info": "06:30 - 15:30 UTC" }, "S2": { "name": "Noon Shift", "time_info": "00:30  - 09:30 UTC" }, "S3": { "name": "Night Shift", "time_info": "17:30 - 00:30 UTC" }, "O": { "name": "On-Call", "time_info": "24:00" } } }
 
-console.log(json_)
+//console.log(json_)
 
 var reports={}
+var json_data=[]
+var all_dict_send_api={}
+var all_dict_array=[]
+var all_dict_from_before_js=[]
+
+
 $("#submit_btn").on("click", function (e) {
     // $('#model_apply_leave').hide()
     //.log("Hidded")
+    
+    // var last_data
+    
+    
+    // console.log(last_data)
+    // console.log(last_data,"json_data shift created ==================================");
+
     var shift = $("#Shift_dropdown").val();
 
     var selected_date = $("#kt_date").val();
     var end_date_start = $("#kt_date").data('daterangepicker');
 
     var end_date_end = $("#kt_date").data('daterangepicker');
-    console.log(end_date_start)
+    //console.log(end_date_start)
 
     request_data = { "shift": shift, "selected_date": selected_date };
-    console.log(request_data, "NEW JS")
+    //console.log(request_data, "NEW JS")
+    
     shiftData()
 
     $.ajax({
         method: "GET",
         url: '/shiftpasstool/set_Ticket_count/?created_date=' + selected_date + '&shift='+ shift +'',
         success: function (data) {
-
+            all_dict_send_api['quer_chart']=data
+            // all_dict_array.push(all_dict_send_api)
             get_counts(data)
+            
         }
     })
 
@@ -33,6 +49,8 @@ $("#submit_btn").on("click", function (e) {
         url: '/shiftpasstool/ticket_comment/?created_date=' + selected_date + '&shift='+ shift +'',
         success: function (data) {
             get_notes(data)
+            all_dict_send_api['ticket_comment']=data
+            // all_dict_array.push(all_dict_send_api)
         }
     })
 
@@ -41,6 +59,8 @@ $("#submit_btn").on("click", function (e) {
         url: '/shiftpasstool/Get_all_activity/?created_date=' + selected_date + '&shift=' + shift + '',
         success: function (data) {
             get_activity(data)
+            all_dict_send_api['activity_data']=data
+            // all_dict_array.push(all_dict_send_api)
         }
     })
 
@@ -49,8 +69,14 @@ $("#submit_btn").on("click", function (e) {
         url: '/shiftpasstool/Get_sm_infra_activate/?created_date=' + selected_date + '&shift=' + shift + '',
         success: function (data) {
             get_activity_infra(data)
+            all_dict_send_api['sm_infra_data']=data
         }
     })
+    all_dict_array.push(all_dict_send_api)
+    console.log(all_dict_array,"all_dict_send_api")
+
+    
+    
 
     // path('Get_sm_infra_activate/',Get_sm_infra_activate.as_view(),name='Get_sm_infra_activate'),
     // path('sm_infra_activate_obj/',sm_infra_activate_obj.as_view(),name='sm_infra_activate_obj')
@@ -92,12 +118,44 @@ function get_act_datas() {
         }
     })
 }
+window.addEventListener('message', (event) =>   {
+
+    all_dict_from_before_js.push(event.data)
+    console.log("all_dict_array",all_dict_array)
+})
+
+function mail_trigger(){
+    console.log("CLICKED")
+    
+    console.log(all_dict_send_api,".................",all_dict_from_before_js)
+    var mail_dic=JSON.stringify({"shifpassjs":all_dict_from_before_js,"shiftpasschartjs":all_dict_send_api})
+    var csrftoken = getCookie('csrftoken');
+    var settings = {
+
+        "headers": { "X-CSRFToken": csrftoken, "Content-Type": "application/json", },
+        "async": true,
+        "crossDomain": false,
+        "url": "/shiftpasstool/MailAPI/",
+        "method": "POST",
+        "processData": false,
+        "data": mail_dic
+    }
+
+    $.ajax(settings).done(function (data) {
+        console.log(data)
+        // get_activity(data)
+        // get_act_datas()
+        // location.reload()
+    })
+    // console.log(res,"FUNCTION RETURN DATA")
+    
+}
 
 function get_activity(data) {
     var host_list = "";
     var hostArray = []
     var data1 = []
-    console.log("activity data", data)
+    //console.log("activity data", data)
     if (data) {
         if (data.length != 0) {
             data.forEach(i => {
@@ -105,7 +163,7 @@ function get_activity(data) {
                 if (data1.includes(i.planned_type) == false) {
                     data1.push(i.planned_type);
                 }
-                console.log(data1)
+                //console.log(data1)
 
             })
             if (data1.length > 0) {
@@ -113,7 +171,7 @@ function get_activity(data) {
                     var s = data.filter(e => (e.planned_type == data1[j]))
                     hostArray.push({ [data1[j]]: s })
                 }
-                console.log(hostArray)
+                //console.log(hostArray)
             }
         }
     }
@@ -124,11 +182,11 @@ function get_activity(data) {
     if (hostArray.length != 0) {
 
         hostArray.forEach(function (keyss) {
-            console.log(keyss)
-            // console.log(value)
+            //console.log(keyss)
+            // //console.log(value)
             for (const [key, items] of Object.entries(keyss)) {
-                console.log(key);
-                console.log(items)
+                //console.log(key);
+                //console.log(items)
 
                 var keyName = `<br>
                           <label style="font-size: small;" class="text-muted fw-bold d-block">`+ key + `</label>`
@@ -145,7 +203,7 @@ function get_activity(data) {
 
                     startDate = new Date(item.planned_start_date).toLocaleDateString()
                     startDate = moment(startDate).format("DD-MMM-YYYY")
-                    console.log(startDate)
+                    //console.log(startDate)
                     if (item.planned_end_date != null) {
                         endDate = new Date(item.planned_end_date).toLocaleDateString()
                         endDate = moment(endDate).format("DD-MMM-YYYY")
@@ -275,7 +333,7 @@ function get_activity(data) {
 function get_activity_infra(data) {
     var host_list_infra = "";
 
-    console.log("activity data", data)
+    //console.log("activity data", data)
 
     if (data.length != 0) {
 
@@ -290,7 +348,7 @@ function get_activity_infra(data) {
 
             startDate = new Date(item.planned_start_date).toLocaleDateString()
             startDate = moment(startDate).format("DD-MMM-YYYY")
-            console.log(startDate)
+            //console.log(startDate)
             if (item.planned_end_date != null) {
                 endDate = new Date(item.planned_end_date).toLocaleDateString()
                 endDate = moment(endDate).format("DD-MMM-YYYY")
@@ -299,7 +357,7 @@ function get_activity_infra(data) {
                 endDate = ''
             }
 
-            console.log(item.pre_check_status)
+            //console.log(item.pre_check_status)
 
             if (item.pre_check_status == 'Resolved') {
                 color = `<span class='badge badge-light-success fs-8 fw-bolder' style="font-size:small !important;">` + item.pre_check_status + `</span> `
@@ -393,7 +451,7 @@ function get_activity_infra(data) {
 
 
 function get_counts(data) {
-    console.log(data, "NEW JSSSS")
+    //console.log(data, "NEW JSSSS")
 
 
     get_chartData(data)
@@ -406,16 +464,16 @@ function get_counts(data) {
 
 function get_chartData(data) {
     if (data != 'No data') {
-        console.log(data)
+        //console.log(data)
         var total = parseInt(data.alerts) + parseInt(data.manual_incidents) + parseInt(data.problems) + parseInt(data.service_request)
-        console.log(total)
+        //console.log(total)
         var upd_chart = ''
         var upd_Btn = ''
 
         upd_chart = upd_chart +
 
             ` <div class="row">
-    <div class="col-4">
+    <div class="col-3">
     <div>
 
     <canvas  id="demoChart"></canvas>
@@ -486,7 +544,7 @@ function get_chartData(data) {
         // chart_dip();
 
         var ctxD = document.getElementById("demoChart").getContext('2d');
-        console.log(ctxD)
+        //console.log(ctxD)
 
 
 
@@ -530,7 +588,7 @@ function get_chartData(data) {
         upd_chart = upd_chart +
 
             ` <div class="row">
-    <div class="col-4">
+    <div class="col-3">
     
 
     
@@ -594,7 +652,7 @@ function get_chartData(data) {
         // chart_dip();
 
         var ctxD = document.getElementById("demoChart").getContext('2d');
-        console.log(ctxD)
+        //console.log(ctxD)
 
 
 
@@ -628,7 +686,7 @@ $.ajax({
 function POST_data() {
     // $('#submit_button_chart').on('click', function (e) {
 
-    console.log("clicked")
+    //console.log("clicked")
     var dic = JSON.stringify({
         "alerts": $('#floatingAlerts_update').val(),
         "manual_incidents": $('#floatingManualIncidents_update').val(),
@@ -657,7 +715,7 @@ function POST_data() {
 
     }
     $.ajax(settings).done(function (response) {
-        console.log(response)
+        //console.log(response)
         get_all_count()
         // location.reload()
     })
@@ -679,7 +737,7 @@ function get_all_count() {
 var update_count_ticket = {}
 function upate_counts(alerts, manual_incidents, problems, service_request, date, shift) {
 
-    //     console.log("update func clicked")
+    //     //console.log("update func clicked")
     //     var dic=JSON.stringify({"alerts":$('#floatingAlerts').val(),
     //     "manual_incidents":$('#floatingManualIncidents').val(),
     //     "problems":$('#floatingProblems').val(),
@@ -701,7 +759,7 @@ function upate_counts(alerts, manual_incidents, problems, service_request, date,
 
 $('#submit_button_chart_update').on('click', function (e) {
 
-    console.log(update_count_ticket, "update_count_ticket")
+    //console.log(update_count_ticket, "update_count_ticket")
     if (update_count_ticket['date'] != "undefined") {
         var dic = JSON.stringify({
             "alerts": $('#floatingAlerts_update').val(),
@@ -725,9 +783,8 @@ $('#submit_button_chart_update').on('click', function (e) {
 
         }
         $.ajax(settings).done(function (response) {
-            console.log(response)
             get_all_count()
-            // location.reload()
+
         })
     } else {
         POST_data()
@@ -754,12 +811,12 @@ function get_notes(data) {
 
     //   document.getElementById('comment_id').value=data.notes
     var upd_notes = ''
-    console.log(data, "DATAAAAAAAAAAAAAAAAAAAAAAAAA")
-    console.log(Object.keys(data))
+    //console.log(data, "DATAAAAAAAAAAAAAAAAAAAAAAAAA")
+    //console.log(Object.keys(data))
     var upd_button = ''
     if (Object.keys(data).length > 0) {
 
-        console.log(typeof data.notes)
+        //console.log(typeof data.notes)
 
         upd_button = upd_button + `
   
@@ -807,15 +864,15 @@ $.ajax({
 
 
 function updateHostList_infra(id) {
-    console.log(reports['infra_data'],"infra")
+    //console.log(reports['infra_data'],"infra")
     var updateSpaData
-    console.log(reports['infra_data'])
-    // console.log(data,"dates...................")
+    //console.log(reports['infra_data'])
+    // //console.log(data,"dates...................")
 
     updateSpaData=reports['infra_data'].filter(e=>e.id == id)
 
     updateSpaData=updateSpaData[0]
-    console.log(updateSpaData,"updateSpaData")
+    //console.log(updateSpaData,"updateSpaData")
     var upd_host_infra = ''
 
     var selectStatus = ''
@@ -920,7 +977,7 @@ placeholder="Implementation Period" value="${updateSpaData.floatingImplementatio
 
     <div class="text-center">
         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
         data-bs-dismiss="modal" id="submit_button_hostList_infra_upd"
         onclick='submit_button_hostList_infra_update("${updateSpaData.planned_start_date}","${updateSpaData.shift}")'>Submit</button>
     </div>
@@ -935,13 +992,13 @@ placeholder="Implementation Period" value="${updateSpaData.floatingImplementatio
 
 
 function updateHostList(id) {
-    console.log(reports['Host_data'],"HOST")
+    console.log(reports['Host_data'],"HOST",id)
     var updatehost_data
-    console.log(reports['Host_data'])
-    // console.log(data,"dates...................")
+    //console.log(reports['Host_data'])
+    // //console.log(data,"dates...................")
 
     updatehost_data=reports['Host_data'].filter(e=>e.ID == id)
-    // console.log(cr_approval,"cr_approval...................")
+    // //console.log(cr_approval,"cr_approval...................")
     updatehost_data=updatehost_data[0]
     var upd_host = ''
 
@@ -952,7 +1009,7 @@ function updateHostList(id) {
     var selectStatus = ''
 
 
-
+    console.log(updatehost_data,"updatehost_data")
     if (updatehost_data.planned_type == 'S4H') {
         planType = planType + `
         <option selected value="S4H">S4H</option>
@@ -1169,7 +1226,7 @@ function updateHostList(id) {
 
     <div class="text-center">
     <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
-        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
         data-bs-dismiss="modal" id="update_button_hostList" 
         onclick='updateHostListData("${updatehost_data.planned_start_date}","${updatehost_data.shift}")'>Submit</button>
     </div>
@@ -1187,7 +1244,7 @@ function updateHostList(id) {
 function updateHostListData(planned_start_date, shift) {
 
 
-    console.log("clicked")
+    //console.log("clicked")
     var Updatedic = JSON.stringify({
         "ticket_id": $('#updatefloatingTid').val(),
         "region": $('#updatefloatingRegion').val(),
@@ -1205,7 +1262,7 @@ function updateHostListData(planned_start_date, shift) {
         "shift": request_data['shift'],
     })
 
-    console.log(Updatedic, "Updatedic")
+    //console.log(Updatedic, "Updatedic")
 
     var csrftoken = getCookie('csrftoken');
     var settings = {
@@ -1220,7 +1277,7 @@ function updateHostListData(planned_start_date, shift) {
     }
 
     $.ajax(settings).done(function (data) {
-        console.log(data)
+        //console.log(data)
         // get_activity(data)
         get_act_datas()
         // location.reload()
@@ -1233,7 +1290,7 @@ function updateHostListData(planned_start_date, shift) {
 function submit_button_hostList_infra_update(planned_start_date, shift) {
 
 
-    console.log("clicked")
+    //console.log("clicked")
 
 
     var dic_infra_update = JSON.stringify({
@@ -1255,7 +1312,7 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
 
 
 
-    console.log(dic_infra_update, "dic_infra_update")
+    //console.log(dic_infra_update, "dic_infra_update")
 
     var csrftoken = getCookie('csrftoken');
     var settings = {
@@ -1270,7 +1327,7 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
     }
 
     $.ajax(settings).done(function (data) {
-        console.log(data)
+        //console.log(data)
         // get_activity_infra(data)
         get_infra_activate()
         // location.reload()
@@ -1281,10 +1338,10 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
 
 
 function update_notes_CMD(date, shift) {
-    console.log(date, "date")
-    console.log($('#comment_id').val())
+    //console.log(date, "date")
+    //console.log($('#comment_id').val())
     // if (date != ""){
-    console.log(request_data)
+    //console.log(request_data)
     if (request_data == "") {
         var dic = JSON.stringify({
             "date": request_data['selected_date'],
@@ -1295,9 +1352,9 @@ function update_notes_CMD(date, shift) {
     } else {
 
 
-        console.log(dic, "DICTTTTT")
+        //console.log(dic, "DICTTTTT")
 
-        console.log("NOTES")
+        //console.log("NOTES")
         // "date":request_data['selected_date'],
         // "shift":request_data['shift']
         // notes:
@@ -1322,7 +1379,7 @@ function update_notes_CMD(date, shift) {
 
     }
     $.ajax(settings).done(function (response) {
-        console.log(response)
+        //console.log(response)
         // get_notes()
         // location.reload()
     })
@@ -1335,7 +1392,7 @@ function update_notes_CMD(date, shift) {
 
 $('#submit_button_hostList').on('click', function (e) {
 
-    console.log("clicked")
+    //console.log("clicked")
     var dic = JSON.stringify({
         "ticket_id": $('#floatingTid').val(),
         "region": $('#floatingRegion').val(),
@@ -1371,7 +1428,7 @@ $('#submit_button_hostList').on('click', function (e) {
 
     }
     $.ajax(settings).done(function (data) {
-        console.log(data)
+        //console.log(data)
         // get_activity(data)
         get_act_datas()
         // location.reload()
@@ -1385,7 +1442,7 @@ $('#submit_button_hostList').on('click', function (e) {
 
 $('#submit_button_hostList_infra').on('click', function (e) {
 
-    console.log("clicked")
+    //console.log("clicked")
     var dic_infra = JSON.stringify({
         "ticket_id": $('#floatingTid_infra').val(),
         // "region":$('#floatingRegion_infra').val(),
@@ -1420,7 +1477,7 @@ $('#submit_button_hostList_infra').on('click', function (e) {
 
     }
     $.ajax(settings).done(function (data) {
-        console.log(data)
+        //console.log(data)
         get_infra_activate()
     })
 
@@ -1430,7 +1487,7 @@ $('#submit_button_hostList_infra').on('click', function (e) {
 
 
 function closeAlert_popup() {
-    console.log('clicked ')
+    //console.log('clicked ')
     var closepopup = ''
     $('#cancelModelView').html(closepopup)
     $('#model_host_list_infra').modal('hide')
@@ -1445,14 +1502,14 @@ function closeAlert_popup() {
 
 
 function closeAlert() {
-    console.log('clicked ')
+    //console.log('clicked ')
     var viewAlert = ''
     $('#cancelModelView').html(viewAlert)
 }
 
 
 function cancelModel() {
-    console.log("click")
+    //console.log("click")
     var viewAlert = ''
     viewAlert = viewAlert + `
 
@@ -1534,7 +1591,7 @@ function cancelModel() {
 //             init_dip_chart()
 //         },
 //         error: function(error_data){
-//             console.log(JSON.parse(error_data.responseText))
+//             //console.log(JSON.parse(error_data.responseText))
 //         }
 //     });
 
@@ -1593,6 +1650,7 @@ function shiftData() {
 
 
     var check = Object.keys(json_['plan'])
+    // all_dict_send_api['Userdetails']=json_['plan']
     var shiftArray = ''
     var ShiftData = ''
     var shiftName = ''
@@ -1601,13 +1659,22 @@ function shiftData() {
     var shiftNameEmp = ''
     var ShiftDataEmp = ''
     var shiftShowDataEmp = ''
+    var msg_icon = `<span class="svg-icon svg-icon-primary svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+    <path opacity="0.3" d="M21 18H3C2.4 18 2 17.6 2 17V7C2 6.4 2.4 6 3 6H21C21.6 6 22 6.4 22 7V17C22 17.6 21.6 18 21 18Z" fill="black"/>
+    <path d="M11.4 13.5C11.8 13.8 12.3 13.8 12.6 13.5L21.6 6.30005C21.4 6.10005 21.2 6 20.9 6H2.99998C2.69998 6 2.49999 6.10005 2.29999 6.30005L11.4 13.5Z" fill="black"/>
+    </svg></span>`
+
+    var chat_icon = `<span class="svg-icon svg-icon-primary svg-icon-2 ms-2 me-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="black">
+     <path opacity="0.3" d="M2 4V16C2 16.6 2.4 17 3 17H13L16.6 20.6C17.1 21.1 18 20.8 18 20V17H21C21.6 17 22 16.6 22 16V4C22 3.4 21.6 3 21 3H3C2.4 3 2 3.4 2 4Z" fill="black"/>
+     <path d="M18 9H6C5.4 9 5 8.6 5 8C5 7.4 5.4 7 6 7H18C18.6 7 19 7.4 19 8C19 8.6 18.6 9 18 9ZM16 12C16 11.4 15.6 11 15 11H6C5.4 11 5 11.4 5 12C5 12.6 5.4 13 6 13H15C15.6 13 16 12.6 16 12Z" fill="black"/>
+     </svg></span>`
     $('#ShiftKanban').html('')
     $('#ShiftKanban1').html('')
 
-    console.log(request_data.shift)
+    //console.log(request_data.shift)
 
     if (request_data != '') {
-        console.log(json_)
+        //console.log(json_)
 
         if (check.length > 0) {
             check.forEach(e => {
@@ -1615,6 +1682,7 @@ function shiftData() {
                     // if(e == 'S1'){
                     if (Object.keys(json_['plan']['S1']).indexOf('SHIFT_LEAD_SM') != -1) {
                         shiftArray = (json_['plan']['S1']['SHIFT_LEAD_SM'])
+                        all_dict_send_api['Userdetails_lead']=json_['plan']['S1']['SHIFT_LEAD_SM']
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Lead</span>`
                     }
                     else {
@@ -1622,9 +1690,11 @@ function shiftData() {
                     }
                     if (Object.keys(json_['plan']['S1']).indexOf('ADHOC_ACTI_SM') != -1) {
                         shiftArrayEmp = (json_['plan']['S1']['ADHOC_ACTI_SM'])
+                        all_dict_send_api['Userdetails_employee']=json_['plan']['S1']['ADHOC_ACTI_SM']
                         shiftNameEmp = `<span class="card-label fw-bolder text-dark">Shift Employees</span>`
                     }
                     else {
+                        // all_dict_send_api['Userdetails']=json_['plan']['S1']['ADHOC_ACTI_SM']
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Employees</span>`
                     }
                 }
@@ -1632,6 +1702,7 @@ function shiftData() {
                     // else if(e == 'S2'){
                     if (Object.keys(json_['plan']['S2']).indexOf('SHIFT_LEAD_SM') != -1) {
                         shiftArray = (json_['plan']['S2']['SHIFT_LEAD_SM'])
+                        all_dict_send_api['Userdetails_lead']=json_['plan']['S2']['SHIFT_LEAD_SM']
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Lead</span>`
                     }
                     else {
@@ -1639,8 +1710,9 @@ function shiftData() {
                     }
                     if (Object.keys(json_['plan']['S2']).indexOf('ADHOC_ACTI_SM') != -1) {
                         shiftArrayEmp = (json_['plan']['S2']['ADHOC_ACTI_SM'])
+                        all_dict_send_api['Userdetails_employee']=json_['plan']['S2']['ADHOC_ACTI_SM']
                         shiftNameEmp = `<span class="card-label fw-bolder text-dark">Shift Employee</span>`
-                        console.log(shiftArrayEmp)
+                        //console.log(shiftArrayEmp)
                     }
                     else {
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Employee</span>`
@@ -1650,6 +1722,7 @@ function shiftData() {
                     // else if(e == 'S3'){
                     if (Object.keys(json_['plan']['S3']).indexOf('SHIFT_LEAD_SM') != -1) {
                         shiftArray = (json_['plan']['S3']['SHIFT_LEAD_SM'])
+                        all_dict_send_api['Userdetails_lead']=json_['plan']['S3']['SHIFT_LEAD_SM']
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Lead</span>`
                     }
                     else {
@@ -1657,6 +1730,7 @@ function shiftData() {
                     }
                     if (Object.keys(json_['plan']['S3']).indexOf('ADHOC_ACTI_SM') != -1) {
                         shiftArrayEmp = (json_['plan']['S3']['ADHOC_ACTI_SM'])
+                        all_dict_send_api['Userdetails_employee']=json_['plan']['S3']['ADHOC_ACTI_SM']
                         shiftNameEmp = `<span class="card-label fw-bolder text-dark">Shift Employees</span>`
                     }
                     else {
@@ -1667,27 +1741,29 @@ function shiftData() {
             })
 
         }
-
+        
+  
+      
 
         if (shiftArray.length > 0) {
             shiftArray.forEach(e => {
+                
                 ShiftData = ShiftData + `
             
-            <div class="col-4">
-                <div class="card container" style="flex-shrink: 0;
-                margin:auto;
-                background-color: #F3F6F9;
-                border-radius: 0.85rem;width: 300px;">
-                    <div class=row>
-                       <div class=col-4>
-                           <img alt="Pic" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" width="50px">
-                       </div>
-                       <div class=col-8 style="margin: auto;">
-                           <span class="card-label fw-bolder text-dark">${e.name}</span>
-                       </div>
-                    </div>
+            <div class="col-3">
+               
+       
+             <div style="background-color:#f8f9fa" class="d-flex align-items-center rounded border-gray-300 border-1 border-gray-300 border-dashed p-0 mb-7">
+                   <div class="symbol symbol-60px me-4">
+                    <img src="https://avatars.wdf.sap.corp/avatar/`+e.inumber+`" class="" alt="" />
+                </div>
+                   <div class="flex-grow-1 me-2">
+                       <a href="#" class="fw-bolder text-gray-600 text-hover-primary fs-6">`+e.name+`</a>
+                       <span class="text-gray-400 fw-bold d-block fs-6">`+e.inumber+`<a target="_blank" href="msteams:/l/chat/0/0?users=`+e.email+`">`+chat_icon+`</a><a target="_blank" href="mailto:`+e.email+`">`+msg_icon+`</a></span>
+                   </div>
+               </div>
 
-               </div><br>
+
             </div>
             
             `
@@ -1698,22 +1774,21 @@ function shiftData() {
             shiftArrayEmp.forEach(e => {
                 ShiftDataEmp = ShiftDataEmp + `
             
-            <div class="col-4">
-                <div class="card container" style="flex-shrink: 0;
-                margin:auto;
-                background-color: #F3F6F9;
-                border-radius: 0.85rem;width: 300px;">
-                    <div class=row>
-                       <div class=col-4>
-                           <img alt="Pic" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" width="50px">
-                       </div>
-                       <div class=col-8 style="margin: auto;">
-                           <span class="card-label fw-bolder text-dark">${e.name}</span>
-                       </div>
-                    </div>
-
-               </div><br>
-            </div>
+                <div class="col-3">
+               
+       
+                <div style="background-color:#f8f9fa" class="d-flex align-items-center rounded border-gray-300 border-1 border-gray-300 border-dashed p-0 mb-7">
+                      <div class="symbol symbol-60px me-4">
+                       <img src="https://avatars.wdf.sap.corp/avatar/`+e.inumber+`" class="" alt="" />
+                   </div>
+                      <div class="flex-grow-1 me-2">
+                          <a href="#" class="fw-bolder text-gray-600 text-hover-primary fs-6">`+e.name+`</a>
+                          <span class="text-gray-400 fw-bold d-block fs-6">`+e.inumber+`<a target="_blank" href="msteams:/l/chat/0/0?users=`+e.email+`">`+chat_icon+`</a><a target="_blank" href="mailto:`+e.email+`">`+msg_icon+`</a></span>
+                      </div>
+                  </div>
+   
+   
+               </div>
             
             `
             })
@@ -1761,11 +1836,13 @@ function shiftData() {
             </div>                          
         
     </div>
- 
+    
 </div>
 </div>
 
 `
+
+
 
 
         $('#ShiftKanban').html(shiftShowData)
@@ -1776,10 +1853,10 @@ function shiftData() {
 
     else {
         var date_ = new Date().getHours()
-        console.log(date_)
+        //console.log(date_)
         var req = date_time(date_)
 
-        console.log(date_time(date_))
+        //console.log(date_time(date_))
 
         if (check.length > 0) {
             check.forEach(e => {
@@ -1812,7 +1889,7 @@ function shiftData() {
                     if (Object.keys(json_['plan']['S2']).indexOf('ADHOC_ACTI_SM') != -1) {
                         shiftArrayEmp = (json_['plan']['S2']['ADHOC_ACTI_SM'])
                         shiftNameEmp = `<span class="card-label fw-bolder text-dark">Shift Employee</span>`
-                        console.log(shiftArrayEmp)
+                        //console.log(shiftArrayEmp)
                     }
                     else {
                         shiftName = `<span class="card-label fw-bolder text-dark">Shift Employee</span>`
@@ -1845,22 +1922,22 @@ function shiftData() {
             shiftArray.forEach(e => {
                 ShiftData = ShiftData + `
             
-            <div class="col-4">
-                <div class="card container" style="flex-shrink: 0;
-                margin:auto;
-                background-color: #F3F6F9;
-                border-radius: 0.85rem;width: 300px;">
-                    <div class=row>
-                       <div class=col-4>
-                           <img alt="Pic" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" width="50px">
-                       </div>
-                       <div class=col-8 style="margin: auto;">
-                           <span class="card-label fw-bolder text-dark">${e.name}</span>
-                       </div>
-                    </div>
-
-               </div><br>
-            </div>
+    
+                <div class="col-3">
+               
+       
+                <div style="background-color:#f8f9fa" class="d-flex align-items-center rounded border-gray-300 border-1 border-gray-300 border-dashed p-0 mb-7">
+                      <div class="symbol symbol-60px me-4">
+                       <img src="https://avatars.wdf.sap.corp/avatar/`+e.inumber+`" class="" alt="" />
+                   </div>
+                      <div class="flex-grow-1 me-2">
+                          <a href="#" class="fw-bolder text-gray-600 text-hover-primary fs-6">`+e.name+`</a>
+                          <span class="text-gray-400 fw-bold d-block fs-6">`+e.inumber+`<a target="_blank" href="msteams:/l/chat/0/0?users=`+e.email+`">`+chat_icon+`</a><a target="_blank" href="mailto:`+e.email+`">`+msg_icon+`</a></span>
+                      </div>
+                  </div>
+   
+   
+               </div>
             
             `
             })
@@ -1870,22 +1947,22 @@ function shiftData() {
             shiftArrayEmp.forEach(e => {
                 ShiftDataEmp = ShiftDataEmp + `
             
-            <div class="col-4">
-                <div class="card container" style="flex-shrink: 0;
-                margin:auto;
-                background-color: #F3F6F9;
-                border-radius: 0.85rem;width: 300px;">
-                    <div class=row>
-                       <div class=col-4>
-                           <img alt="Pic" src="https://cdn.iconscout.com/icon/free/png-256/avatar-370-456322.png" width="50px">
-                       </div>
-                       <div class=col-8 style="margin: auto;">
-                           <span class="card-label fw-bolder text-dark">${e.name}</span>
-                       </div>
-                    </div>
-
-               </div><br>
-            </div>
+       
+                <div class="col-3">
+               
+       
+                <div style="background-color:#f8f9fa" class="d-flex align-items-center rounded border-gray-300 border-1 border-gray-300 border-dashed p-0 mb-7">
+                      <div class="symbol symbol-60px me-4">
+                       <img src="https://avatars.wdf.sap.corp/avatar/`+e.inumber+`" class="" alt="" />
+                   </div>
+                      <div class="flex-grow-1 me-2">
+                          <a href="#" class="fw-bolder text-gray-600 text-hover-primary fs-6">`+e.name+`</a>
+                          <span class="text-gray-400 fw-bold d-block fs-6">`+e.inumber+`<a target="_blank" href="msteams:/l/chat/0/0?users=`+e.email+`">`+chat_icon+`</a><a target="_blank" href="mailto:`+e.email+`">`+msg_icon+`</a></span>
+                      </div>
+                  </div>
+   
+   
+               </div>
             
             `
             })

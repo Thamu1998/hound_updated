@@ -80,7 +80,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="submit" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                        <button type="button" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
                             data-bs-dismiss="modal">Submit</button>
                     </div>
                 </div>
@@ -119,7 +119,7 @@
         </div>
 
         <div class="modal-footer">
-            <button type="submit" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+            <button type="button" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
                 data-bs-dismiss="modal">Submit</button>
         </div>
     </div>
@@ -195,7 +195,7 @@
     
                 <div class="card-body" id="update_notes">
                     <!-- <textarea class="form-control" rows="7" cols="70" name="comment" id="comment_id" style="font-size: initial;background: aliceblue;"></textarea><br><br>
-                    <button type="submit" id="submit_cmd_btn_notes" class="btn btn-sm btn-primary">Submit</button> -->
+                    <button type="button" id="submit_cmd_btn_notes" class="btn btn-sm btn-primary">Submit</button> -->
     
                 </div>
     
@@ -213,12 +213,16 @@
 <div class="card">
     <div class="row g-5 g-xl-10 mt-1">
         <div class="col" id="ShiftKanban">
+            
         </div>
     </div>
+    
     <div class="row g-5 g-xl-10 mt-1">
         <div class="col" id="ShiftKanban1">
+            
         </div>
     </div>
+    
 </div>
 
 
@@ -254,10 +258,10 @@
                             <tr class="fw-bolder fs-6 text-muted">
                                 <th style="min-width: 200px;">Ticket ID</th>
                                 <th style="min-width: 200px;">Cause</th>
-                                <th class="text-center" style="min-width: 200px;">Customer Impact</th>
-                                <th class="text-center" style="min-width: 200px;">Action Required</th>
-                                <th class="text-center" style="min-width: 100px;">Status</th>
-                                <th class="text-center" class="min-w-100px" style="min-width: 100px;">Actions
+                                <th  style="min-width: 200px;">Customer Impact</th>
+                                <th  style="min-width: 200px;">Action Required</th>
+                                <th  style="min-width: 100px;">Status</th>
+                                <th  class="min-w-100px" style="min-width: 100px;">Actions
                                 </th>
                             </tr>
                         </thead>
@@ -297,10 +301,10 @@
                             <tr class="fw-bolder fs-6 text-muted">
                                 <th style="min-width: 200px;">Ticket ID</th>
                                 <th style="min-width: 200px;">Description</th>
-                                <th style="min-width: 200px;text-align: center;">Action Taken</th>
-                                <th style="min-width: 200px;text-align: center;">Action Required</th>
-                                <th style="min-width: 100px;text-align: center;">Status</th>
-                                <th style="min-width: 100px;text-align: center;">Actions
+                                <th style="min-width: 200px;">Action Taken</th>
+                                <th style="min-width: 200px;">Action Required</th>
+                                <th style="min-width: 100px;">Status</th>
+                                <th style="min-width: 100px; ">Actions
                                 </th>
                             </tr>
                         </thead>
@@ -486,10 +490,10 @@
 
                 <div class="modal-footer">
 
-                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                    <button type="button" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
                         data-bs-dismiss="modal">Close</button>
 
-                    <button type="submit" id="submit_button" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
+                    <button type="button" id="submit_button" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
                         data-bs-dismiss="modal">Submit</button>
                 </div>
 
@@ -523,7 +527,7 @@
 
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 
-                <form id="submit_button" class="form" action="#">
+                <form  class="form" action="#">
 
                     <div class="mb-13 text-center">
 
@@ -600,7 +604,7 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                        <button type="button"  id="submit_button" class="btn btn-primary" data-kt-menu-dismiss="true"
                             data-bs-dismiss="modal">Submit</button>
                     </div>
 
@@ -687,10 +691,10 @@
                 <div class="modal-footer">
 
 
-                    <button type="submit" id="close_button_spc" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                    <button type="button" id="close_button_spc" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
                     data-bs-dismiss="modal">Close</button>
 
-                    <button type="submit" id="submit_button_spc" class="btn btn-sm btn-primary"
+                    <button type="button" id="submit_button_spc" class="btn btn-sm btn-primary"
                         data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
                 </div>
 
@@ -722,7 +726,7 @@
 
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 
-                <form id="submit_button_spc" class="form" action="#">
+                <form  class="form" action="#">
 
                     <div class="mb-13 text-center">
 
@@ -791,8 +795,8 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
-                            data-bs-dismiss="modal">Submit</button>
+                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
+                            data-bs-dismiss="modal" id="submit_button_spc">Submit</button>
                     </div>
 
                 </form>
@@ -856,10 +860,10 @@
 
                 <div class="modal-footer">
 
-                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                    <button type="button" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
                         data-bs-dismiss="modal">Close</button>
 
-                    <button type="submit" id="submit_button_chart" class="btn btn-sm btn-primary"
+                    <button type="button" id="submit_button_chart" class="btn btn-sm btn-primary"
                         data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
                 </div>
                 <!-- <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" 
@@ -924,10 +928,10 @@
 
                 <div class="modal-footer">
 
-                    <button type="submit" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
+                    <button type="button" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
                         data-bs-dismiss="modal">Close</button>
 
-                    <button type="submit" id="submit_button_chart_update" class="btn btn-sm btn-primary"
+                    <button type="button" id="submit_button_chart_update" class="btn btn-sm btn-primary"
                         data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
                 </div>
                 <!-- <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" 
@@ -1104,7 +1108,7 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
                             data-bs-dismiss="modal" id="submit_button_hostList">Submit</button>
                     </div>
 
@@ -1217,7 +1221,7 @@
 
                     <div class="text-center">
                         <button type="reset" class="btn btn-light me-3" onclick="cancelModel()">Cancel</button>
-                        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
                             data-bs-dismiss="modal" id="submit_button_hostList_infra">Submit</button>
                     </div>
 
@@ -1406,6 +1410,14 @@
     </div>
 
 
+</div>
+
+<div class="me-3">
+
+    <a href="#" style="float: right;
+    margin-top: 2%;
+    margin-right: 4%;" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder"
+     id="create_work_group_request_btn" onclick="mail_trigger()">mail</a>
 </div>
 
 

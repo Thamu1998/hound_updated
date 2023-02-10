@@ -1,0 +1,230 @@
+<h1>Jeevan</h1>
+
+{%  extends 'base.html' %}
+{% load static %}
+
+{% block css_block %}
+<link href="{% static "assets/css/pages/roster/shifts.css"%}" rel="stylesheet" type="text/css" />
+<link  href="{% static "assets/plugins/custom/jkanban/jkanban.bundle.css"%}" rel="stylesheet" type="text/css" />
+{% endblock %}
+
+{% block page_title %}
+ {{page_title}}
+{% endblock %}
+
+{% block subheader-item %}
+<!-- <select id="team_dropdown_btn" class="form-select form-select-sm form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Select Team" data-allow-clear="false" data-col-index="3"></select> -->
+{% endblock %}
+
+{% block subheader-button %}
+
+<!-- <div class="me-3">
+    <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal" data-bs-target="#model_shift_status">Update Shift Status</a>
+</div>
+
+<div class="me-3">
+    <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal" data-bs-target="#model_apply_leave">Update Leave</a>
+</div> -->
+
+{% endblock %}
+
+
+
+
+
+
+
+{% block body %}
+
+<html>
+    <head>
+        <style>
+            .file-upload {
+              background-color: #ffffff;
+              width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+            }
+            
+            .file-select {
+              display: inline-block;
+              text-align: center;
+              background-color: #f9f9f9;
+              width: 100%;
+              padding: 50px;
+              border: 2px dashed #009ef7;
+              border-radius: 5px;
+              transition: all .2s ease-in-out;
+            }
+            
+            .file-select:hover {
+              background-color: #eeeeee;
+              cursor: pointer;
+            }
+            
+            .file-select-button {
+              background-color:  #009ef7;
+              color: #ffffff;
+              display: inline-block;
+              width: 100%;
+              border: 0;
+              padding: 15px;
+              border-radius: 5px;
+              transition: all .2s ease-in-out;
+              cursor: pointer;
+              
+            }
+            
+            /* .file-select-button:hover {
+              background-color: #262626;
+            } */
+            
+            .file-select-name {
+              margin-bottom: 10px;
+              font-size: 16px;
+              color: black;
+              text-align: center;
+              font-weight: bold;
+            }
+
+            .file-select-name1 {
+              margin-top: 10px;
+              font-size: 12px;
+              color: black;
+              text-align: center;
+            }
+            
+            #chooseFile {
+              display: none;
+            }
+            </style>
+    </head>
+    <body>
+    
+          <div class="card card-flush" style="min-height:325px;">
+            <div class="row g-5 g-xl-10 mt-1">
+            <div class="col-4" style="margin: auto;">
+               <div class="card-header border-0 pt-5">
+                <h3 class="card-title align-items-start flex-column">
+                    <span class="card-label fw-bolder text-primary">Generate Server List</span>
+                </h3>
+
+            </div>
+            <div class="card-body" id="floating_chart">      
+                <!-- <div  style="width: 300px; height: 200px;"> -->
+                    <canvas id="labelChart"></canvas>
+                  <!-- </div> -->
+                  
+            </div>
+            <!-- <div class="card-body" id="chart_widget_1"> </div> -->
+
+            
+
+        </div>
+        <div class="col-2"> </div>
+   
+        <div class="col-6" style="margin: auto;">
+            <div class="card card-flush" style="min-height:325px;">
+    
+                <div class="card-header border-0 pt-5">
+                    <h3 class="card-title align-items-start flex-column">
+                        <span class="card-label fw-bolder text-primary">Upload Excel File</span>
+    
+                    </h3>
+                  
+                </div>
+    
+                <div class="card-body" id="update_notes">
+                    <div class="file-upload">
+                        <div class="file-select">
+                            <div class="file-select-name" id="noFile">Drop files here or click to upload</div> 
+                          <div class="file-select-button" id="fileName">Choose File</div>
+                          <input type="file" accept=".xlsx, .xls, .csv" name="chooseFile" id="chooseFile">
+                          <div class="file-select-name1" id="noFile">Only xlsx files are allowed to upload</div> 
+                        </div>
+                      </div>
+    
+                </div>
+    
+                <!-- <div class="card-footer">
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+  
+</div>
+
+<div class="row g-5 g-xl-10 mt-1">
+
+
+
+    <div class="card card-flush" style="min-height:280px;">
+        <div class="card-header border-0 pt-5">
+            <h3 class="card-title align-items-start flex-column">
+                <span class="card-label fw-bolder text-primary">Generate Server List</span>
+
+            </h3>
+     
+
+            <!-- <div class="me-3">
+
+                <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                    data-bs-target="#model_create_token" id="create_work_group_request_btn">create ticket</a>
+            </div> -->
+        </div>
+        <div class="card-body" style="overflow-x: scroll;">
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                    <table class="table table-row-dashed table-row-gray-300 gy-7" >
+                        <thead>
+                            <tr class="fw-bolder fs-6 text-muted text-center">
+                                <th style="min-width: 100px;">Date</th>
+                                <th style="min-width: 100px;">OS</th>
+                                <th style="min-width: 100px;">Sap_rating_critical</th>
+                                <th  style="min-width: 100px;">Sap_rating_high</th>
+                                <th  style="min-width: 100px;">Sap_rating_low</th>
+                                <th  style="min-width: 100px;">Sap_rating_medium</th>
+                                <th style="min-width: 100px;">Software</th>
+                                <th  style="min-width: 100px;">patch_offline</th>
+                                <th  style="min-width: 100px;">patch_online</th>
+                            </tr>
+                        </thead>
+                        <tbody id="Generate_view_list" style="text-align: center;">
+
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+    </body>
+</html>
+
+
+
+
+{% endblock %}
+
+
+
+
+<!-- F:\Hound\static\assets\js\pages\vulnerablity -->
+
+
+{% block js_block %}
+<!-- <script src="{% static "assets/plugins/custom/jkanban/jkanban.bundle.js"%}"></script> -->
+<!-- <script type="text/javascript">
+    var current_user_team = "{{user.team.code}}"
+</script> -->
+<!-- <script src="{% static "assets/js/pages/roster/shift_dom.js"%}"></script>
+<script src="{% static "assets/js/pages/roster/daily_shift.js"%}"></script> -->
+<!-- <script src="{% static "assets/js/pages/shiftpasstool/shiftpasstool_create.js"%}"></script> -->
+<script src="{% static "assets/js/pages/vulnerablity/dashboard.js"%}"></script>
+
+{% endblock %}

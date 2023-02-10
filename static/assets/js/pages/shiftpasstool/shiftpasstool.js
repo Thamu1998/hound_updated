@@ -1,7 +1,4 @@
-$("#kt_date").flatpickr({
-    enableTime: true,
-    dateFormat: "Y-m-dTH:i",
-});
+
 
 // function convert_date(data) {
 //     console.log(typeof(data))
@@ -26,13 +23,43 @@ $("#kt_date").flatpickr({
 //         return null
 //     }
 // };
-// var request_data = [];
+// import flatpickr from 'flatpickr';
+var request_data = {};
+// flatpickr("#kt_date", {
+//     //options go here
+//     enableTime: true,
+//     dateFormat: "Y-m-dTH:i",
+// });
+
+
+
+$("#kt_date").flatpickr({
+    enableTime: true,
+    dateFormat: "Y-m-dTH:i",
+});
+
+// function collect_dict(data){
+//  console.log(data)
+// }
+
+// createDatePicker()
 // var queryselector=document.querySelector("#kt_date")
 // ////.log(queryselector,"queryselector")
 
+
+
 $("#submit_btn").on("click", function (e) {
+    var shiftpass={}
     // $('#model_apply_leave').hide()
     //.log("Hidded")
+    let jsonData = {
+        name: 'John Doe',
+        age: 30,
+        address: '123 Main St.'
+    };
+    
+    // Send the JSON object to the other script
+    
     var shift = $("#Shift_dropdown").val();
 
     var selected_date = $("#kt_date").val();
@@ -48,13 +75,23 @@ $("#submit_btn").on("click", function (e) {
     //.log(shift, selected_date);
     // var leave_type = $("#leave_dropdown").val();
     request_data={ "shift": shift, "selected_date": selected_date };
-    console.log(request_data)
+    console.log(request_data,"REQ")
+    shiftpass['shift_date']=request_data
+    
+    // collect_dict(request_data)
     $.ajax({
         method: "GET",
         url: '/shiftpasstool/outage_get_api/?shift=' + shift + '&created_date=' + selected_date + '',
         success: function (data) {
 
             generate_change_request_list_dom(data)
+            shiftpass['outage_get']=data
+            console.log(shiftpass['outage_get'],"OUTAGEEEEEE")
+            
+        },error: function(xhr, status, error){
+            console.log("............... ERRORRRRR")
+            
+            
         }
 
     });
@@ -65,15 +102,38 @@ $("#submit_btn").on("click", function (e) {
         url: '/shiftpasstool/post_tracking/?shift=' + shift + '&created_date=' + selected_date + '',
         success: function (data) {
             generate_change_request_list_SPC(data)
-
+            shiftpass['follow_up']=data
+        
+            
+        },error: function(xhr, status, error){
+            console.log("............... ERRORRRRR")
+            
+            
         }
 
-    });
+    })
+    setTimeout(() => {
+        broadcast_data_transforming(shiftpass)
+    }, 3000);
+    
+    
+    
+    
+    
 });
 // startTimepicker = form.querySelector('#kt_calendar_datepicker_start_time');
 // endTimepicker = form.querySelector('#kt_calendar_datepicker_end_time');
 
 // POST outage
+function broadcast_data_transforming(newdata){
+    // console.log(newdata.length,"broadcast_data_transforming")
+    // if(newdata.length >= 3){
+    console.log(newdata,"NEWWWWWWWWWWWWWWW")
+    window.postMessage(newdata, '*');
+    // }
+
+}
+// window.postMessage(shiftpass, '*');
 $("#submit_button").on('click', function (e) {
     //.log("clicked")
 
@@ -172,6 +232,8 @@ function generate_change_request_list_dom(data) {
     var color='';
     var statusHide='';
     var textData=''
+    var custom_impact=''
+    var ActionRequired=''
     // if (data.length==0){
     //     data=[]
     //     data.push({"Ticket_ID": '', "Subject": '', "customer_impact": '', "Action_Required": ''})
@@ -228,7 +290,31 @@ function generate_change_request_list_dom(data) {
                 textData=`
                 <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                 <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Subject + `</label>
+                </div>`
+            }
+            
+            if (item.customer_impact.length > 100){
+                custom_impact=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:1000px">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.customer_impact + `</label>
             </div>`
+            }else{
+                custom_impact=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.customer_impact + `</label>
+                </div>`
+            }
+            // Action_Required
+            if (item.Action_Required.length > 100){
+                ActionRequired=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:1000px">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
+            </div>`
+            }else{
+                ActionRequired=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
+                </div>`
             }
 
             team_options = team_options + `<tr>
@@ -241,15 +327,13 @@ function generate_change_request_list_dom(data) {
                 <td style="white-space: initial;">
                    ${textData}
                 </td>
-                <td style="text-align:center;font-size: medium;">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
-                        <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.customer_impact + `</label>
-                    </div>
+                <td style="white-space: initial;">
+                    ${custom_impact}
+                    
                 </td>
-                <td style="text-align:center;font-size: medium;">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
-                        <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
-                    </div>
+                <td style="white-space: initial;">
+                    ${ActionRequired}
+                    
                 </td>
                 <td style="text-align:center;font-size: medium;">
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
@@ -424,7 +508,7 @@ function update(ID) {
 
     <div class="text-center">
         <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
-        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true" onclick="update_ticket('${UpdateData.created_date}','${UpdateData.shift}')"
+        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true" onclick="update_ticket('${UpdateData.created_date}','${UpdateData.shift}')"
         data-bs-dismiss="modal" >Update</button>
     </div>
 
@@ -562,6 +646,8 @@ function generate_change_request_list_SPC(data) {
     var color = '';
     var statusHide = ''
     var textData=''
+    var Action_Taken=''
+    var Action_Required=''
     console.log(data, "resData")
     outage_report['SPC_data']=data['new_data1']
     if (data['new_data1']){
@@ -648,26 +734,47 @@ function generate_change_request_list_SPC(data) {
             }
 
             console.log(color)
-
-
+            // Action_Taken
+            if(item.Action_Taken.length > 100){
+                Action_Taken=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:700px">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Taken + `</label>
+            </div>`
+            }
+            else{
+                Action_Taken=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Taken + `</label>
+            </div>`
+            }
+            // Action_Required
+            if(item.Action_Required.length > 100){
+                Action_Required=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:700px">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
+            </div>`
+            }
+            else{
+                Action_Required=`
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
+            </div>`
+            }
             team_options1 = team_options1 + `<tr>
                 <td id=`+ item.ID + `>
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                         <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Ticket_ID + `</label>
                     </div>
                 </td>
-                <td>
+                <td style="white-space: initial;">
                 ${textData}
                 </td>
-                <td style="text-align:center">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
-                        <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Taken + `</label>
-                    </div>
+                <td style="white-space: initial;">
+                ${Action_Taken}
+                    
                 </td>
-                <td style="text-align:center">
-                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
-                        <label style="font-size: small;" class="text-muted fw-bold d-block">`+ item.Action_Required + `</label>
-                    </div>
+                <td style="white-space: initial;">
+                    ${Action_Required}
                 </td>
                 <td style="text-align:center">
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
@@ -734,35 +841,7 @@ $("#submit_button_spc").on('click', function (e) {
     // "start_time":date
     // var floatingdate = $("#floatingdate").val();
     // var floatingdate = $("#floatingdate").val();
-    data = JSON.stringify({
-        "Ticket_ID": floatingTicket,
-        "Subject": floatingCause,
-        "Action_Taken": floatingCustomerImp,
-        "Action_Required": floatingActionReq,
-        "created_date": floatingdate,
-        "shift": floatingShift,
-        "Status": floatingStatus,
-        "start_time": floatingdate
-    })
-
-
-
-    var csrftoken = getCookie('csrftoken');
-    var settings = {
-
-        "headers": { "X-CSRFToken": csrftoken, "Content-Type": "application/json", },
-        "async": true,
-        "crossDomain": false,
-        "url": "/shiftpasstool/post_tracking/",
-        "method": "POST",
-        "processData": false,
-        "data": data
-
-    }
-    $.ajax(settings).done(function (response) {
-        console.log(response,"RESSSSSSSSSSSSSSSSSSSSSSSSSSS")
-        getspcData()
-    })
+  
     
     // $.ajax({
     //     method: "GET",
@@ -1052,13 +1131,11 @@ function update_spa(ID) {
 
     <div class="text-center">
         <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
-        <button type="submit" class="btn btn-primary" data-kt-menu-dismiss="true"
+        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
         data-bs-dismiss="modal" id='update_button_spa' onclick="update_ticket_spa('${updateSpaData.created_date}','${updateSpaData.shift}')">Update</button>
     </div>
 
 </form>
-
-
 
                     `
     $('#floatingTickets_spa ').html(upd_spa)
@@ -1115,9 +1192,6 @@ function update_ticket_spa(created_date, shift) {
 }
 
 
-
-
-
-
+// export default request_data;
 
 

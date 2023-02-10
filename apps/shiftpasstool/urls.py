@@ -40,7 +40,8 @@ api_url = [
     path('Activity_db/',Activity_db.as_view(),name="Activity_db"),
     path('Get_all_activity/',Get_all_activity.as_view(),name="Get_all_activity"),
     path('Get_sm_infra_activate/',Get_sm_infra_activate.as_view(),name='Get_sm_infra_activate'),
-    path('sm_infra_activate_obj/',sm_infra_activate_obj.as_view(),name='sm_infra_activate_obj')
+    path('sm_infra_activate_obj/',sm_infra_activate_obj.as_view(),name='sm_infra_activate_obj'),
+    path('MailAPI/',MailAPI_view.as_view(),name="MailAPI")
     # path()
 ]
 

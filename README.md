@@ -21,6 +21,8 @@ $ cd HOUND
 ```sh
 $ virtualenv env
 $ env\Scripts\activate
+$ set APPENV=local
+$ python manage.py runserver
 ```
 
 3. Install the dependencies:
