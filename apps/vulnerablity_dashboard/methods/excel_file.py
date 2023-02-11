@@ -34,6 +34,14 @@ class analyse_vulnerablity_excel:
         new_df['Sap_rating_critical']=[len(df_sap_rating_critical)]
         new_df['patch_online'] =[len(df_patch_online)]
         new_df['patch_offline'] =[len(df_patch_offline)]
+
+        result = {}
+        for vulnerability in df['Vulnerability'].unique():
+            hostnames = df[df['Vulnerability'] == vulnerability]['Hostname'].tolist()
+            result[vulnerability] = list(set(hostnames))
+        
+
+        print(result)
         import datetime
         for k,v in new_df.iterrows():
             vulnerablity_analyse_data.objects.create(Vulnerability_count=v['Vulnerability_count'],OS=v['OS'],Software=v['Software']
@@ -41,7 +49,7 @@ class analyse_vulnerablity_excel:
             Sap_rating_critical=v['Sap_rating_critical'],patch_online=v['patch_online'],patch_offline=v['patch_offline'],created_date=datetime.datetime.now())
 
 
-        return "creted vulnerablity_data"
+        return result
 
 
 
