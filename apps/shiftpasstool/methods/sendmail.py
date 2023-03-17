@@ -1,5 +1,7 @@
 from django.core.mail import EmailMessage,send_mail
-from django.template.loader import render_to_string
+from django.template.loader import render_to_string,get_template
+
+from config import settings
 
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # EMAIL_HOST = 'mail-rot.shp.rot.s4h.sap.corp'
@@ -97,17 +99,30 @@ class send_mail_to_destination:
         context['Activity_data']=dictionary
 
         # Render the HTML template
-        html_content = render_to_string('shiftpasstool/mail.html', context)
+        html_content=get_template('shiftpasstool/mail.html').render(context)
+        # html_content = render_to_string('shiftpasstool/mail.html', context)
 
-        # msg = EmailMessage(subject, body,html_content, to=to)
-        # msg.content_subtype = "html"  # Main content is now text/html
-        # msg.send()
-        send_mail(
-            'Subject',
-            'Here is the message.',
-            'jeevanom306@gmail.com',
-            ['kunigal.naveen@gmail.com'],
-            html_message=html_content
-)
+        msg = EmailMessage(subject, body,from_email='jeevanom306@gmail.com', to=to,html_message=html_content)
+        msg.content_subtype = "html"  # Main content is now text/html
+        # msg.attach_alternative(html_content, 'text/html')
+        msg.send()
+#         send_mail(
+#             'Subject',
+#             'Here is the message.',
+#             'jeevanom306@gmail.com',
+#             ['kunigal.naveen@gmail.com'],
+#             html_message=html_content
+# )
         return context
 
+# import sys
+# from django.core.mail import EmailMessage
+# from django.template.loader import render_to_string, get_template
+# from django.utils.html import strip_tags
+# html_tpl_path = 'mail/welcome.html'
+# context_data = {'username': sys.argv[1]}
+# email_html_template = get_template(html_tpl_path).render(context_data)
+# receiver_email = sys.argv[2]
+# email = EmailMessage('Welcome to Hound', email_html_template, 'hound@mail.s4hana.ondemand.com', [receiver_email])
+# email.content_subtype = 'html'
+# email.send()

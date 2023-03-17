@@ -17,13 +17,6 @@
 
 {% block subheader-button %}
 
-<!-- <div class="me-3">
-    <a href="#" id="kt_drawer_example_advanced_button"  class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder"
-        >Select Date & Shift</a>
-</div> -->
-
-
-
 
 <style>
     #swap_request_from_tbody_outages {
@@ -64,10 +57,10 @@
             <div class="modal-body">
                 <div class="card-body">
                     <div class="form-floating">
-                        <label for="Shift_dropdown">Select Shift</label>
+                       
                         <select id="Shift_dropdown" class="form-select form-select-solid mb-5"
                             data-placeholder="Select Shift" data-dropdown-parent="#model_apply_leave">
-                            <option></option>
+                            <option value="" disabled hidden selected>Select Shift</option>
                             <option>Morning</option>
                             <option>Afternoon</option>
                             <option>Night</option>
@@ -91,48 +84,9 @@
 
 
 
-<!-- <div id="kt_drawer_example_advanced" class="bg-white card" data-kt-drawer="true" data-kt-drawer-activate="true" data-kt-drawer-toggle="#kt_drawer_example_advanced_button" data-kt-drawer-close="#kt_drawer_example_advanced_close" data-kt-drawer-name="docs" data-kt-drawer-width="500px">
-    <div class="card-header card-header-stretch">
-        <div class="card-toolbar">
-            <ul class="nav nav-tabs nav-line-tabs nav-stretch fs-6 border-0">
-                <li class="nav-item">
-                    <a class="nav-link active" data-bs-toggle="tab" href="#date_filter">Filter</a>
-                </li>
-            
-            </ul>
-        </div>
-    </div>
-    <div class="card-body">
-        <div class="form-floating">
-            <label for="Shift_dropdown">Select Shift</label>
-            <select id="Shift_dropdown" class="form-select form-select-solid mb-5"
-                data-placeholder="Select Shift" data-dropdown-parent="#model_apply_leave" >
-                <option></option>
-                <option>Morning</option>
-                <option>Afternoon</option>
-                <option>Night</option>
-            </select>
-        </div>
-
-        <div class="mb-0">
-            <input type='date' class="form-control form-control-solid" placeholder="Pick date" id="kt_date" />
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" id="submit_btn" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
-                data-bs-dismiss="modal">Submit</button>
-        </div>
-    </div>
-</div> -->
-
 
 <!--begin::Row-->
-
-
-
-
-
-   
+  
         <div class="card card-flush" style="min-height:325px;">
             <div class="row g-5 g-xl-10 mt-1">
             <div class="col-6">
@@ -142,13 +96,8 @@
 
                 </h3>
                 <div class="modal-footer">
-                    <!-- <button type="button" id="create_work_group_request_btn" code="" class="btn btn-primary">Create
-                    Ticket</button> -->
+                   
                 </div>
-
-                <!-- <div >
-
-            </div> -->
 
                 <div class="me-3" id="hideUpdate">
 
@@ -156,22 +105,13 @@
                 </div>
             </div>
             <div class="card-body" id="floating_chart"></div>
-            <!-- <div class="card-body" id="chart_widget_1"> </div> -->
+
 
         </div>
-        <!-- <div class="col-1" style="background-color: aliceblue;">
 
-        </div> -->
         <div class="col-6">
             <div class="card card-flush" style="min-height:325px;">
-                <!-- <div class="card-header border-0 pt-5" id="Update_button_comment">
-                    
-                    
-                    <div class="modal-footer">
-    
-                    </div>
-                </div> -->
-    
+
     
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
@@ -179,8 +119,7 @@
     
                     </h3>
                     <div class="modal-footer">
-                        <!-- <button type="button" id="create_work_group_request_btn" code="" class="btn btn-primary">Create
-                            Ticket</button> -->
+                      
                     </div>
     
                     <!-- <div >
@@ -194,9 +133,7 @@
                 </div>
     
                 <div class="card-body" id="update_notes">
-                    <!-- <textarea class="form-control" rows="7" cols="70" name="comment" id="comment_id" style="font-size: initial;background: aliceblue;"></textarea><br><br>
-                    <button type="button" id="submit_cmd_btn_notes" class="btn btn-sm btn-primary">Submit</button> -->
-    
+                    
                 </div>
     
                 <!-- <div class="card-footer">
@@ -246,7 +183,7 @@
             <div class="me-3">
 
                 <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
-                    data-bs-target="#model_create_token" id="create_work_group_request_btn">create ticket</a>
+                    data-bs-target="#model_create_token" id="create_work_group_request_btn">Create Ticket</a>
             </div>
         </div>
         <div class="card-body" style="overflow-x: scroll;">
@@ -289,7 +226,7 @@
             </h3>
             <div class="modal-footer">
                 <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
-                    data-bs-target="#model_create_token1" id="create_work_group_request_btn">create ticket</a>
+                    data-bs-target="#model_create_token1" id="create_work_group_request_btn">Create Ticket</a>
             </div>
         </div>
         <div class="card-body" style="overflow-x: scroll;">
@@ -329,12 +266,12 @@
     <div class="card card-flush" style="min-height:280px;">
         <div class="card-header border-0 pt-5">
             <h3 class="card-title align-items-start flex-column">
-                <span class="card-label fw-bolder text-dark">Weeekend Activity</span>
+                <span class="card-label fw-bolder text-dark">Weekend Activity</span>
 
             </h3>
             <div class="modal-footer">
                 <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
-                    data-bs-target="#model_host_list" id="create_work_group_request_btn">create</a>
+                    data-bs-target="#model_host_list" id="create_work_group_request_btn">Create Ticket</a>
             </div>
         </div>
         <div class="card-body" style="overflow-x: scroll;">
@@ -384,7 +321,7 @@
             </h3>
             <div class="modal-footer">
                 <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
-                    data-bs-target="#model_host_list_infra" id="create_work_group_request_btn">create</a>
+                    data-bs-target="#model_host_list_infra" id="create_work_group_request_btn">Create Ticket</a>
             </div>
         </div>
         <div class="card-body" style="overflow-x: scroll;">
@@ -420,89 +357,6 @@
 </div>
 
 <div class="modal fade" tabindex="-1" id="model_create_token">
-    <!-- <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-
-           
-                <div class="row mt-3">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingTicket" placeholder="Ticket Id">
-                            <label for="floatingTicket">Ticket Id</label>
-                        </div>
-
-                    </div>
-                </div><br>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingCause" placeholder="Cause">
-                            <label for="floatingCause">Cause</label>
-                        </div>
-                    </div>
-                </div><br>
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingCustomerImp"
-                                placeholder="Customer Impact">
-                            <label for="floatingCustomerImp">Customer Impact</label>
-                        </div>
-
-                    </div>
-
-                </div><br>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingActionReq"
-                                placeholder="Action Required">
-                            <label for="floatingActionReq">Action Required</label>
-                        </div>
-                    </div>
-                </div><br>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-                            
-
-                            <label for="floatingStatus">Status</label>
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                                id="floatingStatus">
-                                <option selected></option>
-                                <option value="New">New</option>
-                                <option value="InProgress">InProgress</option>
-                                <option value="Waiting">Waiting</option>
-                                <option value="Resolved">Resolved</option>
-                            </select>
-
-                        </div>
-
-                    </div>
-
-                </div><br>
-
-
-
-                <div class="modal-footer">
-
-                    <button type="button" id="close_button" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
-                        data-bs-dismiss="modal">Close</button>
-
-                    <button type="button" id="submit_button" class="btn btn-sm btn-primary" data-kt-menu-dismiss="true"
-                        data-bs-dismiss="modal">Submit</button>
-                </div>
-
-            </div>
-        </div>
-    </div> -->
-
-
-
 
     <div class="modal-dialog modal-dialog-centered mw-750px">
 
@@ -625,84 +479,6 @@
 <!-- SPC TOKEN -->
 <div class="modal fade" tabindex="-1" id="model_create_token1">
 
-    <!-- <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-body">
-
-                <div class="row mt-3">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingTicket_spc" placeholder="Ticket Id">
-                            <label for="floatingTicket">Ticket Id</label>
-                        </div>
-
-                    </div>
-                </div><br>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingCause_spc" placeholder="Cause">
-                            <label for="floatingCause">Cause</label>
-                        </div>
-                    </div>
-                </div><br>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingCustomerImp_spc"
-                                placeholder="Customer Impact">
-                            <label for="floatingCustomerImp"> Action Taken</label>
-                        </div>
-
-                    </div>
-                </div><br>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-                            <input type="text" class="form-control" id="floatingActionReq_spc"
-                                placeholder="Action Required">
-                            <label for="floatingActionReq">Action Required</label>
-                        </div>
-                    </div>
-                </div><br>
-
-                <div class="row">
-                    <div class="col">
-                        <div class="form-floating">
-
-                            <label for="floatingStatus">Status</label>
-                            <select class="form-select form-select-lg mb-3" aria-label=".form-select-lg example"
-                                id="floatingStatus_spc">
-                                <option selected></option>
-                                <option value="New">New</option>
-                                <option value="InProgress">InProgress</option>
-                            </select>
-                        </div>
-
-
-
-                    </div>
-
-                </div><br>
-
-               
-
-                <div class="modal-footer">
-
-
-                    <button type="button" id="close_button_spc" class="btn btn-sm btn-light" data-kt-menu-dismiss="true"
-                    data-bs-dismiss="modal">Close</button>
-
-                    <button type="button" id="submit_button_spc" class="btn btn-sm btn-primary"
-                        data-kt-menu-dismiss="true" data-bs-dismiss="modal">Submit</button>
-                </div>
-
-            </div>
-        </div>
-    </div> -->
-
-
     <div class="modal-dialog modal-dialog-centered mw-750px">
 
         <div class="modal-content rounded">
@@ -732,9 +508,7 @@
 
                         <h1 class="mb-3">Create SPC Ticket</h1>
 
-                        <div class="text-gray-400 fw-bold fs-5">If you need more info, please check
-                            <a href="" class="fw-bolder link-primary">Support Guidelines</a>.
-                        </div>
+                        
 
                     </div>
 
@@ -1085,26 +859,8 @@
                         </div>
 
 
-                        <!-- <div class="col-md-6 fv-row">
-                            <label class="required fs-6 fw-bold mb-2">CR Approval</label>
-                            <input type="text" class="form-control" id="floatingCRApproval" placeholder="CR Approval">
-
-                        </div> -->
-
                     </div>
 
-                    <!-- <div class="row g-9 mb-8"> -->
-
-                    <!-- <div class="col-md-6 fv-row">
-                            <label class="required fs-6 fw-bold mb-2">Resource</label>
-                            <input type="text" class="form-control" id="floatingResource" placeholder="Resource">
-
-                        </div> -->
-
-
-
-
-                    <!-- </div> -->
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
@@ -1415,36 +1171,28 @@
 <div class="me-3">
 
     <a href="#" style="float: right;
-    margin-top: 2%;
+    margin-top: 2%;min-width: 115px;justify-content: center;
     margin-right: 4%;" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder"
-     id="create_work_group_request_btn" onclick="mail_trigger()">mail</a>
+     id="create_work_group_request_btn" onclick="mail_trigger()">Send Mail</a>
 </div>
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="container">
-    <button class="btn btn-primary mt-5" >Create Ticket</button>
-    <div class="popup  text-center" id="popup">
-
-        
-
-        
-
-        
+<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+ aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="text-center">
+                <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt="" style="width: 50px;"><br><br>
+                <h6 class="text-center">Mail Sent Successfully</h6><br>
+                <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;" data-dismiss="modal">Ok</button>
+            </div>
+           
+        </div>
+      
+      </div>
     </div>
-</div> -->
+  </div>
 
 <!--end::Row-->
 

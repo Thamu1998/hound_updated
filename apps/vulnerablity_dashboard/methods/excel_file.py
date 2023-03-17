@@ -20,11 +20,11 @@ class analyse_vulnerablity_excel:
         df_sap_rating_low=df[df['SAP Rating'].apply(lambda x:x.lower())=='low']
         df_sap_rating_medium['SAP Rating']
 
-        df_patch_online=df[df['Online Patch'] ==True]
-        df_patch_offline=df[df['Online Patch'] ==False]
-        grouped = df.groupby('Hostname')['Vulnerability'].count().reset_index(name='count')
+        df_patch_online=df[df['Online Patch'] == True]
+        df_patch_offline=df[df['Online Patch'] == False]
+        # grouped = df.groupby('Hostname')['Vulnerability'].count().reset_index(name='count')
 
-        new_df['Vulnerability_count']=[grouped.set_index('Hostname')['count'].to_dict()]
+        # new_df['Vulnerability_count']=[grouped.set_index('Hostname')['count'].to_dict()]
 
         new_df['OS']=[len(df_os)]
         new_df['Software']=[len(df_software)]
@@ -36,20 +36,28 @@ class analyse_vulnerablity_excel:
         new_df['patch_offline'] =[len(df_patch_offline)]
 
         result = {}
+        res=[]
         for vulnerability in df['Vulnerability'].unique():
             hostnames = df[df['Vulnerability'] == vulnerability]['Hostname'].tolist()
             result[vulnerability] = list(set(hostnames))
-        
+            # result['hostcount']=len(set(hostnames))
+        res.append(result)
+            # break
+        # print(res)
 
-        print(result)
         import datetime
-        for k,v in new_df.iterrows():
-            vulnerablity_analyse_data.objects.create(Vulnerability_count=v['Vulnerability_count'],OS=v['OS'],Software=v['Software']
-            ,Sap_rating_high=v['Sap_rating_high'],Sap_rating_low=v['Sap_rating_low'],Sap_rating_medium=v['Sap_rating_medium'],
-            Sap_rating_critical=v['Sap_rating_critical'],patch_online=v['patch_online'],patch_offline=v['patch_offline'],created_date=datetime.datetime.now())
-
-
-        return result
+        # for k,v in new_df.iterrows():
+        #     vulnerablity_analyse_data.objects.create(Vulnerability_count=v['Vulnerability_count'],OS=v['OS'],Software=v['Software']
+        #     ,Sap_rating_high=v['Sap_rating_high'],Sap_rating_low=v['Sap_rating_low'],Sap_rating_medium=v['Sap_rating_medium'],
+        #     Sap_rating_critical=v['Sap_rating_critical'],patch_online=v['patch_online'],patch_offline=v['patch_offline'],created_date=datetime.datetime.now())
+        # for k,v in enumerate(res):
+            
+        #     for i,j in v.items():
+        #         print(v,j[:3])
+        #         break
+        #     break
+        arr=[{f"{i}":j} for k,v in enumerate(res) for i,j in v.items()]
+        return new_df,arr
 
 
 
