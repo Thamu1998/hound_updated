@@ -5,6 +5,11 @@ $("#kt_date").flatpickr({
   dateFormat: "Y-m-dTH:i",
 });
 
+// 
+
+
+
+
 $("#submit_btn").on("click", function (e) {
   var shiftpass = {};
 
@@ -50,9 +55,7 @@ $("#submit_btn").on("click", function (e) {
       generate_change_request_list_SPC(data);
       shiftpass["follow_up"] = data;
     },
-    error: function (xhr, status, error) {
-      console.log("............... ERRORRRRR");
-    },
+    error: function (xhr, status, error) {},
   });
   setTimeout(() => {
     broadcast_data_transforming(shiftpass);
@@ -96,7 +99,6 @@ $("#submit_button").on("click", function (e) {
     data: data,
   };
   $.ajax(settings).done(function (response) {
-    console.log("res");
     getoutageData();
   });
 });
@@ -110,7 +112,6 @@ $.ajax({
 });
 
 function getoutageData() {
-  console.log("outwork");
   $.ajax({
     method: "GET",
     url: "/shiftpasstool/outage_get_api/",
@@ -574,7 +575,6 @@ function generate_change_request_list_SPC(data) {
             </div>`;
         }
 
-        console.log(color);
         // Action_Taken
         if (item.Action_Taken.length > 100) {
           Action_Taken =
@@ -824,8 +824,6 @@ function view_outage(
   var color = "";
   var porgressBar = "";
 
-  console.log(timezones);
-
   var endDate = timezones.filter((e) => e.end_date != null);
   if (endDate.length != 0) {
     endDate = endDate[0]["end_date"];
@@ -912,8 +910,6 @@ function update_spa(ID) {
   updateSpaData = outage_report["SPC_data"].filter((e) => e.ID == ID);
 
   updateSpaData = updateSpaData[0];
-
-  console.log(updateSpaData);
 
   var upd_spa = "";
 
@@ -1060,8 +1056,6 @@ function update_ticket_spa(created_date, shift) {
     created_date: request_data["selected_date"],
     shift: request_data["shift"],
   });
-
-  console.log("update spa", data);
 
   var csrftoken = getCookie("csrftoken");
   var settings = {

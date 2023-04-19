@@ -1,9 +1,13 @@
 from django.db import models
 import datetime
 # Create your models here.
+
+def get_upload_file(instance,filename):
+      return f'vulnerablity/{instance.created_date.date()}_{filename}'
+
 class vulnerablity_data(models.Model):
-        excel_sheet=models.TextField()
-        created_date=models.DateTimeField()
+      excel_sheet=models.FileField(upload_to=get_upload_file)
+      created_date=models.DateTimeField(default=datetime.datetime.now())
         
 
 class vulnerablity_analyse_data(models.Model):

@@ -7,7 +7,7 @@ sessionStorage.removeItem('testArray')
   var btn=''
   btn=`Choose file`       
   $('#btnNameDiv').html(btn)      
-  
+
   
 
 fileInput.addEventListener("change", function (e) {
@@ -30,7 +30,7 @@ noFile.addEventListener("click", function (e) {
 function postFile(file,excelName) {
     console.log(file)
     var data = new FormData()
-    data.append('excel', file)
+    data.append('excel_sheet', file)
 
 
     var csrftoken = getCookie('csrftoken');
@@ -56,27 +56,15 @@ function postFile(file,excelName) {
     xhr.onload = function () {
         // if (this.status === 200) {
         console.log(JSON.parse(this.responseText));
-        loadChart(JSON.parse(this.responseText))
+        var dataSet=JSON.parse(this.responseText)
+        getExcelData()
+        // main_vulnerability(dataSet)
+
+       
+    
         fileName.innerHTML = excelName;
-            console.log(JSON.parse(this.responseText))
-            var tableData=JSON.parse(this.responseText)[1]
-            var excelDatas =[]
-                 tableData.forEach(function (item) {
-                   Object.keys(item).forEach(function (key) {
-                    excelDatas.push({Vulname : key,hostnameLen : item[key].length,hostname : item[key]});
-                })
-              })
-              console.log(excelDatas)
 
-        $('#testtable').DataTable({
-            data:excelDatas,
-            columns: [
-                { data: 'Vulname' },
-                { data: 'hostnameLen' },
-                { data: 'hostname' },
-
-            ],
-        });
+            
 
         // Generate_view_list_data(JSON.parse(this.responseText))
 
@@ -94,198 +82,617 @@ function postFile(file,excelName) {
 
 }
 
-// function getExcelData() {
+function getExcelData() {
 
-//     $.ajax({
-//         method: "GET",
-//         url: 'vulnerablity_API_view/',
-//         success: function (data) {
-//             console.log(data)
-//             loadChart(data)
-//             // Generate_view_list_data(data)
-//         }
+    $.ajax({
+        method: "GET",
+        url: 'vulnerablity_API_view/',
+        success: function (data) {
+            console.log(data)
+            main_vulnerability(data)
+            // Generate_view_list_data(data)
+        }
 
+    });
+
+}
+
+
+
+    function main_vulnerability(dataSet){
+        console.log(dataSet)
+        loadChart(dataSet)
+        loadChart1(dataSet)
+        loadChart2(dataSet)
+        var tableData=dataSet[1][0]['Hostwise_vulnerability_count']
+            var tableData1=dataSet[2]
+            var tableData2=dataSet[3][0]['vulnerablity_count']
+            
+            var excelDatas =[]
+            var excelDatas1 =[]
+            var excelDatas2 =[]
+            var headHide=[]
+            var btnShow=''
+               console.log(tableData)
+               console.log(tableData1)
+               console.log(tableData2)
+
+              Object.keys(tableData).forEach(function (key) {
+                 excelDatas.push({Vulname : key,hostnameLen : tableData[key].length , hostnamelist : tableData[key] });
+                })
+
+              Object.keys(tableData1).forEach(function (key){
+                tableData1[key].forEach(function (item) {
+                    // console.log(Object.entries(item))
+                Object.entries(item).forEach(function (f) {
+                  excelDatas1.push({VulnameKey:key ,Vulname : f[0],hostnameLen :f[1].length,hostnamelist:f[1]});
+             })
+           })
+        })
+
+        Object.keys(tableData2).forEach(function (key) {
+            excelDatas2.push({Vulname : key,hostnameLen : tableData2[key].length , hostnamelist : tableData2[key] });
+           })
+
+           console.log(excelDatas1)
+           console.log(excelDatas2)
+           $('#testtable').DataTable({
+            
+            data:excelDatas,
+            lengthMenu: [5, 10, 15, 20, 50, 100, 200, 300, 500, 1000],
+            columns: [
+                { data: 'Vulname' },
+                { data: 'hostnameLen' , 
+                render: function(data, type, row, meta) {
+                    return `<span class="text-grey" style="font-weight:bold;display:block;text-align:center">${data}</span>`
+                } },
+                { data: 'hostnamelist',
+                render: function(data, type, row, meta) {
+                        return `<a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                        data-bs-target="#model_create_token" onclick='showlist(${JSON.stringify(data)})'>View</a>`
+
+                }
+
+             }
+            ],
+            searching: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    title:'Generate Server List',
+                    exportOptions: {
+                        columns: [ 0, 1]         
+                    },
+                    text: `<div class="d-flex justify-content-end">
+                    <a id="export_excel_btn" href="#" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+                        <span class="svg-icon svg-icon-primary svg-icon-1x">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"></rect>
+                                    <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "></path>
+                                </g>
+                            </svg>
+                        </span>Export
+                    </a>
+                </div>`,
+              
+                
+                }
+            ]
+            
+        });
+
+
+   
+
+        $('#testtable1').DataTable({
+            
+            data:excelDatas1,
+            lengthMenu: [5, 10, 15, 20, 50, 100, 200, 300, 500, 1000],
+            "scrollX": true,
+
+            destroy: true,
+
+            
+            language: {'lengthMenu': 'Display _MENU_',},
+
+                  searchDelay: 500,
+
+                  processing: true,
+            
+            columns: [
+                { data: 'VulnameKey',
+                render: function(data, type, row, meta) {
+                    // console.log(row.Vulname) 
+                   
+                    if(headHide.includes(data) == false){
+                        headHide.push(data) 
+                        row.Vulname=''
+                        row.hostnameLen=''
+                        row.hostnamelist=''
+                        btnShow='false'
+                        return '<span class="text-grey" style="font-weight:bold;">'+data+'</span>' 
+                        
+                    }
+                    else{
+                        btnShow='true'
+                        data=''
+                        return '<span class="text-grey" style="font-weight:bold;">'+data+'</span>' 
+                    }
+
+                    
+                    
+            }
+        },
+                { data: 'Vulname'},
+                { data: 'hostnameLen',
+                    render: function(data, type, row, meta) {
+                        return `<span class="text-grey" style="font-weight:bold;display:block;text-align:center">${data}</span>`
+                    }
+               },
+                { data: 'hostnamelist',
+                render: function(data, type, row, meta) {
+                    // console.log(data)
+                    if(btnShow == 'true'){
+                        return `<a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                        data-bs-target="#model_create_token" onclick='showlist(${JSON.stringify(data)})'>View</a>`
+                    }
+                   else{
+                        data=''
+                        return data
+                   }
+
+                }
+
+            }
+
+            ],
+            
+            searching: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    exportOptions: {
+                        columns: [0,1,2]         
+                    },
+                    title:'Hostlist',
+                    text: `<div class="d-flex justify-content-end">
+                    <a id="export_excel_btn" href="#" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+                        <span class="svg-icon svg-icon-primary svg-icon-1x">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"></rect>
+                                    <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "></path>
+                                </g>
+                            </svg>
+                        </span>Export
+                    </a>
+                </div>`
+                
+                }
+            ]
+            
+            
+        });
+
+
+        $('#testtable2').DataTable({
+            data:excelDatas2,
+            lengthMenu: [5, 10, 15, 20, 50, 100, 200, 300, 500, 1000],
+            columns: [
+                { data: 'Vulname' },
+                { data: 'hostnameLen' , 
+                render: function(data, type, row, meta) {
+                    return `<span class="text-grey" style="font-weight:bold;display:block;text-align:center">${data}</span>`
+                } },
+                { data: 'hostnamelist',
+                render: function(data, type, row, meta) {
+                        return `<a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" data-bs-toggle="modal"
+                        data-bs-target="#model_create_token" onclick='showlist(${JSON.stringify(data)})'>View</a>`
+
+                }
+
+             }
+            ],
+            searching: false,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    extend: 'excel',
+                    columns: [0,1],
+                    title:'Vulnerablity list',
+                    text: `<div class="d-flex justify-content-end">
+                    <a id="export_excel_btn" href="#" class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary fw-bolder me-3">
+                        <span class="svg-icon svg-icon-primary svg-icon-1x">
+                            <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 24 24" version="1.1">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <rect x="0" y="0" width="24" height="24"></rect>
+                                    <path d="M17,8 C16.4477153,8 16,7.55228475 16,7 C16,6.44771525 16.4477153,6 17,6 L18,6 C20.209139,6 22,7.790861 22,10 L22,18 C22,20.209139 20.209139,22 18,22 L6,22 C3.790861,22 2,20.209139 2,18 L2,9.99305689 C2,7.7839179 3.790861,5.99305689 6,5.99305689 L7.00000482,5.99305689 C7.55228957,5.99305689 8.00000482,6.44077214 8.00000482,6.99305689 C8.00000482,7.54534164 7.55228957,7.99305689 7.00000482,7.99305689 L6,7.99305689 C4.8954305,7.99305689 4,8.88848739 4,9.99305689 L4,18 C4,19.1045695 4.8954305,20 6,20 L18,20 C19.1045695,20 20,19.1045695 20,18 L20,10 C20,8.8954305 19.1045695,8 18,8 L17,8 Z" fill="#000000" fill-rule="nonzero" opacity="0.3"></path>
+                                    <rect fill="#000000" opacity="0.3" transform="translate(12.000000, 8.000000) scale(1, -1) rotate(-180.000000) translate(-12.000000, -8.000000) " x="11" y="2" width="2" height="12" rx="1"></rect>
+                                    <path d="M12,2.58578644 L14.2928932,0.292893219 C14.6834175,-0.0976310729 15.3165825,-0.0976310729 15.7071068,0.292893219 C16.0976311,0.683417511 16.0976311,1.31658249 15.7071068,1.70710678 L12.7071068,4.70710678 C12.3165825,5.09763107 11.6834175,5.09763107 11.2928932,4.70710678 L8.29289322,1.70710678 C7.90236893,1.31658249 7.90236893,0.683417511 8.29289322,0.292893219 C8.68341751,-0.0976310729 9.31658249,-0.0976310729 9.70710678,0.292893219 L12,2.58578644 Z" fill="#000000" fill-rule="nonzero" transform="translate(12.000000, 2.500000) scale(1, -1) translate(-12.000000, -2.500000) "></path>
+                                </g>
+                            </svg>
+                        </span>Export
+                    </a>
+                </div>`
+                
+                }
+            ]
+        });
+
+        
+
+        var patchTable = ''    
+        patchTable = patchTable + `
+
+        <tr>
+            <td>${dataSet[0].patch_online}</td>
+            <td>${dataSet[0].patch_offline}</td>
+         </tr>   
+        
+        `
+        $("#patchTableShow").html(patchTable);
+        
+
+    }
+
+
+
+
+
+    function showlist(data){
+        console.log(data)
+        var list=''
+        if(data.length > 0){
+            data.forEach(e=>{
+                list=list+`
+                
+                        <div class="col-3 fv-row">
+                        <label>${e}</label>
+                        </div>
+                  
+                `
+            })
+            $("#hostListData").html(list);
+        }
+    
+        
+    }
+// $(document).ready(function() {
+//     $('#testtable').DataTable({
+//         dom: 'Bfrtip',
+//         buttons: [
+//         'copy', 'csv', 'excel', 'pdf', 'print'
+//         ]
 //     });
+//     });
+    
+    // $(document).ready(function() {
+    //     $('#testtable').DataTable({
+    //       dom: 'Bfrtip',
+    //       buttons: [
+    //         {
+    //           extend: 'csvHtml5',
+    //           exportOptions: {
+    //             columns: ':visible'
+    //           },
+    //           action: function(e, dt, button, config) {
+    //             var csvData = dt.buttons.exportData().body;
+    //             var win = window.open();
+    //             win.document.write('<pre>' + csvData + '</pre>');
+    //             win.document.close();
+    //             win.focus();
+    //             win.print();
+    //           }
+    //         }
+    //       ]
+    //     });
+    //   });
+      
+// $(document).ready(function() {
+    
+//     });
+// $('#export_excel_btn').click(function() {
+//     console.log('clicked')
 
-// }
+//     $('#testtable').DataTable({
+//         select: true,
+//         retrieve: true,
+//         buttons: [
+//         {
+//             extend: 'csv',
+//             text: 'Export CSV',
+//             exportOptions: {
+//             modifier: {
+//                 selected: true
+//             }
+//             }
+//         }
+//         ]
+//     });
+// } );
+
+
+
+
 
 function loadChart(chartCount) {
     data = chartCount[0]
 
-    var total = parseInt(data.OS) + parseInt(data.Sap_rating_critical) + parseInt(data.Sap_rating_high) + parseInt(data.Sap_rating_low) +
-        parseInt(data.Sap_rating_medium) + parseInt(data.Software) + parseInt(data.patch_offline) + parseInt(data.patch_online)
+    var total = parseInt(data.OS_path) + parseInt(data.OS_configpath) + parseInt(data.configuration_config) + parseInt(data.configuration_mitigation)
     //console.log(total)
     var upd_chart = ''
-    var upd_Btn = ''
+ 
+   
 
     upd_chart = upd_chart +
 
     `
     <div class="row">
-      <div class="col-3">
-        <canvas id="labelChart"></canvas>
+    <div class="col-3"></div>
+ 
+    <div class="col-8" style="margin-top: 3%;">
+      <div class="row">
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#F7464A;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">OS Path</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.OS_path}</span>
+        </div>
+      </div><br>
+  
+  
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#46BFBD;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">OS Configpath</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.OS_configpath}</span>
+        </div>
+  
+      </div><br>
+  
+  
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#FDB45C;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Configuration Config</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.configuration_config}</span>
+        </div>
+      </div><br>
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#949FB1;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Configuration Mitigation</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.configuration_mitigation}</span>
+        </div>
+  
       </div>
-    
-      <div class="col-8" style="margin:auto">
-        <div class="row">
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:#F7464A;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">OS</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.OS}</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:#46BFBD;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">Sap_rating_critical</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.Sap_rating_critical}</span>
-              </div>
-    
-            </div>
-          </div>
-    
-        </div><br>
-    
-        <div class="row">
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:#FDB45C;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">Sap_rating_high</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.Sap_rating_high}</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:#949FB1;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">Sap_rating_low</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.Sap_rating_low}</span>
-              </div>
-    
-            </div>
-          </div>
-    
-        </div><br>
-    
-    
-        <div class="row">
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:#4D5360;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">Sap_rating_medium</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.Sap_rating_medium}</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:green;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">Software</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.Software}</span>
-              </div>
-    
-            </div>
-          </div>
-    
-        </div><br>
-    
-    
-        <div class="row">
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:blue;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">patch_offline</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.patch_offline}</span>
-              </div>
-            </div>
-          </div>
-    
-          <div class="col-6">
-            <div class="row">
-    
-              <div class="col-8">
-                <h6 style="color: deepskyblue;"><span style="background-color:pink;width: 0px;
-               height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
-                    style="font-size: small;">patch_online</span></h6>
-              </div>
-    
-              <div class="col-3">
-                <span style=font-weight:bold;font-size:small;>${data.patch_online}</span>
-              </div>
-    
-            </div>
-          </div>
-    
-        </div><br>
-    
-      </div>
+  
     </div>
+  </div>
     `
 
     $('#floating_chart_server ').html(upd_chart)
+ 
+
+}
+
+function loadChart2(chartCount) {
+    data = chartCount[0]
+
+    var total1 = parseInt(data.OS_path) + parseInt(data.OS_configpath) + parseInt(data.configuration_config) + parseInt(data.configuration_mitigation)
+    var os =parseInt(data.OS_path) + parseInt(data.OS_configpath)
+    var config = parseInt(data.configuration_config) + parseInt(data.configuration_mitigation)
+    var upd_chart1 = ''
+    upd_chart1 = upd_chart1 +
+
+    `
+    <div class="row">
+        <div class="col-3">
+                <div style="float: left; position: relative;">
+                <div
+                    style="width: 100%; height: 40px; position: absolute; top: 60%; left: 0; 
+                    margin-top: -20px; line-height:19px; text-align: center;font-size: x-large;
+                    font-weight: bold;">
+                    ${total1}
+                </div>
+                <canvas  width="200" height="200" id="labelChart2"></canvas>
+            
+                </div
+        </div>
+
+ 
+  
+    <div class="col-8" style="position: absolute;left: 27%;margin-top: 7%;">
+      <div class="row">
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#F7464A;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">OS Vulnerabilities</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${os}</span>
+        </div>
+      </div><br>  
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:#FDB45C;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Configuration Vulnerabilities</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${config}</span>
+        </div>
+      </div><br>
+  
+   
+  
+    </div>
+  </div>
+    `
+
+    $('#floating_chart_server1 ').html(upd_chart1)
 
 
 
-
-
-
-    var ctxP = document.getElementById("labelChart").getContext('2d');
+    var ctxP = document.getElementById("labelChart2").getContext('2d');
     var myPieChart = new Chart(ctxP, {
         type: 'doughnut',
         data: {
             // labels: ["OS", "Sap_rating_critical", "Sap_rating_high", "Sap_rating_low", "Sap_rating_medium", "Software",
             //     "patch_offline", "patch_online"],
             datasets: [{
-                data: [parseInt(data.OS), parseInt(data.Sap_rating_critical), parseInt(data.Sap_rating_high), parseInt(data.Sap_rating_low),
-                parseInt(data.Sap_rating_medium), parseInt(data.Software), parseInt(data.patch_offline), parseInt(data.patch_online)],
-                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1", "#4D5360", 'green', 'blue', 'pink'],
+                data: [parseInt(data.OS_path), parseInt(data.OS_configpath), parseInt(data.configuration_config), parseInt(data.configuration_mitigation)],
+                backgroundColor: ["#F7464A", "#46BFBD", "#FDB45C", "#949FB1"],
+                //   hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
+            }]
+        },
+        options: {
+            // Set the size of the center hole in the chart
+            responsive: true,
+            cutout:'70%'
+        }
+    });
+
+
+}
+
+function loadChart1(chartCount) {
+    data = chartCount[0]
+
+    var total = parseInt(data.Sap_rating_low) + parseInt(data.Sap_rating_medium) + parseInt(data.Sap_rating_high) + parseInt(data.Sap_rating_critical)
+    //console.log(total)
+    var upd_chart = ''
+   
+
+    upd_chart = upd_chart +
+
+    `
+    <div class="row">
+        <div class="col-3">
+                <div style="float: left; position: relative;">
+                <div
+                    style="width: 100%; height: 40px; position: absolute; top: 60%; left: 0; 
+                    margin-top: -20px; line-height:19px; text-align: center;font-size: x-large;
+                    font-weight: bold;">
+                    ${total}
+                </div>
+                <canvas  width="200" height="200" id="labelChart1"></canvas>
+            
+                </div
+        </div>
+
+ 
+  
+    <div class="col-8" style="position: absolute;left: 40%;margin-top: 3%;">
+      <div class="row">
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:aquamarine;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Sap_rating_low</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.Sap_rating_low}</span>
+        </div>
+      </div><br>
+  
+  
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:teal;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Sap_rating_medium</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.Sap_rating_medium}</span>
+        </div>
+  
+      </div><br>
+  
+  
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:lightskyblue;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Sap_rating_high</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.Sap_rating_high}</span>
+        </div>
+      </div><br>
+  
+      <div class="row">
+  
+        <div class="col-6">
+          <h6 style="color: deepskyblue;"><span style="background-color:red;width: 0px;
+             height: 10px;" class="badge rounded-circle">&nbsp;</span> &nbsp;&nbsp;<span
+              style="font-size: small;">Sap_rating_critical</span></h6>
+        </div>
+  
+        <div class="col-3">
+          <span style=font-weight:bold;font-size:small;>${data.Sap_rating_critical}</span>
+        </div>
+  
+      </div>
+  
+    </div>
+  </div>
+    `
+
+    $('#high_vulnerability_chart ').html(upd_chart)
+
+
+
+
+
+
+    var ctxP = document.getElementById("labelChart1").getContext('2d');
+    var myPieChart = new Chart(ctxP, {
+        type: 'doughnut',
+        data: {
+            // labels: ["OS", "Sap_rating_critical", "Sap_rating_high", "Sap_rating_low", "Sap_rating_medium", "Software",
+            //     "patch_offline", "patch_online"],
+            datasets: [{
+                data: [parseInt(data.Sap_rating_low), parseInt(data.Sap_rating_medium), parseInt(data.Sap_rating_high), parseInt(data.Sap_rating_critical)],
+                backgroundColor: ["aquamarine", "teal", "lightskyblue", "red"],
                 //   hoverBackgroundColor: ["#FF5A5E", "#5AD3D1", "#FFC870", "#A8B3C5", "#616774"]
             }]
         },

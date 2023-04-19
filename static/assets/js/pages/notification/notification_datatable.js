@@ -118,7 +118,7 @@ jQuery(document).ready(function() {
     rowGroup_data = {dataSrc: 'EventID',startRender: function(rows, group) {
         return $('<tr class="group group-start"><td class="bg-secondary text-dark" colspan="28"></td></tr>');
     }},
-
+    console.log(URL,"url")
 	KTDatatablesSearchOptionsAdvancedSearch.init(URL, columnDefs, colums, columnDefs, sort_data, rowGroup_data, default_query_filter);
 
     // Execute a function when the user releases a key on the keyboard

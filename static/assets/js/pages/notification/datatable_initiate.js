@@ -4,7 +4,7 @@ var col = "";
 var q_filter = "";
 
 var KTDatatablesSearchOptionsAdvancedSearch = function() {
-
+	
 	$.fn.dataTable.Api.register('column().title()', function() {
 
 		return $(this.header()).text().trim();
@@ -51,7 +51,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function() {
 
 			columnDefs: columnDefs_data,
 		});
-
+		
 		new $.fn.dataTable.Buttons( table, {buttons: ['print', 'copyHtml5', 'excelHtml5', 'csvHtml5', 'pdfHtml5', ],});
 
 		var filter = function() {
@@ -187,7 +187,7 @@ var KTDatatablesSearchOptionsAdvancedSearch = function() {
 
 		//main function to initiate the module
 		init: function(URL, columnDef_data, columns_data, columnDefs_data, sort_data, rowGroup_data, default_query_filter) {
-
+			
 			initTable(URL, columnDef_data, columns_data, columnDefs_data, sort_data, rowGroup_data, default_query_filter);
 
 		}
@@ -195,4 +195,3 @@ var KTDatatablesSearchOptionsAdvancedSearch = function() {
 
 
 }();
-

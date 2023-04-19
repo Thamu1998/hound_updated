@@ -3,8 +3,9 @@
 
 {% block css_block %}
 
-
 {% endblock %}
+
+
 
 {% block page_title %}
 {{page_title}}
@@ -48,6 +49,7 @@
 <div id="holiday_info_div"></div>
 
 <div class="row" id="data_div"></div>
+
 
 
 
@@ -96,7 +98,7 @@
 
                 </h3>
                 <div class="modal-footer">
-                   
+
                 </div>
 
                 <div class="me-3" id="hideUpdate">
@@ -128,7 +130,7 @@
     
                     <div class="me-3" id="Update_button_comment">
     
-    
+                        
                     </div>
                 </div>
     
@@ -283,12 +285,14 @@
                             <tr class="fw-bolder fs-6 text-muted">
                                 <th style="min-width: 200px;text-align: center;">Region</th>
                                 <th style="min-width: 200px;">Ticket ID</th>
+                                
                                 <!-- <th style="">Planned_type</th> -->
                                 <th style="min-width: 200px;">Description</th>
                                 <th style="min-width: 200px;">Pre Check</th>
                                 <th style="min-width: 200px;text-align: center;">CR ID</th>
                                 <th style="width:380px;min-width: 200px;text-align: center;">CMP Date&Time</th>
-                                <!-- <th style="">Shift</th> -->
+                                <th style="min-width: 200px;">Assignee</th>
+                                <th style="min-width: 200px;">Remarks</th>
                                 <th style="min-width: 100px;text-align: center;">Status</th>
                                 <th style="min-width: 100px;">Actions
                                 </th>
@@ -306,6 +310,10 @@
 
 
 </div>
+
+
+
+   
 
 
 
@@ -337,7 +345,10 @@
                                 <th >Description</th>
                                 <!-- <th style="">CR ID</th> -->
                                 <th style="min-width: 100px;">Implementation Period</th>
+                                <th style="min-width: 100px;">Assignee</th>
+                                <th style="min-width: 100px;">Remarks</th>
                                 <!-- <th style="">Shift</th> -->
+                               
                                 <th style="min-width: 100px;">Status</th>
                                 <th style="min-width: 100px;">Actions
                                 </th>
@@ -722,7 +733,7 @@
 
 <!-- Create Host list Model -->
 <div class="modal fade" tabindex="-1" id="model_host_list">
-
+    
 
     <div class="modal-dialog modal-dialog-centered mw-750px">
 
@@ -791,7 +802,8 @@
                                 <option value="">Select a Type...</option>
                                 <option value="S4H">S4H</option>
                                 <option value="IBP">IBP</option>
-                                <option value="BYD/C4C">BYD/C4C</option>
+                                <option value="BYD">BYD</option>
+                                <option value="C4C">C4C</option>
                             </select>
                         </div>
 
@@ -813,7 +825,7 @@
 
                     <div class="row g-9 mb-8">
 
-                        <div>
+                        <div  class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">Description</label>
 
                             <textarea class="form-control" rows="3" cols="40" id="floatingSubject"
@@ -821,10 +833,7 @@
 
                         </div>
 
-                    </div>
-
-                    <div class="row g-9 mb-8">
-                        <div>
+                        <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">Precheck Status</label>
 
                             <textarea class="form-control" rows="3" cols="40" id="floatingComment"
@@ -832,6 +841,7 @@
                                 style="font-size: initial;background: aliceblue;"></textarea>
 
                         </div>
+
                     </div>
 
                     <div class="row g-9 mb-8">
@@ -839,9 +849,28 @@
                         <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">CR ID</label>
                             <input type="text" class="form-control" id="floatingCR" placeholder="CR ID">
+                        </div>
 
+                        
+                        <div class="col-md-6 fv-row">
+                            <label class="required fs-6 fw-bold mb-2">Remarks</label>
+
+                            <textarea class="form-control" rows="1" cols="10" id="floatingRemarks"
+                                placeholder="Remarks"
+                                style="font-size: initial;background: aliceblue;"></textarea>
 
                         </div>
+                       
+                    </div>
+
+                    <div class="row g-9 mb-8">
+
+                        <div class="col-md-6 fv-row" >
+                            <label class="required fs-6 fw-bold mb-2">Assignee</label>
+                            <select class="form-select form-select-solid" data-control="select2"
+                            data-placeholder="Select a Assignee" id="selectEmployee" data-dropdown-parent="#model_host_list">
+                            </select>
+                        </div>   
 
                         <div class="col-md-6 fv-row">
 
@@ -849,9 +878,9 @@
                             <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
                                 data-placeholder="Select a Status" id="floatingHostStatus">
                                 <option value="">Select a Status...</option>
+                                <option value="New">New</option>
                                 <option value="Inprogress">Inprogress</option>
                                 <option value="Waiting">Waiting</option>
-                                <option value="New">New</option>
                                 <option value="Resolved">Resolved</option>
                             </select>
 
@@ -921,54 +950,53 @@
                     <div class="row g-9 mb-8">
 
                         <div class="col-md-6 fv-row">
-
-                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                                <span class="required">Ticket ID</span>
-                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
-                                    title="Ticket ID"></i>
-                            </label>
-
-                            <input type="text" class="form-control" id="floatingTid_infra" placeholder="Ticket ID">
-
+                          <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                            <span class="required">Ticket ID</span>
+                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
+                          </label>
+                          <input type="text" class="form-control" id="floatingTid_infra" placeholder="Ticket ID">
                         </div>
-
+                      
                         <div class="col-md-6 fv-row">
-
-                            <label class="required fs-6 fw-bold mb-2">Status</label>
-                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                                data-placeholder="Select a Status" id="floatingHostStatus_infra">
-                                <option value="">Select a Status...</option>
-                                <option value="Inprogress">Inprogress</option>
-                                <option value="Waiting">Waiting</option>
-                                <option value="New">New</option>
-                                <option value="Resolved">Resolved</option>
-                            </select>
-
-
+                          <label class="required fs-6 fw-bold mb-2">Status</label>
+                          <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                            data-placeholder="Select a Status" id="floatingHostStatus_infra">
+                            <option value="">Select a Status...</option>
+                            <option value="New">New</option>
+                            <option value="Inprogress">Inprogress</option>
+                            <option value="Waiting">Waiting</option>
+                            <option value="Resolved">Resolved</option>
+                          </select>
                         </div>
-
-
-                    </div>
-
-
-                    <div class="d-flex flex-column mb-8 fv-row">
-
+                      
+                      </div>
+                      
+                      
+                      <div class="d-flex flex-column mb-8 fv-row">
                         <label class="required fs-6 fw-bold mb-2">Implementation Period</label>
-                        <input type="text" class="form-control" id="floatingImplementation"
-                            placeholder="Implementation Period">
-
-
-                    </div>
-
-                    <div class="d-flex flex-column mb-8 fv-row">
-
+                        <input type="text" class="form-control" id="floatingImplementation" placeholder="Implementation Period">
+                      </div>
+                      
+                      <div class="d-flex flex-column mb-8 fv-row">
                         <label class="required fs-6 fw-bold mb-2">Description</label>
-                        <!-- <input type="text" class="form-control" id="floatingSubject_infra"
-                        placeholder="Subject"> -->
-
-                        <textarea class="form-control" rows="3" cols="40" id="floatingSubject_infra"
-                            placeholder="Description" style="font-size: initial;background: aliceblue;"></textarea>
-                    </div>
+                        <textarea class="form-control" rows="3" cols="40" id="floatingSubject_infra" placeholder="Description"
+                          style="font-size: initial;background: aliceblue;"></textarea>
+                      </div>
+                      
+                      <div class="row g-9 mb-8">
+                        <div class="col-md-6 fv-row">
+                          <label class="required fs-6 fw-bold mb-2">Remarks</label>
+                          <textarea class="form-control" rows="1" cols="10" id="floatingRemarks_infra" placeholder="Remarks"
+                            style="font-size: initial;background: aliceblue;"></textarea>
+                        </div>
+                      
+                        <div class="col-md-6 fv-row">
+                          <label class="required fs-6 fw-bold mb-2">Assignee</label>
+                          <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select a Assignee"
+                            id="selectEmployee_infra" data-dropdown-parent="#model_host_list_infra">
+                          </select>
+                        </div>
+                      </div>
 
 
 
@@ -1095,41 +1123,42 @@
 </div>
 
 
-<div class="modal fade" tabindex="-1" id="updateViewHost">
 
-    <div class="modal-dialog modal-dialog-centered mw-750px">
+    <div class="modal fade" tabindex="-1" id="updateViewHost">
 
-        <div class="modal-content rounded">
-
-            <div class="modal-header pb-0 border-0 justify-content-end">
-
-                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-
-                    <span class="svg-icon svg-icon-1">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                transform="rotate(-45 6 17.3137)" fill="black" />
-                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                fill="black" />
-                        </svg>
-                    </span>
+        <div class="modal-dialog modal-dialog-centered mw-750px">
+    
+            <div class="modal-content rounded">
+    
+                <div class="modal-header pb-0 border-0 justify-content-end">
+    
+                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+    
+                        <span class="svg-icon svg-icon-1">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                    transform="rotate(-45 6 17.3137)" fill="black" />
+                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                    fill="black" />
+                            </svg>
+                        </span>
+    
+                    </div>
+    
+                </div>
+    
+                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost">
 
                 </div>
 
             </div>
-
-            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost">
-
-
-
-            </div>
-
+    
         </div>
-
+    
+    
     </div>
 
 
-</div>
 
 
 <div class="modal fade" tabindex="-1" id="updateViewHost_infra">
@@ -1194,6 +1223,24 @@
     </div>
   </div>
 
+
+  <div class="modal fade" id="check_alert_changes" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+ aria-hidden="true" >
+    <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+      <div class="modal-content">
+        <div class="modal-body">
+            <div class="text-center">
+                <img src="https://www.freeiconspng.com/uploads/orange-warning-icon-3.png" alt="" style="width: 50px;" >
+                <!-- <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt="" style="width: 50px;"><br><br> -->
+                <h6 class="text-center" id="passing_message">Check Date And Shift</h6><br>
+                <button type="button" class="btn btn-primary" onclick="closeModal_date_and_shift()" style="min-width: 100px;" data-dismiss="modal">Ok</button>
+            </div>
+           
+        </div>
+      
+      </div>
+    </div>
+  </div>
 <!--end::Row-->
 
 {% endblock %}

@@ -1,34 +1,23 @@
+import pandas as pd
+
+from datetime import datetime
+from apps.roster.methods.today_shift import today_plan
+from dateutil.parser import parse
 from django.http.request import QueryDict
-from functools import partial
-from re import A
-from telnetlib import STATUS
-from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from django.views.generic import FormView, TemplateView
-from django.db.models import Q, Count, Sum, Max, Avg
-import json
-import datetime
-from background_task import background
+from django.views.generic import TemplateView
+from apps.shiftpasstool.methods.datecondition import date_method
 from apps.shiftpasstool.methods.sendmail import send_mail_to_destination
-
 from apps.shiftpasstool.methods.ticket_history_maintain import ticket_handling
-from .serializers import master_tracking_serializer, outage_history_, outage_history_tickets_serializer, tracking_serializer, outage_master_tickets_serializer, tickets_notes_serializer, tickets_counts_serializer, Activity_table, sm_infra_activate_serializer
+from .serializers import master_tracking_serializer, outage_history_tickets_serializer, tracking_serializer, \
+    outage_master_tickets_serializer, tickets_notes_serializer, tickets_counts_serializer, Activity_table, \
+    sm_infra_activate_serializer
 from .models import outage_master_tickets, outage_tracking_history, tracking_history, master_tickets
-from rest_framework.decorators import api_view
-import pandas as pd
-# IMPORT COMMON FUNCTIONS
-# from config.common_functions import query_builder
-from config.common_functions import query_builder, pull_request
-# from apps.shiftpasstool import serializers
-from django.shortcuts import render, redirect
-from django.utils import timezone
-import time
-# from apps.shiftpasstool. import
-from apps.shiftpasstool.methods.generate_date import Histories, JSON_convert, New_ticket1, datetime_converter, select_date_time
+
+from apps.shiftpasstool.methods.generate_date import Histories, JSON_convert, datetime_converter, select_date_time
 from apps.shiftpasstool.models import tickets_notes, tickets_count_table, ActivityDB, sm_infra_activate
-# from
+
 
 # Create your views here.
 
@@ -48,128 +37,78 @@ In this function it will store once in master table and once in history table.
 
 class post_tracking(APIView):
     def post(self, request):
-        self.request.data['timerange']=datetime.now().time()
-        self.request.data['shift'] = self.request.data['shift'].lower()
-        # print(self.request.data)
-        shift = select_date_time()
-        self.request.data['hour'] = shift.f1(
-            hours=self.request.data['start_time'])
-        # print(self.request.data['hour']['shift'],"/////////////////////////////////////////")
-        self.request.data['hour'] = self.request.data['hour']['shift']
-        master_serializer = master_tracking_serializer(data=self.request.data)
-        if master_serializer.is_valid():
-            master_serializer.save()
-        else:
-            print(master_serializer.errors)
-        serializer = tracking_serializer(data=self.request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response("Tracking data saved successfully")
-        else:
-            # print(serializer.errors)
-            return Response(serializer.error_messages)
+        shift_date_method=date_method()
+
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['start_time'],shift_type=self.request.data['shift'])
 
 
+        if req_date_check:
+            self.request.data['timerange'] = datetime.now().time()
+            self.request.data['shift'] = self.request.data['shift'].lower()
+            shift = select_date_time()
+            self.request.data['hour'] = shift.f1(
+                hours=self.request.data['start_time'])
+            self.request.data['hour'] = self.request.data['hour']['shift']
+            master_serializer = master_tracking_serializer(data=self.request.data)
+            if master_serializer.is_valid():
+                master_serializer.save()
+            else:
+                pass
+            serializer = tracking_serializer(data=self.request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response("Tracking data saved successfully")
+            else:
+                return Response(serializer.error_messages)
+        else:
+            return Response("Please check data")
     def get(self, request):
-        arr_query = []
-        query_all = tracking_history.objects.all()
-        quer=query_all.values()
-        df=pd.DataFrame(quer)
-        ticket_filter=ticket_handling()
-        if len(self.request.GET) > 0:
-            
-            final_arr=[]
-            
-            for j in df['Ticket_ID'].unique():
-                req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
+        try:
+            arr_query = []
+            query_all = tracking_history.objects.all()
+            quer = query_all.values()
+            df = pd.DataFrame(quer)
+            ticket_filter = ticket_handling()
+            if len(self.request.GET) > 0:
 
-                df_filter=df[df['Ticket_ID'] == j]
+                final_arr = []
 
-                ticket_res=ticket_filter.get_current_ticket_status_Follow_up(req_date=req_date,filter_df=df_filter,shift=self.request.GET['shift'].lower())
-                
-                if ticket_res is None:
-                    pass
-                else:
-                    if ticket_res != "NULL":
-                        print(ticket_res)
-                        final_arr.append(ticket_res)
+                for j in df['Ticket_ID'].unique():
+                    req_date = datetime.strptime(
+                        self.request.GET['created_date'].split("T")[0], "%Y-%m-%d")
 
-        else:
-            final_arr=[]
+                    df_filter = df[df['Ticket_ID'] == j]
 
-            for j in df['Ticket_ID'].unique():
-                
+                    ticket_res = ticket_filter.get_current_ticket_status_Follow_up(
+                        req_date=req_date, filter_df=df_filter, shift=self.request.GET['shift'].lower())
 
-                df_filter=df[df['Ticket_ID'] == j]
-                SHIFT=select_date_time()
-                shift=SHIFT.f(hours=datetime.now().hour)
-                req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
-                # print(req_date)
-                res=ticket_filter.get_current_ticket_status_Follow_up(req_date=req_date,shift=shift.lower(),filter_df=df_filter)
-                print(type(res))
-                if res is None:
-                    pass
-                else:
-                    if res != "NULL":
-                        print(type(res),res,"RESSSS")
-                        final_arr.append(res)
-            
-        return Response({"new_data1": final_arr, "new_data2": final_arr})
+                    if ticket_res is None:
+                        pass
+                    else:
+                        if ticket_res != "NULL":
+                            final_arr.append(ticket_res)
 
+            else:
+                final_arr = []
 
+                for j in df['Ticket_ID'].unique():
 
-'''
-In this function it will get all data in history of tracking data's and also get particular datas using (shift, date)
+                    df_filter = df[df['Ticket_ID'] == j]
+                    SHIFT = select_date_time()
+                    shift = SHIFT.f(hours=datetime.now().hour)
+                    req_date = datetime.strptime(
+                        str(datetime.now().date()), "%Y-%m-%d")
+                    res = ticket_filter.get_current_ticket_status_Follow_up(
+                        req_date=req_date, shift=shift.lower(), filter_df=df_filter)
+                    if res is None:
+                        pass
+                    else:
+                        if res != "NULL":
+                            final_arr.append(res)
 
-'''
-
-
-@api_view(['GET'])
-def get_tracking(request):
-    try:
-        if len(request.GET) > 0:
-            query = tracking_history.objects.filter(
-                start_time__gt=request.GET['created_date'])
-        else:
-            query = tracking_history.objects.all()
-        # #print(query,"get_tracking")
-        serializer = tracking_serializer(instance=query, many=True)
-        df = pd.DataFrame(serializer.data)
-        # #print(df)
-        if len(df) > 0:
-            arr = []
-            for i in df['Ticket_ID'].unique():
-                df_filter = df[df['Ticket_ID'] == i]
-
-                df1 = df_filter.sort_values(by=['id'], ascending=False)
-                # #print(df1,"SPA")
-                # df1=df1.reset_index(drop=True)
-                # df1=pd.DataFrame(df1)
-                # #print(df1)
-                for k, i in df1.iterrows():
-                    arr.append({'ID': i['id'], "Ticket_ID": i['Ticket_ID'], "Subject": i['Subject'], "Action_Taken": i['Action_Taken'],
-                                "Action_Required": i['Action_Required'], "Status": i['Status'], "created_date": i['created_date'], "date": i['date'], "shift": i['shift']})
-                    break
-            return Response(arr)
-        else:
-            return Response([])
-    except Exception as e:
-        # print(e,"errror")
-        return Response([])
-
-
-'''
-In this function get all data's in master table
-'''
-
-
-@api_view(['GET'])
-def master_data(request):
-
-    if request.method == 'GET' and len(request.GET) == 0:
-        query = master_tickets.objects.all()
-        serializer = master_tracking_serializer(instance=query, many=True)
-        return Response(serializer.data)
+            return Response({"new_data1": final_arr, "new_data2": final_arr})
+        except:
+            return Response({"new_data1": [], "new_data2": []})
 
 
 '''
@@ -181,43 +120,46 @@ And same thing it will post in history table also
 
 class update_tracking(APIView):
     def put(self, request):
-        self.request.data['timerange']=datetime.now().time()
-        if master_tickets.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).exists():
-            query = master_tickets.objects.filter(
-                Ticket_ID=self.request.data['Ticket_ID']).values()
-            history = tracking_history.objects.filter(
-                Ticket_ID=self.request.data['Ticket_ID']).values()
-            self.request.data['start_time'] = parse(self.request.data['created_date'])
-            if len(history) > 1:
-                new_history = history[len(history)-1]
-                query = tracking_history.objects.filter(
-                    **new_history).update(end_time=self.request.data['start_time'])
+        shift_date_method=date_method()
+
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['start_time'],shift_type=self.request.data['shift'])
+
+
+        if req_date_check:
+            self.request.data['timerange'] = datetime.now().time()
+            if master_tickets.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).exists():
+                query = master_tickets.objects.filter(
+                    Ticket_ID=self.request.data['Ticket_ID']).values()
+                history = tracking_history.objects.filter(
+                    Ticket_ID=self.request.data['Ticket_ID']).values()
+                self.request.data['start_time'] = parse(
+                    self.request.data['created_date'])
+                if len(history) > 1:
+                    new_history = history[len(history) - 1]
+                    query = tracking_history.objects.filter(
+                        **new_history).update(end_time=self.request.data['start_time'])
+                else:
+                    new_history = history
+                    tracking_history.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
+                        end_time=self.request.data['start_time'])
+
+                shift = datetime.now().hour
+                shift_1 = select_date_time()
+                get_shift = shift_1.f(hours=shift)
+                if self.request.data['Status'].lower().replace(" ", "") == 'resolved':
+                    self.request.data['end_time'] = self.request.data['start_time']
+
+                master_tickets.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
+                    Status=self.request.data['Status'], date=self.request.data['start_time'], shift=get_shift)
+                his = Histories()
+                his.make_history(data=self.request.data)
+
+                return Response("Tracking history updated successfully")
+
             else:
-                new_history = history
-                # print(new_history,"new_history")
-                tracking_history.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
-                    end_time=self.request.data['start_time'])
-
-            # if self.request.data['Status'].lower().replace(" ","") == 'inprogress' or self.request.data['Status'].lower().replace(" ","") == 'waiting' or  self.request.data['Status'].lower().replace(" ","") == 'resolved':
-
-            shift = datetime.now().hour
-            shift_1 = select_date_time()
-            get_shift = shift_1.f(hours=shift)
-            if self.request.data['Status'].lower().replace(" ", "") == 'resolved':
-                self.request.data['end_time'] = self.request.data['start_time']
-
-            master_tickets.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
-                Status=self.request.data['Status'], date=self.request.data['start_time'], shift=get_shift)
-            # self.request.data['shift'] = get_shift
-            his = Histories()
-            his.make_history(data=self.request.data)
-
-            return Response("Tracking history updated successfully")
-            # else:
-            #     return Response(f"{query[0]['Ticket_ID']} already update into inprogress")
+                return Response(f"{request.data['Ticket_ID']} Ticket ID does not exist")
         else:
-            return Response(f"{request.data['Ticket_ID']} Ticket ID does not exist")
-
+            return Response("Please check the date")
 
 # create history table
 # create a ticket in master table
@@ -225,96 +167,101 @@ class update_tracking(APIView):
 '''
 trigger function is to trigger in cronjob.....
 '''
-from dateutil.parser import parse
 
 
 class post_api(APIView):
 
     def post(self, request):
-        self.request.data['timerange']=datetime.now().time()
-        self.request.data['shift'] = self.request.data['shift'].lower()
 
-        # self.request.data['start_time']=timezone.now()
 
-        serializer = outage_master_tickets_serializer(data=self.request.data)
+        shift_date_method=date_method()
 
-        if serializer.is_valid():
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['start_time'],shift_type=self.request.data['shift'])
 
-            serializer.save()
 
-            his = Histories()
+        if req_date_check:
+            
+            self.request.data['timerange'] = datetime.now().time()
 
-            his.make_outage_history(data=self.request.data)
+            self.request.data['shift'] = self.request.data['shift'].lower()
 
-            return Response('created')
+            serializer = outage_master_tickets_serializer(data=self.request.data)
+
+            if serializer.is_valid():
+                # pass
+                serializer.save()
+
+                his = Histories()
+
+                his.make_outage_history(data=self.request.data)
+
+                return Response('created')
+            else:
+                return Response(serializer.errors)
         else:
-            print(serializer.errors, 'serializer.errors.................')
-            return Response(serializer.errors)
+            print("else")
+            return Response("Please check data")
 
     def put(self, request):
         
-        self.request.data['timerange']=datetime.now().time()
+        shift_date_method=date_method()
 
-        query1 = outage_master_tickets.objects.filter(
-            Ticket_ID=self.request.data['Ticket_ID']).first()
-        query = outage_master_tickets.objects.filter(
-            Ticket_ID=self.request.data['Ticket_ID']).values()
-        print(query, "len(query)")
-        history = outage_tracking_history.objects.filter(
-            Ticket_ID=self.request.data['Ticket_ID']).values()
-        
-        self.request.data['start_time'] = parse(self.request.data['created_date'])
-        # self.request.data['start_time']=datetime.strptime('2022-11-15T12:00','%Y-%m-%dT%H:%M')
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['created_date'])
 
-        if len(history) > 1:
-            new_history = history[len(history)-1]
-            print(new_history, "............new_history")
-            outage_tracking_history.objects.filter(
-                **new_history).update(end_time=self.request.data['start_time'])
-        else:
-            new_history = history
-            # print(new_history,"new_history")
-            outage_tracking_history.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
-                end_time=self.request.data['start_time'])
 
-        if self.request.data['Status'].lower().replace(" ", "") == 'resolved':
-            self.request.data['end_time'] = self.request.data['start_time']
-            # self.request.data['end_time']=datetime.strptime('2022-11-15T12:00','%Y-%m-%dT%H:%M')
+        if req_date_check:
+            self.request.data['timerange'] = datetime.now().time()
 
-        if query[0]['Status'].lower().replace(" ", "") == 'resolved' or query[0]['Status'].lower().replace(" ", "") == 'inprogress' or query[0]['Status'].lower().replace(" ", "") == 'waiting' or query[0]['Status'].lower().replace(" ", "") == 'new':
-            # request.data['date']=[datetime.date()]
+            query1 = outage_master_tickets.objects.filter(
+                Ticket_ID=self.request.data['Ticket_ID']).first()
+            query = outage_master_tickets.objects.filter(
+                Ticket_ID=self.request.data['Ticket_ID']).values()
+            history = outage_tracking_history.objects.filter(
+                Ticket_ID=self.request.data['Ticket_ID']).values()
 
-            query_dict_1 = QueryDict('', mutable=True)
-            query_dict_1.update(self.request.data)
+            self.request.data['start_time'] = parse(
+                self.request.data['created_date'])
 
-            # print(query_dict_1)
-
-            serializer = outage_master_tickets_serializer(
-                query1, data=query_dict_1, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                #print(serializer.data,"BEFORE HISTORY ")
-                shift = datetime.now().hour
-                shift_1 = select_date_time()
-                get_shift = shift_1.f(hours=shift)
-                # get_shift=f(shift)
-                # self.request.data['shift'] = get_shift
-                his = Histories()
-
-                history = his.make_outage_history(data=self.request.data)
-                # print(history,"hihstory")
-                return Response("updated")
+            if len(history) > 1:
+                new_history = history[len(history) - 1]
+                outage_tracking_history.objects.filter(
+                    **new_history).update(end_time=self.request.data['start_time'])
             else:
-                print(serializer.errors, "/.................................")
-                return Response(serializer.errors)
+                new_history = history
+                outage_tracking_history.objects.filter(Ticket_ID=self.request.data['Ticket_ID']).update(
+                    end_time=self.request.data['start_time'])
+
+            if self.request.data['Status'].lower().replace(" ", "") == 'resolved':
+                self.request.data['end_time'] = self.request.data['start_time']
+
+            if query[0]['Status'].lower().replace(" ", "") == 'resolved' or query[0]['Status'].lower().replace(" ",
+                                                                                                            "") == 'inprogress' or \
+                    query[0]['Status'].lower().replace(" ", "") == 'waiting' or query[0]['Status'].lower().replace(" ",
+                                                                                                                "") == 'new':
+
+                query_dict_1 = QueryDict('', mutable=True)
+                query_dict_1.update(self.request.data)
+
+                serializer = outage_master_tickets_serializer(
+                    query1, data=query_dict_1, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    shift = datetime.now().hour
+                    shift_1 = select_date_time()
+                    get_shift = shift_1.f(hours=shift)
+                    his = Histories()
+
+                    history = his.make_outage_history(data=self.request.data)
+                    return Response("updated")
+                else:
+                    return Response(serializer.errors)
+        else:
+            return Response("Please check data")
 
     def get(self, request):
-        # query=outage_master_tickets.objects.all().values('id')
-        # #print(query)
         serializer = outage_master_tickets_serializer(
             outage_master_tickets.objects.all(), many=True)
         return Response(serializer.data)
-
 
 
 class Outage_Get_Id(APIView):
@@ -333,109 +280,99 @@ class SPC_Get_Id(APIView):
         return Response(serializer.data)
 
 
-
-from datetime import datetime, time
-
 class outage_get_api(APIView):
     def get(self, request):
         all_results = outage_tracking_history.objects.all()
-        all_result_values=all_results.values()
-        df=pd.DataFrame(all_result_values)
-        ticket=ticket_handling()
+        all_result_values = all_results.values()
+        df = pd.DataFrame(all_result_values)
+        ticket = ticket_handling()
         if len(self.request.GET) > 0:
-            req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
-            
-            final_arr=[]
+            req_date = datetime.strptime(
+                self.request.GET['created_date'].split("T")[0], "%Y-%m-%d")
+
+            final_arr = []
             for row in df['Ticket_ID'].unique():
-                # req_date, shift,filter_df
-                filter_dataframe=df[df['Ticket_ID'] == row]
-                # filter_dataframe.to_csv('F:\\Hound\\final.csv')
-                res=ticket.get_current_ticket_status_outage(req_date=req_date,shift=self.request.GET['shift'].lower(),filter_df=filter_dataframe)
-                print()
+                filter_dataframe = df[df['Ticket_ID'] == row]
+                res = ticket.get_current_ticket_status_outage(
+                    req_date=req_date, shift=self.request.GET['shift'].lower(), filter_df=filter_dataframe)
                 if res is None:
                     pass
                 else:
                     if res != "NULL":
-                        
-                        print(type(res),res,"RESSSS")
                         final_arr.append(res)
         else:
-            final_arr=[]
+            final_arr = []
 
             for row in df['Ticket_ID'].unique():
-                # req_date, shift,filter_df
-                filter_dataframe=df[df['Ticket_ID'] == row]
-                # filter_dataframe.to_csv('F:\\Hound\\final.csv')
-                SHIFT=select_date_time()
-                shift=SHIFT.f(hours=datetime.now().hour)
-                req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
-                print(req_date)
-                res=ticket.get_current_ticket_status_outage(req_date=req_date,shift=shift.lower(),filter_df=filter_dataframe)
-                print(type(res))
+                filter_dataframe = df[df['Ticket_ID'] == row]
+                SHIFT = select_date_time()
+                shift = SHIFT.f(hours=datetime.now().hour)
+                req_date = datetime.strptime(
+                    str(datetime.now().date()), "%Y-%m-%d")
+                res = ticket.get_current_ticket_status_outage(
+                    req_date=req_date, shift=shift.lower(), filter_df=filter_dataframe)
                 if res is None:
                     pass
                 else:
                     if res != "NULL":
-                        
-                        print(type(res),res,"RESSSS")
                         final_arr.append(res)
-        final_res={}
+        final_res = {}
         final_res['report'] = final_arr
         final_res['timezones'] = final_arr
         return Response(final_res)
 
 
-
 class ticket_comment(APIView):
 
-   
-
     def post(self, request):
-        date = self.request.data['date']
 
-        shift = self.request.data['shift']
-        convertFormat = datetime_converter()
+        shift_date_method=date_method()
 
-        converted_date = convertFormat.DateTimeConvert(date=date)
-        # converted_date=DateTimeConvert(date)
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['date'],shift_type=self.request.data['shift'])
 
-        if tickets_notes.objects.filter(date__date=converted_date[0], date__hour=converted_date[1], shift=shift).exists():
-            json_query = JSON_convert()
-            json = json_query.JSON_query(data=self.request.data)
-            json_query = json
-            print(json_query)
 
-            update_query = tickets_notes.objects.filter(
-                **self.request.data).first()
+        if req_date_check:
+            date = self.request.data['date']
 
-            serializer = tickets_notes_serializer(
-                instance=update_query, data=json_query, partial=True)
-            if serializer.is_valid():
-                serializer.save()
-                return Response("tickets notes updates")
+            shift = self.request.data['shift']
+            convertFormat = datetime_converter()
+
+            converted_date = convertFormat.DateTimeConvert(date=date)
+
+            if tickets_notes.objects.filter(date__date=converted_date[0], date__hour=converted_date[1],
+                                            shift=shift).exists():
+                json_query = JSON_convert()
+                json = json_query.JSON_query(data=self.request.data)
+                json_query = json
+                update_query = tickets_notes.objects.filter(
+                    **self.request.data).first()
+
+                serializer = tickets_notes_serializer(
+                    instance=update_query, data=json_query, partial=True)
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response("tickets notes updates")
+                else:
+                    return Response(serializer.errors)
             else:
-                print(serializer.error_messages)
-                print(serializer.errors)
+                json_query = JSON_convert()
+                json = json_query.JSON_query(data=self.request.data)
+                serializer_query = json
+
+                serializer = tickets_notes_serializer(data=serializer_query)
+
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response("Tickets Notes created")
+                else:
+                    return Response(serializer.errors)
+                
         else:
-            json_query = JSON_convert()
-            json = json_query.JSON_query(data=self.request.data)
-            serializer_query = json
-
-            serializer = tickets_notes_serializer(data=serializer_query)
-
-            if serializer.is_valid():
-                serializer.save()
-
-            else:
-                print(serializer.errors)
-                print(serializer.error_messages)
-            return Response("Tickets Notes created")
+            return Response("Please check the date")
 
     def get(self, request):
-        print("len(self.request.GET)", len(
-            self.request.GET), "........................")
+
         if len(self.request.GET) > 0:
-            # shift=self.request.GET['shift']
             date = self.request.GET['created_date']
             convertFormat = datetime_converter()
 
@@ -443,11 +380,11 @@ class ticket_comment(APIView):
                 date=date)
 
             query = tickets_notes.objects.filter(
-                date__date=get_date,shift=self.request.GET['shift']).order_by('-id')
-            print(query)
-            if len(query) ==0:
+                date__date=get_date, shift=self.request.GET['shift']).order_by('-id')
+
+            if len(query) == 0:
                 query = tickets_notes.objects.filter(
-                date__date=get_date).order_by('-id')
+                    date__date=get_date).order_by('-id')
             if len(query) > 0:
                 serializer = tickets_notes_serializer(query, many=True)
 
@@ -461,8 +398,6 @@ class ticket_comment(APIView):
 
             SHIFT = select_date_time()
             shift = SHIFT.f(hours=hour)
-            print(latest_date, hour, shift)
-            # query=tickets_notes.objects.filter(date__date=latest_date,shift=SHIFT).order_by('-id')
             query = tickets_notes.objects.filter(
                 date__date=latest_date).order_by('-id')
         if len(query) > 0:
@@ -473,174 +408,184 @@ class ticket_comment(APIView):
             return Response([])
 
 
+class today_shift_planer_info_for_tickets(APIView):
+
+    def get(self, request):
+        try:
+            team_id = request.GET.get('tm', None)
+
+            today_plan_init = today_plan(user_info=request.user)
+            shift = today_plan_init.plan(team_id=team_id)
+            return Response(shift, status=200)
+        except Exception as e:
+            return Response(status=500)
+
+
 class set_Ticket_count(APIView):
 
     def post(self, request):
-        # json_data=JSON_query(self.request.data)
-        json_query = JSON_convert()
-        json_data = json_query.JSON_query(data=self.request.data)
-        serializer = tickets_counts_serializer(data=json_data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response("Ticket count created")
-        else:
-            print(serializer.error_messages)
-            print(serializer.errors)
-            return Response("Not created Ticket count")
+        shift_date_method=date_method()
 
-    def put(self, request):
-        # json_data=JSON_query(self.request.data)
-        date = self.request.data['date']
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['date'],shift_type=self.request.data['shift'])
 
-        shift = self.request.data['shift']
-        convertFormat = datetime_converter()
 
-        converted_date = convertFormat.DateTimeConvert(date=date)
-        # converted_date=DateTimeConvert(date)
-        print(tickets_count_table.objects.filter(
-            date__date=converted_date[0], date__hour=converted_date[1], shift=shift).exists(), "OUTSIDE")
-        if tickets_count_table.objects.filter(date__date=converted_date[0], date__hour=converted_date[1], shift=shift).exists():
-
-            update_query = tickets_count_table.objects.filter(
-                **self.request.data).first()
-            self.request.data['date'] = datetime.now()
+        if req_date_check:
             json_query = JSON_convert()
-            json_query = json_query.JSON_query(data=self.request.data)
-
-            serializer = tickets_counts_serializer(
-                instance=update_query, data=json_query, partial=True)
-            print(serializer.is_valid(), "INSIDE")
+            json_data = json_query.JSON_query(data=self.request.data)
+            serializer = tickets_counts_serializer(data=json_data)
             if serializer.is_valid():
                 serializer.save()
-                return Response("Updated successfully")
+                return Response("Ticket count created")
             else:
-                print(serializer.error_messages)
-                print(serializer.errors)
-                return Response(serializer.error_messages)
+                return Response("Not created Ticket count")
         else:
-            self.post(self.request.data)
-            # print("ELSEEEE")
-            return Response("Ticket count POSTEd")
+            return Response('Please check the date')
+        
+    def put(self, request):
+        shift_date_method=date_method()
+
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['date'],shift_type=self.request.data['shift'])
+
+
+        if req_date_check:
+            date = self.request.data['date']
+
+            shift = self.request.data['shift']
+            convertFormat = datetime_converter()
+
+            converted_date = convertFormat.DateTimeConvert(date=date)
+
+            if tickets_count_table.objects.filter(date__date=converted_date[0], date__hour=converted_date[1],
+                                                shift=shift).exists():
+
+                update_query = tickets_count_table.objects.filter(
+                    **self.request.data).first()
+                self.request.data['date'] = datetime.now()
+                json_query = JSON_convert()
+                json_query = json_query.JSON_query(data=self.request.data)
+
+                serializer = tickets_counts_serializer(
+                    instance=update_query, data=json_query, partial=True)
+
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response("Updated successfully")
+                else:
+
+                    return Response(serializer.error_messages)
+            else:
+                self.post(self.request.data)
+
+                return Response("Ticket count POSTEd")
+        else:
+            return Response("Please check the date")
 
     def get(self, request):
-        #
-        # response = shift_status_info.as_view()(request._request)
-        # print(response.data,"response")
         if len(self.request.GET) > 0:
-            print(self.request.GET)
+
             date = self.request.GET['created_date']
             convertFormat = datetime_converter()
-            shift=self.request.GET['shift']
+            shift = self.request.GET['shift']
 
             get_date, get_hour, get_datetime = convertFormat.DateTimeConvert(
                 date=date)
             query = tickets_count_table.objects.filter(
-            date__date=get_date,shift=shift).order_by('-id')
+                date__date=get_date, shift=shift).order_by('-id')
             if len(query) == 0:
                 query = tickets_count_table.objects.filter(
-            date__date=get_date).order_by('-id')
-            # get_date,get_hour=DateTimeConvert(date)
+                    date__date=get_date).order_by('-id')
+
         else:
             date = datetime.now()
             get_date = date.date()
             get_hour = date.hour
-            
+
             query = tickets_count_table.objects.all().order_by('-id')
-        print(query)
+
         if len(query) > 0:
             serializer = tickets_counts_serializer(query, many=True)
             return Response(serializer.data[0])
         else:
             return Response("No data")
-            # pass
 
 
 class sm_infra_activate_obj(APIView):
 
     def post(self, request):
-        # self.request.data['planned_start_date'] =
-        # self.request.GET['created_date'] = parse(self.request.GET['created_date'])
-        self.request.data['timerange']=datetime.now().time()
-        json_query = JSON_convert()
-        json_query = json_query.JSON_query(data=self.request.data)
-        # json_query=JSON_query(self.request.data)
-        print(json_query, "......"
-        )
-        if sm_infra_activate.objects.filter(ticket_id=json_query['ticket_id']).exists():
-            query1 = sm_infra_activate.objects.filter(
-                ticket_id=json_query['ticket_id']).values()
-            if len(query1) > 1:
 
-                sm_infra_activate.objects.filter(
-                    **query1[len(query1)-1]).update(planned_end_date=self.request.data['planned_start_date'])
+        shift_date_method=date_method()
+
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['date'],shift_type=self.request.data['shift'])
+
+
+        if req_date_check:
+            self.request.data['timerange'] = datetime.now().time()
+            json_query = JSON_convert()
+            json_query = json_query.JSON_query(data=self.request.data)
+
+            if sm_infra_activate.objects.filter(ticket_id=json_query['ticket_id']).exists():
+                query1 = sm_infra_activate.objects.filter(
+                    ticket_id=json_query['ticket_id']).values()
+                if len(query1) > 1:
+
+                    sm_infra_activate.objects.filter(
+                        **query1[len(query1) - 1]).update(planned_end_date=self.request.data['planned_start_date'])
+                else:
+                    sm_infra_activate.objects.filter(
+                        **query1[0]).update(planned_end_date=self.request.data['planned_start_date'])
+
+            if self.request.data['pre_check_status'] == 'Resolved':
+                json_query['planned_end_date'] = self.request.data['planned_start_date']
+
+            serializer = sm_infra_activate_serializer(data=json_query)
+            if serializer.is_valid():
+                serializer.save()
+                return Response("sm_infra_createed")
             else:
-                print(query1[0])
-                sm_infra_activate.objects.filter(
-                    **query1[0]).update(planned_end_date=self.request.data['planned_start_date'])
-                
-        if self.request.data['pre_check_status'] == 'Resolved':
-            # datetime.now()
-            json_query['planned_end_date'] = self.request.data['planned_start_date']
-
-            
-        print(json_query)
-        serializer = sm_infra_activate_serializer(data=json_query)
-        if serializer.is_valid():
-            serializer.save()
-
-            # req_data=Get_all_activity.as_view()(request.data)
-            # print(req_data)
-            return Response("sm_infra_createed")
+                return Response(serializer.errors)
         else:
-            return Response(serializer.errors)
+            return Response("Please check the date")
 
 
 class Get_sm_infra_activate(APIView):
 
-    def get(self,request):
+    def get(self, request):
         try:
             arr_query = []
             query_all = sm_infra_activate.objects.all()
-            quer=query_all.values()
-            df_filter=pd.DataFrame(quer)
-            ticket=ticket_handling()
+            quer = query_all.values()
+            df_filter = pd.DataFrame(quer)
+            ticket = ticket_handling()
             if len(self.request.GET) > 0:
-                req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
-                final_arr=[]
+                req_date = datetime.strptime(
+                    self.request.GET['created_date'].split("T")[0], "%Y-%m-%d")
+                final_arr = []
                 import numpy as np
                 for v in df_filter['ticket_id'].unique():
-                    tic_new_df=df_filter[df_filter['ticket_id']==v]
-                    # tic_new_df.replace({np.nan: None}, inplace = True)
-                    res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=self.request.GET['shift'].lower(),filter_df=tic_new_df)
-                    print()
+                    tic_new_df = df_filter[df_filter['ticket_id'] == v]
+                    res = ticket.get_current_ticket_status_SM_INFRA(
+                        req_date=req_date, shift=self.request.GET['shift'].lower(), filter_df=tic_new_df)
                     if res is None:
                         pass
                     else:
                         if res != "NULL":
-                            
-                            print(type(res),res,"RESSSS")
                             final_arr.append(res)
-                    
-                
+
             else:
-                final_arr=[]
+                final_arr = []
 
                 for row in df_filter['ticket_id'].unique():
-                    # req_date, shift,filter_df
-                    filter_dataframe=df_filter[df_filter['ticket_id'] == row]
-                    # filter_dataframe.to_csv('F:\\Hound\\final.csv')
-                    SHIFT=select_date_time()
-                    shift=SHIFT.f(hours=datetime.now().hour)
-                    req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
-                    print(req_date)
-                    res=ticket.get_current_ticket_status_SM_INFRA(req_date=req_date,shift=shift.lower(),filter_df=filter_dataframe)
-                    print(type(res))
+                    filter_dataframe = df_filter[df_filter['ticket_id'] == row]
+                    SHIFT = select_date_time()
+                    shift = SHIFT.f(hours=datetime.now().hour)
+                    req_date = datetime.strptime(
+                        str(datetime.now().date()), "%Y-%m-%d")
+                    res = ticket.get_current_ticket_status_SM_INFRA(
+                        req_date=req_date, shift=shift.lower(), filter_df=filter_dataframe)
                     if res is None:
                         pass
                     else:
                         if res != "NULL":
-                            
-                            print(type(res),res,"RESSSS")
                             final_arr.append(res)
             return Response(final_arr)
         except:
@@ -650,111 +595,107 @@ class Get_sm_infra_activate(APIView):
 class Activity_db(APIView):
 
     def post(self, request):
-        self.request.data['timerange']=datetime.now().time()
-        # date_hour=
-        # json_query=JSON_query(self.request.data)
-        json_query = JSON_convert()
-        json_query = json_query.JSON_query(data=self.request.data)
+        shift_date_method=date_method()
 
-        if ActivityDB.objects.filter(ticket_id=json_query['ticket_id']).exists():
-            query1 = ActivityDB.objects.filter(
-                ticket_id=json_query['ticket_id']).values()
-            # import dateutil.parser
-            # convert_date=dateutil.parser.parse(json_query['planned_start_date'])
-            # json_query['planned_start_date'] = datetime.now()
-            # json_query['planned_start_date'] = convert_date
-            if len(query1) > 1:
-                # print()
+        req_date_check=shift_date_method.shift_date_check(shift_date=self.request.data['date'],shift_type=self.request.data['shift'])
 
-                ActivityDB.objects.filter(
-                    **query1[len(query1)-1]).update(planned_end_date=json_query['planned_start_date'])
+
+        if req_date_check:
+            self.request.data['timerange'] = datetime.now().time()
+            json_query = JSON_convert()
+            json_query = json_query.JSON_query(data=self.request.data)
+
+            if ActivityDB.objects.filter(ticket_id=json_query['ticket_id']).exists():
+                query1 = ActivityDB.objects.filter(
+                    ticket_id=json_query['ticket_id']).values()
+                if len(query1) > 1:
+                    ActivityDB.objects.filter(
+                        **query1[len(query1) - 1]).update(planned_end_date=json_query['planned_start_date'])
+                else:
+                    ActivityDB.objects.filter(
+                        **query1[0]).update(planned_end_date=json_query['planned_start_date'])
+
+            convert_date = json_query['planned_start_date']
+            if self.request.data['pre_check_status'] == 'Resolved':
+                json_query['planned_end_date'] = json_query['planned_start_date']
+            serializer = Activity_table(data=json_query)
+            if serializer.is_valid():
+                serializer.save()
+                return Response("Activate DB created")
             else:
-                print(query1[0])
-                # self.request.data['planned_start_date']=da
-                ActivityDB.objects.filter(
-                    **query1[0]).update(planned_end_date=json_query['planned_start_date'])
-            # SHIFT = select_date_time()
-            # shift = SHIFT.f(hours=json_query['planned_start_date'].time().hour)
-            # json_query['shift'] = shift
+                return Response(serializer.errors)
 
-        # try:
-        #     convert_date=datetime.strptime(self.request.data['planned_start_date'],'%Y-%m-%dT%H:%M:%SZ')
-        # except:
-        #     convert_date=datetime.strptime(self.request.data['planned_start_date'],'%Y-%m-%dT%H:%M')
-        convert_date = json_query['planned_start_date']
-        if self.request.data['pre_check_status'] == 'Resolved':
-            # datetime.now()
-            json_query['planned_end_date'] = json_query['planned_start_date']
-            # SHIFT = select_date_time()
-            # shift = SHIFT.f(hours=convert_date.time().hour)
-            # json_query['shift'] = shift
-        serializer = Activity_table(data=json_query)
-        if serializer.is_valid():
-            serializer.save()
-            # req_data=Get_all_activity.as_view()(request._request)
-            return Response("Activate DB created")
         else:
-            return Response(serializer.errors)
-
-
-from dateutil.parser import parse
+            return Response("Please check the date")
 class Get_all_activity(APIView):
 
     def get(self, request):
-        arr_query = []
-        query_all = ActivityDB.objects.all()
-        quer=query_all.values()
-        df_filter=pd.DataFrame(quer)
-        ticket=ticket_handling()
-        if len(self.request.GET) > 0:
-            req_date=datetime.strptime(self.request.GET['created_date'].split("T")[0],"%Y-%m-%d")
-         
-            final_arr=[]
-            import numpy as np
-            for v in df_filter['ticket_id'].unique():
-                tic_new_df=df_filter[df_filter['ticket_id']==v]
-                # tic_new_df.replace({np.nan: None}, inplace = True)
-                res=ticket.get_current_ticket_status_WeeekendActivity(req_date=req_date,shift=self.request.GET['shift'].lower(),filter_df=tic_new_df)
-                # print()
-                if res is None:
-                    pass
-                else:
-                    if res != "NULL":
-                        print(type(res),res,"RESSSS")
-                        final_arr.append(res)
-                
-            
-        else:
-            final_arr=[]
+        try:
+            arr_query = []
+            query_all = ActivityDB.objects.all()
+            quer = query_all.values()
+            df_filter = pd.DataFrame(quer)
+            ticket = ticket_handling()
+            if len(self.request.GET) > 0:
+                req_date = datetime.strptime(
+                    self.request.GET['created_date'].split("T")[0], "%Y-%m-%d")
 
-            for row in df_filter['ticket_id'].unique():
-                # req_date, shift,filter_df
-                filter_dataframe=df_filter[df_filter['ticket_id'] == row]
-                # filter_dataframe.to_csv('F:\\Hound\\final.csv')
-                SHIFT=select_date_time()
-                shift=SHIFT.f(hours=datetime.now().hour)
-                req_date=datetime.strptime(str(datetime.now().date()),"%Y-%m-%d")
-                print(req_date)
-                res=ticket.get_current_ticket_status_WeeekendActivity(req_date=req_date,shift=shift.lower(),filter_df=filter_dataframe)
-                print(type(res))
-                if res is None:
-                    pass
-                else:
-                    if res != "NULL":
-                        
-                        print(type(res),res,"RESSSS")
-                        final_arr.append(res)
-                        
-        return Response(final_arr)
+                final_arr = []
+                import numpy as np
+                for v in df_filter['ticket_id'].unique():
+                    tic_new_df = df_filter[df_filter['ticket_id'] == v]
+
+                    res = ticket.get_current_ticket_status_WeeekendActivity(
+                        req_date=req_date, shift=self.request.GET['shift'].lower(), filter_df=tic_new_df)
+                    if res is None:
+                        pass
+                    else:
+                        if res != "NULL":
+                            final_arr.append(res)
+
+            else:
+                final_arr = []
+
+                for row in df_filter['ticket_id'].unique():
+                    filter_dataframe = df_filter[df_filter['ticket_id'] == row]
+                    SHIFT = select_date_time()
+                    shift = SHIFT.f(hours=datetime.now().hour)
+                    req_date = datetime.strptime(
+                        str(datetime.now().date()), "%Y-%m-%d")
+                    res = ticket.get_current_ticket_status_WeeekendActivity(
+                        req_date=req_date, shift=shift.lower(), filter_df=filter_dataframe)
+                    if res is None:
+                        pass
+                    else:
+                        if res != "NULL":
+                            final_arr.append(res)
+
+            return Response(final_arr)
+        except:
+            return Response([])
 
 
 class MailAPI_view(APIView):
 
-    def post(self,request):
-        # print(self.request.data)
-        # print(self.request.data['shiftpasschartjs']['sm_infra_data'])
-        email=send_mail_to_destination()
-        res=email.mail_content(json_data=self.request.data)
-        # print(res)
+    def post(self, request):
+        email = send_mail_to_destination()
+        res = email.mail_content(json_data=self.request.data)
         return Response(res)
+
+from apps.user_account.models import User, sub_team_owner, subTeam, team
+
+class admin_page(APIView):
+
+    # template_name = 'shiftpasstool/shiftpasstest.html'
+
+    def get(self,request):
+
+        # sub_team_id = sub_team_owner.objects.values_list('sub_team_id', flat=True).filter(owner=self.request.user, sub_team__team__code=self.request.user.team.code)
         
+        context = {}
+        # context["user_list"]=[{"name":"jee","username":"jeekumar"}]
+        # context["sub_team"] = [{"code":team[0], "name":team[1]} for team in subTeam.objects.values_list("code", "name").filter(code__in=sub_team_id).order_by('code').distinct("code")]
+        context["user_list"] = [{"id":183,"username":"C5218479","first_name":"Christian","last_name":"Starick","id":183,"username":"C5218479","first_name":"Christian","last_name":"Starick"}]
+                                #  "email":"christian.starick@sap.com","team":"NON_OPS","team_name":"Non Operation Member","sub_team":"ADHOC_ACTI_NON_OPS","sub_team_name":"Adhoc activity no ops","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":305,"username":"C5229274","first_name":"Kartik","last_name":"Mehta","email":"kartik.mehta@sap.com","team":None,"team_name":"","sub_team":None,"sub_team_name":"","role":None,"role_name":"","is_active":True,"is_block":False,"groups":[]},{"id":248,"username":"C5253571","first_name":"Georgi","last_name":"Stoyanov01","email":"georgi.stoyanov01@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM_EU","sub_team_name":"Adhoc activity server management EU","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":68,"username":"C5255630","first_name":"Joerg","last_name":"Richter01","email":"joerg.richter01@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM_EU","sub_team_name":"Adhoc activity server management EU","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":235,"username":"C5257755","first_name":"Roman","last_name":"Faltz","email":"roman.faltz@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM_EU","sub_team_name":"Adhoc activity server management EU","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":185,"username":"C5275350","first_name":"Samuel","last_name":"Werth","email":"samuel.werth@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM_EU","sub_team_name":"Adhoc activity server management EU","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":182,"username":"C5275944","first_name":"Jinkuan","last_name":"Wang","email":"jinkuan.wang@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM","sub_team_name":"Adhoc activity server management Bangalore","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":261,"username":"C5276906","first_name":"X","last_name":"Yao","email":"x.yao@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":None,"sub_team_name":"","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":262,"username":"C5277227","first_name":"Yiting","last_name":"Yu","email":"yiting.yu@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":None,"sub_team_name":"","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":251,"username":"C5278287","first_name":"Hua","last_name":"Li02","email":"hua.li02@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM","sub_team_name":"Adhoc activity server management Bangalore","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":279,"username":"C5291022","first_name":"Ganesh","last_name":"Vijayaraj","email":"ganesh.vijayaraj@sap.com","team":"BRL_APP_OP","team_name":"Application Bangalore","sub_team":"ADHOC_ACTI","sub_team_name":"Adhoc activity Application Bangalore","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":137,"username":"C5303704","first_name":"Sayaji","last_name":"Kadam","email":"sayaji.kadam@sap.com","team":"NON_OPS","team_name":"Non Operation Member","sub_team":"ADHOC_ACTI_NON_OPS","sub_team_name":"Adhoc activity no ops","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":316,"username":"C5303907","first_name":"Anita","last_name":"Sturm","email":"anita.sturm@sap.com","team":"EU_SM_OP","team_name":"Server Management EU","sub_team":"ADHOC_ACTI_SM_EU","sub_team_name":"Adhoc activity server management EU","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":151,"username":"C5307925","first_name":"Rajesh","last_name":"Arumugam","email":"rajesh.arumugam@sap.com","team":"NON_OPS","team_name":"Non Operation Member","sub_team":"ADHOC_ACTI_NON_OPS","sub_team_name":"Adhoc activity no ops","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]},{"id":174,"username":"C5308217","first_name":"Jewel","last_name":"Susan","email":"jewel.susan.lalu@sap.com","team":"NON_OPS","team_name":"Non Operation Member","sub_team":"ADHOC_ACTI_NON_OPS","sub_team_name":"Adhoc activity no ops","role":"SHIFT_MEM","role_name":"Shift Member","is_active":True,"is_block":False,"groups":[{"id":3,"permissions":[{"id":72,"name":"Custom: User can view the system related info in Pingdom dashboard","codename":"get_dc_info","content_type":16},{"id":66,"name":"Custom: Default access for team member","codename":"team_member","content_type":16},{"id":290,"name":"Custom: Can update shift member leave(update_member_leave)","codename":"update_member_leave","content_type":16}],"name":"ops_member"}]}]
+        
+        return Response(context)

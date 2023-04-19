@@ -7,7 +7,8 @@ from django.utils.timezone import now
 choice_planned_type = [
     ('S4H', 'S4H'),
     ('IBP', 'IBP'),
-    ('BYD/C4C', 'BYD/C4C'),
+    ('BYD', 'BYD'),
+    ('C4C','C4C')
 ]
 
 choice_region = [
@@ -25,7 +26,6 @@ choice_status = [
     ('Resolved', 'Resolved'),
 ]
 # Create your models here.
-# choices={'morning':'morning','afternoon':'afternoon','night':'night'}
 
 # SPC ticket
 
@@ -34,14 +34,14 @@ class tracking_history(models.Model):
     Ticket_ID = models.CharField(max_length=10)
     Subject = models.TextField(null=True)
     Action_Taken = models.TextField(null=True)
-    Action_Required = models.TextField()
+    Action_Required = models.TextField(blank=True, null=True)
     Status = models.CharField(max_length=20)
     created_date = models.DateTimeField()
-    date = models.DateField(default=datetime.datetime.now())
+    date = models.DateField(auto_now_add=True)
     shift = models.CharField(max_length=100)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
-    timerange=models.TimeField(blank=True,null=True)
+    timerange = models.TimeField(blank=True, null=True)
 
 
 class master_tickets(models.Model):
@@ -51,7 +51,7 @@ class master_tickets(models.Model):
     Action_Required = models.TextField(null=True)
     Status = models.CharField(max_length=20)
     created_date = models.DateTimeField()
-    date = models.DateField(default=datetime.datetime.now())
+    date = models.DateField(auto_now_add=True)
     shift = models.CharField(max_length=20)
 
 
@@ -59,15 +59,15 @@ class master_tickets(models.Model):
 class outage_tracking_history(models.Model):
     Ticket_ID = models.CharField(max_length=10)
     Subject = models.TextField(null=True)
-    customer_impact = models.TextField()
-    Action_Required = models.TextField()
+    customer_impact = models.TextField(blank=True, null=True)
+    Action_Required = models.TextField(blank=True, null=True)
     Status = models.CharField(max_length=20)
     created_date = models.DateTimeField()
-    date = models.DateField(default=datetime.date.today())
+    date = models.DateField(auto_now_add=True)
     shift = models.CharField(max_length=20)
     start_time = models.DateTimeField()
     end_time = models.DateTimeField(blank=True, null=True)
-    timerange=models.TimeField(blank=True,null=True)
+    timerange = models.TimeField(blank=True, null=True)
 
 
 class outage_master_tickets(models.Model):
@@ -77,7 +77,7 @@ class outage_master_tickets(models.Model):
     Action_Required = models.TextField(null=True)
     Status = models.CharField(max_length=20)
     created_date = models.DateTimeField()
-    date = models.DateField(default=datetime.datetime.now())
+    date = models.DateField(auto_now_add=True)
     shift = models.CharField(max_length=20)
 
 
@@ -116,7 +116,9 @@ class ActivityDB(models.Model):
     resource = models.TextField(null=True)
     shift = models.CharField(max_length=250, null=True)
     floatingCmpDate = models.TextField(null=True)
-    timerange=models.TimeField(blank=True,null=True)
+    timerange = models.TimeField(blank=True, null=True)
+    assigned=models.CharField(max_length=250,null=True,blank=True)
+    remarks=models.TextField()
 
     # def __str__(self):
     #     return self.planned_type
@@ -131,4 +133,7 @@ class sm_infra_activate(models.Model):
     ticket_id = models.CharField(max_length=250, null=True)
     shift = models.CharField(max_length=250, null=True)
     floatingImplementation = models.TextField(null=True)
-    timerange=models.TimeField(blank=True,null=True)
+    timerange = models.TimeField(blank=True, null=True)
+    assigned=models.CharField(max_length=250,null=True,blank=True)
+    remarks=models.TextField(blank=True, null=True)
+

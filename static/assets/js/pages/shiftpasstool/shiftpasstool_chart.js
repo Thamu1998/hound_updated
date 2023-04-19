@@ -1,9 +1,11 @@
 var request_data = "";
+var selectvalues=''
 var reports = {};
 var json_data = [];
 var all_dict_send_api = {};
 var all_dict_array = [];
 var all_dict_from_before_js = [];
+
 
 $("#submit_btn").on("click", function (e) {
   var shift = $("#Shift_dropdown").val();
@@ -92,6 +94,42 @@ $.ajax({
   },
 });
 
+$.ajax({
+  method: "GET",
+  url:
+    "/shiftpasstool/shift/admin",
+  success: function (data) {
+        getselectEmployeeData(data.user_list)
+  },
+})
+
+function getselectEmployeeData(data){
+var selectEmp=''
+  if(data.length > 0){
+   
+    data.forEach(e=>
+/* <img src="https://avatars.wdf.sap.corp/avatar/${e.id}" alt=""  class="rounded-circle me-2" width='40'></img> */
+
+      selectvalues=selectvalues + 
+      `<option data-tokens="${e.username}-${e.first_name} ${e.last_name}" value="${e.username}-${e.first_name} ${e.last_name}">
+      ${e.username}-${e.first_name} ${e.last_name}</option>`
+      )
+
+      selectEmp=selectEmp + `
+     
+      <option value="">Select a Assignee...</option>
+             ${selectvalues}
+    `
+  }
+
+
+
+$("#selectEmployee").html(selectEmp);
+$("#selectEmployee_infra").html(selectEmp);
+}
+
+
+
 function get_infra_activate() {
   $.ajax({
     method: "GET",
@@ -143,8 +181,14 @@ function mail_trigger() {
 
 function closeModal(){
     $('#exampleModalCenter').modal('hide')
+    all_dict_from_before_js=[]
 }
 
+function closeModal_date_and_shift(){
+  console.log("asdlklfhasjkdhf")
+  $('#check_alert_changes').modal('hide')
+  // all_dict_from_before_js=[]
+}
 function get_activity(data) {
   var host_list = "";
   var hostArray = [];
@@ -152,6 +196,7 @@ function get_activity(data) {
 
   if (data) {
     if (data.length != 0) {
+      reports["Host_data"] = data;
       data.forEach((i) => {
         if (data1.includes(i.planned_type) == false) {
           data1.push(i.planned_type);
@@ -171,7 +216,7 @@ function get_activity(data) {
       for (const [key, items] of Object.entries(keyss)) {
         var keyName =
           `<br>
-                          <label style="font-size: small;" class="text-muted fw-bold d-block">` +
+            <label style="font-size: small;" class="text-muted fw-bold d-block">` +
           key +
           `</label>`;
 
@@ -182,7 +227,7 @@ function get_activity(data) {
         var preCheckData = "";
 
         host_list = host_list + keyName;
-        reports["Host_data"] = items;
+        items.sort((a, b) => a.region.localeCompare(b.region));
         items.forEach(function (item) {
           startDate = new Date(item.planned_start_date).toLocaleDateString();
           startDate = moment(startDate).format("DD-MMM-YYYY");
@@ -275,15 +320,12 @@ function get_activity(data) {
             `</label>
                         </div>
                     </td>
-                        <td  id=` +
-            item.ID +
-            `>
+                        <td  id=` + item.ID +  `>
                             <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
-                                <label style="font-size: small;" class="text-muted fw-bold d-block">` +
-            item.ticket_id +
-            `</label>
+                                <label style="font-size: small;" class="text-muted fw-bold d-block">` + item.ticket_id + `</label>
                             </div>
                         </td>
+                    
                         <td style="white-space: initial;">
                            ${textData}
 
@@ -303,6 +345,16 @@ function get_activity(data) {
                             <label style="font-size: small;" class="text-muted fw-bold d-block">${item.floatingCmpDate}</label>
                         </div>
                     </td>
+                    <td>
+                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                        <label style="font-size: small;" class="text-muted fw-bold d-block">` + item.assigned + `</label>
+                    </div>
+                </td>
+                    <td style="white-space: initial;">
+                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block">
+                        <label style="font-size: small;" class="text-muted fw-bold d-block">${item.remarks}</label>
+                    </div>
+                </td>
                     <td style="text-align:center">
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                     ${color}
@@ -426,6 +478,18 @@ function get_activity_infra(data) {
                             <label style="font-size: small;" class="text-muted fw-bold d-block">${item.floatingImplementation}</label>
                         </div>
                     </td>
+
+                    <td>
+                    <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                        <label style="font-size: small;" class="text-muted fw-bold d-block">${item.assigned}</label>
+                    </div>
+                </td>
+
+                <td>
+                <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+                    <label style="font-size: small;" class="text-muted fw-bold d-block">${item.remarks}</label>
+                </div>
+            </td>
 
                     <td >
                     <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
@@ -844,9 +908,9 @@ function updateHostList_infra(id) {
     selectStatus =
       selectStatus +
       `
-        <option selected value="Inprogress">Inprogress</option>
-        <option value="Waiting">Waiting</option>
         <option value="New">New</option>
+        <option value="Inprogress">Inprogress</option>
+        <option value="Waiting">Waiting</option>
         <option value="Resolved">Resolved</option>
         `;
   }
@@ -855,10 +919,10 @@ function updateHostList_infra(id) {
     selectStatus =
       selectStatus +
       `
-        <option  value="Inprogress">Inprogress</option>
-        <option selected value="Waiting">Waiting</option>
-        <option  value="New">New</option>
-        <option value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
         `;
   }
 
@@ -866,10 +930,10 @@ function updateHostList_infra(id) {
     selectStatus =
       selectStatus +
       `
-        <option  value="Inprogress">Inprogress</option>
-        <option value="Waiting">Waiting</option>
-        <option selected value="New">New</option>
-        <option value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
         `;
   }
 
@@ -877,12 +941,14 @@ function updateHostList_infra(id) {
     selectStatus =
       selectStatus +
       `
-        <option  value="Inprogress">Inprogress</option>
-        <option value="Waiting">Waiting</option>
-        <option value="New">New</option>
-        <option selected value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
         `;
   }
+
+  selectvalues=selectvalues + `<option selected value="${updateSpaData.assigned}">${updateSpaData.assigned}</option>`
 
   upd_host_infra =
     upd_host_infra +
@@ -947,6 +1013,27 @@ placeholder="Implementation Period" value="${updateSpaData.floatingImplementatio
     </div>
 
 
+    <div class="row g-9 mb-8">
+
+    <div class="col-md-6 fv-row">
+      <label class="required fs-6 fw-bold mb-2">Remarks</label>
+
+      <textarea class="form-control" rows="1" cols="10" id="updatefloatingRemarks_infra" placeholder="Remarks"
+          style="font-size: initial;background: aliceblue;">${updateSpaData.remarks}</textarea>
+
+  </div>
+
+    <div class="col-md-6 fv-row">
+        <label class="required fs-6 fw-bold mb-2">Assignee</label>
+        <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select a Assignee"
+            id="updateAssignee_infra" data-dropdown-parent="#updateViewHost_infra">
+            <option value="">Select a Assignee...</option>
+            ${selectvalues}
+        </select>
+    </div>
+
+  </div>
+
 
 
     <div class="text-center">
@@ -961,6 +1048,7 @@ placeholder="Implementation Period" value="${updateSpaData.floatingImplementatio
     `;
 
   $("#modelUpdateHost_infra").html(upd_host_infra);
+  $("#updateAssignee_infra").select2();
 }
 
 function updateHostList(id) {
@@ -977,13 +1065,15 @@ function updateHostList(id) {
   var selectStatus = "";
 
 
+
   if (updatehost_data.planned_type == "S4H") {
     planType =
       planType +
       `
         <option selected value="S4H">S4H</option>
         <option value="IBP">IBP</option>
-        <option value="BYD/C4C">BYD/C4C</option>
+        <option value="BYD">BYD</option>
+        <option value="C4C">C4C</option>
     `;
   } else if (updatehost_data.planned_type == "IBP") {
     planType =
@@ -991,16 +1081,30 @@ function updateHostList(id) {
       `
     <option  value="S4H">S4H</option>
     <option selected value="IBP">IBP</option>
-    <option value="BYD/C4C">BYD/C4C</option>
+    <option value="BYD">BYD</option>
+    <option value="C4C">C4C</option>
 `;
-  } else if (updatehost_data.planned_type == "BYD/C4C") {
+  } 
+  else if (updatehost_data.planned_type == "BYD") {
     planType =
       planType +
       `
     <option  value="S4H">S4H</option>
     <option value="IBP">IBP</option>
-    <option selected value="BYD/C4C">BYD/C4C</option>
-`;
+    <option selected value="BYD">BYD</option>
+    <option value="C4C">C4C</option>
+`
+  }
+
+  else if (updatehost_data.planned_type == "C4C") {
+    planType =
+      planType +
+      `
+    <option  value="S4H">S4H</option>
+    <option value="IBP">IBP</option>
+    <option value="BYD">BYD</option>
+    <option selected value="C4C">C4C</option>
+`
   }
 
   if (updatehost_data.region == "EMEA") {
@@ -1071,10 +1175,10 @@ function updateHostList(id) {
     selectStatus =
       selectStatus +
       `
-                        <option selected value="Inprogress">Inprogress</option>
-                        <option value="Waiting">Waiting</option>
-                        <option value="New">New</option>
-                        <option value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
                         `;
   }
 
@@ -1082,10 +1186,10 @@ function updateHostList(id) {
     selectStatus =
       selectStatus +
       `
-                        <option  value="Inprogress">Inprogress</option>
-                        <option selected value="Waiting">Waiting</option>
-                        <option  value="New">New</option>
-                        <option value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
                         `;
   }
 
@@ -1093,10 +1197,10 @@ function updateHostList(id) {
     selectStatus =
       selectStatus +
       `
-                        <option  value="Inprogress">Inprogress</option>
-                        <option value="Waiting">Waiting</option>
-                        <option selected value="New">New</option>
-                        <option value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
                         `;
   }
 
@@ -1104,17 +1208,20 @@ function updateHostList(id) {
     selectStatus =
       selectStatus +
       `
-                        <option  value="Inprogress">Inprogress</option>
-                        <option value="Waiting">Waiting</option>
-                        <option value="New">New</option>
-                        <option selected value="Resolved">Resolved</option>
+      <option value="New">New</option>
+      <option value="Inprogress">Inprogress</option>
+      <option value="Waiting">Waiting</option>
+      <option value="Resolved">Resolved</option>
                         `;
   }
+
+   selectvalues=selectvalues + `<option selected value="${updatehost_data.assigned}">${updatehost_data.assigned}</option>`
+
+ 
 
   upd_host =
     upd_host +
     `
-           
     <form class="form" action="#">
 
     <div class="mb-13 text-center">
@@ -1122,49 +1229,50 @@ function updateHostList(id) {
         <h1 class="mb-3">Update Ticket</h1>
 
         <div class="text-gray-400 fw-bold fs-5">If you need more info, please check
-        <a href="" class="fw-bolder link-primary">Support Guidelines</a>.</div>
+            <a href="" class="fw-bolder link-primary">Support Guidelines</a>.
+        </div>
 
     </div>
 
     <div class="row g-9 mb-8">
-    <div class="col-md-6 fv-row">
-        <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-            <span class="required">Ticket ID</span>
-            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
-        </label>
+        <div class="col-md-6 fv-row">
+            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                <span class="required">Ticket ID</span>
+                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
+            </label>
 
-        <input type="text" class="form-control" id="updatefloatingTid"  placeholder="Ticket ID" value="` +
+            <input type="text" class="form-control" id="updatefloatingTid" placeholder="Ticket ID" value="` +
     updatehost_data.ticket_id +
     `">
+        </div>
+
+        <div class="col-md-6 fv-row">
+            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                <span class="required">CMP Date&Time</span>
+                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="CMP Date&Time"></i>
+            </label>
+
+            <input type="text" class="form-control" id="updatefloatingCmpDate" placeholder="CMP Date&Time"
+                value="${updatehost_data.floatingCmpDate}">
+        </div>
+
     </div>
-
-    <div class="col-md-6 fv-row">
-    <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-        <span class="required">CMP Date&Time</span>
-        <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
-            title="CMP Date&Time"></i>
-    </label>
-
-    <input type="text" class="form-control" id="updatefloatingCmpDate" placeholder="CMP Date&Time" value="${updatehost_data.floatingCmpDate}">
-  </div>
-
-  </div>
 
     <div class="row g-9 mb-8">
 
         <div class="col-md-6 fv-row">
             <label class="required fs-6 fw-bold mb-2">Planned Type</label>
-            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-            data-placeholder="Select a Type"  id="updatefloatingPlanned">
-            ${planType}
+            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                data-placeholder="Select a Type" id="updatefloatingPlanned">
+                ${planType}
             </select>
         </div>
 
         <div class="col-md-6 fv-row">
             <label class="required fs-6 fw-bold mb-2">Region</label>
-            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-            data-placeholder="Select a Region"  id="updatefloatingRegion">
-            ${selectRegion}
+            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                data-placeholder="Select a Region" id="updatefloatingRegion">
+                ${selectRegion}
             </select>
 
         </div>
@@ -1172,61 +1280,76 @@ function updateHostList(id) {
     </div>
 
     <div class="row g-9 mb-8">
-   
-    <div>
-        <label class="required fs-6 fw-bold mb-2">Description</label>
-
-        <textarea class="form-control" rows="3" cols="40" id="updatefloatingSubject"placeholder="Description"
-       style="font-size: initial;background: aliceblue;">${updatehost_data.subject}</textarea>
-
-    </div>
-
-</div>
-
-<div class="row g-9 mb-8">
-    <div>
-        <label class="required fs-6 fw-bold mb-2">Precheck Status</label>
-       
-        <textarea class="form-control" rows="3" cols="40" id="updatefloatingComment"placeholder="Precheck Status"
-        style="font-size: initial;background: aliceblue;">${updatehost_data.pre_check_status_text}</textarea>
-
-    </div>
-</div>
-
-    <div class="row g-9 mb-8">
 
         <div class="col-md-6 fv-row">
-            <label class="required fs-6 fw-bold mb-2">CR ID</label>
-            <input type="text" class="form-control" id="updatefloatingCR"
-            placeholder="CR ID" value="` +
-    updatehost_data.cr_id +
-    `">
+            <label class="required fs-6 fw-bold mb-2">Description</label>
 
+            <textarea class="form-control" rows="3" cols="40" id="updatefloatingSubject" placeholder="Description"
+                style="font-size: initial;background: aliceblue;">${updatehost_data.subject}</textarea>
 
         </div>
 
         <div class="col-md-6 fv-row">
-   
-        <label class="required fs-6 fw-bold mb-2">Status</label>
-        <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" 
-        data-placeholder="Select a Status"  id="updatefloatingHostStatus">
-        ${selectStatus}
-        </select>
+            <label class="required fs-6 fw-bold mb-2">Precheck Status</label>
+
+            <textarea class="form-control" rows="3" cols="40" id="updatefloatingComment" placeholder="Precheck Status"
+                style="font-size: initial;background: aliceblue;">${updatehost_data.pre_check_status_text}</textarea>
+
+        </div>
+
+    </div>
+
+    <div class="row g-9 mb-8">
+        <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-bold mb-2">CR ID</label>
+            <input type="text" class="form-control" id="updatefloatingCR" placeholder="CR ID" 
+            value="` + updatehost_data.cr_id +`">
+        </div>
+
+        <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-bold mb-2">Remarks</label>
+
+            <textarea class="form-control" rows="1" cols="10" id="updatefloatingRemarks" placeholder="Remarks"
+                style="font-size: initial;background: aliceblue;">${updatehost_data.remarks}</textarea>
+
+        </div>
+
+       
+
+    </div>
+
+    <div class="row g-9 mb-8">
+
+        <div class="col-md-6 fv-row">
+            <label class="required fs-6 fw-bold mb-2">Assignee</label>
+            <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select a Assignee"
+                id="updateAssignee" data-dropdown-parent="#updateViewHost">
+                <option value="">Select a Assignee...</option>
+                ${selectvalues}
+            </select>
+        </div>
+
+        <div class="col-md-6 fv-row">
+
+            <label class="required fs-6 fw-bold mb-2">Status</label>
+            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                data-placeholder="Select a Status" id="updatefloatingHostStatus">
+                ${selectStatus}
+            </select>
+
+
+        </div>
+
 
 
     </div>
 
 
-
-    </div>
-
-  
 
     <div class="text-center">
-    <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
-        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
-        data-bs-dismiss="modal" id="update_button_hostList" 
-        onclick='updateHostListData("${updatehost_data.planned_start_date}","${updatehost_data.shift}")'>Submit</button>
+        <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
+        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true" data-bs-dismiss="modal"
+            id="update_button_hostList" onclick='updateHostListData()'>Submit</button>
     </div>
 
 </form>
@@ -1235,9 +1358,10 @@ function updateHostList(id) {
                     `;
 
   $("#modelUpdateHost").html(upd_host);
+  $("#updateAssignee").select2();
 }
 
-function updateHostListData(planned_start_date, shift) {
+function updateHostListData() {
   var Updatedic = JSON.stringify({
     ticket_id: $("#updatefloatingTid").val(),
     region: $("#updatefloatingRegion").val(),
@@ -1249,7 +1373,9 @@ function updateHostListData(planned_start_date, shift) {
     pre_check_status_text: $("#updatefloatingComment").val(),
     planned_type: $("#updatefloatingPlanned").val(),
     floatingCmpDate: $("#updatefloatingCmpDate").val(),
-    floatingImplementation: $("floatingImplementation_update").val(),
+    floatingImplementation: $("#floatingImplementation_update").val(),
+    assigned:$("#updateAssignee").val(),
+    remarks:$("#updatefloatingRemarks").val(),
     planned_start_date: request_data["selected_date"],
     shift: request_data["shift"],
   });
@@ -1276,6 +1402,8 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
     subject: $("#floatingSubject_infra_update").val(),
     pre_check_status: $("#floatingHostStatus_infra_update").val(),
     floatingImplementation: $("#floatingImplementation_update").val(),
+    remarks: $("#updatefloatingRemarks_infra").val(),
+    assigned: $("#updateAssignee_infra").val(),
     planned_start_date: request_data["selected_date"],
     shift: request_data["shift"],
   });
@@ -1295,22 +1423,30 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
     get_infra_activate();
   });
 }
-
-function update_notes_CMD(date, shift) {
-  if (request_data == "") {
-    var dic = JSON.stringify({
-      date: request_data["selected_date"],
-      shift: request_data["shift"],
-      notes: $("#comment_id").val(),
-    });
-  } else {
-    var dic = JSON.stringify({
-      date: request_data["selected_date"],
-      shift: request_data["shift"],
-      notes: $("#comment_id").val(),
-    });
+function alert_messages(dic){
+  if (Object.keys(dic).includes('selected_date') && Object.keys(dic).includes('shift')) {
+    // do something here
+    console.log("pass")
+  }else{
+    
+    // if(data){
+      $('#check_alert_changes').modal('show')
+      // }
   }
 
+}
+
+function update_notes_CMD(date, shift) {
+  
+    var dic = JSON.stringify({
+      date: request_data["selected_date"],
+      shift: request_data["shift"],
+      notes: $("#comment_id").val(),
+    });
+
+  alert_messages(dic)
+  console.log("alert")
+  
   var csrftoken = getCookie("csrftoken");
   var settings = {
     headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
@@ -1321,7 +1457,7 @@ function update_notes_CMD(date, shift) {
     processData: false,
     data: dic,
   };
-  $.ajax(settings).done(function (response) {});
+  // $.ajax(settings).done(function (response) {});
 }
 
 $("#submit_button_hostList").on("click", function (e) {
@@ -1336,6 +1472,8 @@ $("#submit_button_hostList").on("click", function (e) {
     planned_type: $("#floatingPlanned").val(),
     floatingCmpDate: $("#floatingCmpDate").val(),
     pre_check_status: $("#floatingHostStatus").val(),
+    assigned: $("#selectEmployee").val(),
+    remarks: $("#floatingRemarks").val(),
     planned_start_date: request_data["selected_date"],
     shift: request_data["shift"],
   });
@@ -1361,6 +1499,8 @@ $("#submit_button_hostList_infra").on("click", function (e) {
     subject: $("#floatingSubject_infra").val(),
     pre_check_status: $("#floatingHostStatus_infra").val(),
     floatingImplementation: $("#floatingImplementation").val(),
+    assigned: $("#selectEmployee_infra").val(),
+    remarks: $("#floatingRemarks_infra").val(),
     planned_start_date: request_data["selected_date"],
     shift: request_data["shift"],
   });
@@ -1473,10 +1613,12 @@ function shiftData() {
       }else{
         check=[]
       }
+      // userData(json_['plan'])
       userData(check)
     },
-    error:function(err){   
+    error:function(err){
       check =[]
+      // userData(json_['plan'])
       userData(check)
     }
     
@@ -1918,3 +2060,9 @@ function userData(check){
     $("#ShiftKanban1").html(shiftShowDataEmp);
   }
 }
+
+
+// $(document).ready(function () {
+  
+// });
+

@@ -2,51 +2,7 @@
 
 
 <head>
-<!-- <style>
-    table,
-    tr {
 
-
-        border: 1px solid black;
-        border-collapse: collapse;
-        font-size: 10.0pt;
-        width: 60%;
-        margin-left: 20%;
-        margin-right: 20%;
-
-    }
-
-    th {
-        text-align: left;
-    }
-
-    #td-border {
-        border-right: 1px solid black;
-
-    }
-
-    #bg1 {
-        background-color: rgb(255, 200, 50) ;
-    }
-
-    #bg2 {
-        border-top: hidden;
-        border-bottom: hidden;
-        background-color: rgb(249, 233, 188);
-    }
-
-    #bg3 {
-        border-top: hidden;
-        border-bottom: hidden;
-        text-align-last: center;
-        background-color: rgb(167, 124, 8);
-    }
-
-    span {
-        font-weight: lighter;
-        padding-inline-start: 2%;
-    }
-</style> -->
 
 </head>
 
@@ -59,12 +15,12 @@
      background-color: rgb(255, 200, 50)">
 
         <tr style="border: 1px solid black; border-collapse: collapse;">
-            <th id="td-border" style="border: 1px solid black; border-collapse: collapse;">Date : &nbsp;&nbsp;<span>{{ shift_and_date.selected }}</span></th>
-            <th id="td-border" style="border: 1px solid black; border-collapse: collapse;">Day : &nbsp;&nbsp;<span>{{ day }}</span></th>
-            <th style="border: 1px solid black; border-collapse: collapse;">Shift : &nbsp;&nbsp;<span>{{ shift_and_date.shift }}</span></th>
+            <th id="td-border" style="border: 1px solid black; border-collapse: collapse;width: 35% !important;">Date : &nbsp;&nbsp;<span>{{ shift_and_date.selected }}</span></th>
+            <th id="td-border" style="border: 1px solid black; border-collapse: collapse;width: 30% !important;">Day : &nbsp;&nbsp;<span>{{ day }}</span></th>
+            <th style="border: 1px solid black; border-collapse: collapse;width: 35% !important;">Shift : &nbsp;&nbsp;<span>{{ shift_and_date.shift }}</span></th>
         </tr>
         <tr style="border: 1px solid black; border-collapse: collapse;">
-            <th style="border: 1px solid black; border-collapse: collapse;" id="td-border">Shift In-Charge : <span>
+            <th style="border: 1px solid black; border-collapse: collapse;width: 50% !important;" id="td-border">Shift In-Charge : <span>
 
                 {% for i in Lead %}
 
@@ -73,7 +29,7 @@
                 {% endfor %}
             </span></th>
 
-            <th style="border: 1px solid black; border-collapse: collapse;">Colleagues In Shift : <span>
+            <th style="border: 1px solid black; border-collapse: collapse;width: 50% !important;">Colleagues In Shift : <span>
 
                 {% for i in employees %}
 
@@ -83,17 +39,16 @@
             </span></th>
         </tr>
 
-       <tr style="border: 1px solid black; border-collapse: collapse;">
-            <th> Queue Status:</th>
-        </tr>
+       <!-- <tr style="border: 1px solid black; border-collapse: collapse;">
+        </tr> -->
     </table>
 
     <table id="bg2" style=" border-top: hidden;
     border-bottom: hidden;
     border: 1px solid black; border-collapse: collapse;width: 100%;">
         <tr style="border: 1px solid black; border-collapse: collapse;">
-            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;width: 50%;">Chart</th>
-            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;width: 50%;">Comment</th>
+            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;width: 50%;">Queue Status</th>
+            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;width: 50%;">Technical Note</th>
         </tr>
         <tr>
             <td id="td-border" style="border: 1px solid black; border-collapse: collapse;width: 50%;"> 
@@ -112,13 +67,7 @@
             <td style="border: 1px solid black; border-collapse: collapse;text-align: center;width: 50%;">{{ ticket_comment.notes }}</td>
         </tr>
 
-        <!-- {{ quer_chart  }} -->
-
-            <!-- <tr style="background-color: white;border: 1px solid black; border-collapse: collapse;text-align: center;">
-                
-                <td id="td-border" style="border: 1px solid black; border-collapse: collapse;text-align: center;"> </td>
-                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;">{{ ticket_comment.notes }}</td>
-            </tr> -->
+        
   
     </table>
 
@@ -150,7 +99,7 @@
 
     </table>
     {% endfor %}
-
+    <br>
     <table style="
     border: 1px solid black; border-collapse: collapse;
     font-size: 10.0pt; width: 100%; 
@@ -184,8 +133,15 @@
 
     </table>
     {% endfor %}
-
-    
+    <br>
+    <table style="
+    border: 1px solid black; border-collapse: collapse;
+    font-size: 10.0pt; width: 100%; 
+     background-color: rgb(255, 200, 50)">
+        <tr  style="border: 1px solid black; border-collapse: collapse;">
+            <th style="border: 1px solid black; border-collapse: collapse;text-align: left;">Weekend Activity</th>
+        </tr>
+    </table>
         
     <table style="
     border: 1px solid black; border-collapse: collapse;
@@ -214,11 +170,11 @@
                         <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
                         <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
                         <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
-                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status }}</th>
-                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_approval }}</th>
-                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
                         <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
-                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.comments }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.assigned }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.remarks }}</th>
                     </tr>
 
                     {% endfor %}
@@ -227,47 +183,95 @@
                         <!-- <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i }}</th> -->
                     <tr style="background-color: rgb(249, 242, 53);border: 1px solid black; border-collapse: collapse;">
                         
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border"></th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_approval }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.comments }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border"></th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.assigned }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.remarks }}</th>
                     </tr>
 
                         {% endfor %}
 
-                    {% elif j == 'BYD_C4C' %}
-                        {% for i in Activity_data.IBP %}
-                        <!-- <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i }}</th> -->
+                    {% elif j == 'BYD' %}
+                        {% for i in Activity_data.BYD %}
+                        
                     <tr style="background-color: rgb(249, 242, 53);border: 1px solid black; border-collapse: collapse;">
                         
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border"></th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_approval }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
-                            <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.comments }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border"></th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.assigned }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.remarks }}</th>
+                        </tr>
+
+                        {% endfor %}
+					{% elif j == 'C4C' %}
+                        {% for i in Activity_data.C4C %}
+                        
+                    <tr style="background-color: rgb(249, 242, 53);border: 1px solid black; border-collapse: collapse;">
+                        
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border"></th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.region }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.ticket_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.subject }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.pre_check_status_text }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.cr_id }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.floatingCmpDate }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.assigned }}</th>
+                        <th style="border: 1px solid black; border-collapse: collapse;text-align: center;"id="td-border">{{ i.remarks }}</th>
                         </tr>
 
                         {% endfor %}
                     {% endif %}
 
                 {% endfor %}
-                    <!-- </tr> -->
-                
-                
+                    
+            
+
+    </table><br>
+
+
+    <table style="
+    border: 1px solid black; border-collapse: collapse;
+    font-size: 10.0pt; width: 100%; 
+     background-color: rgb(255, 200, 50)">
+        <tr  style="border: 1px solid black; border-collapse: collapse;">
+            <th style="border: 1px solid black; border-collapse: collapse;text-align: left;">SM Infra</th>
+        </tr>
+    </table>
+    
+    
+    <table style="
+    border: 1px solid black; border-collapse: collapse;
+    font-size: 10.0pt; width: 100%; 
+    background-color: rgb(167, 124, 8);">
+
+            <tr style="background-color: rgb(4, 168, 244);border: 1px solid black; border-collapse: collapse;">
+                <th style="border: 1px solid black; border-collapse: collapse;text-align: center;" id="td-border">Ticket ID</th>
+                <th style="border: 1px solid black; border-collapse: collapse;text-align: center;" id="td-border">Description</th>
+                <th style="border: 1px solid black; border-collapse: collapse;text-align: center;">Implementation Period</th>
+                <th style="border: 1px solid black; border-collapse: collapse;text-align: center;">Assignee</th>
+                <th style="border: 1px solid black; border-collapse: collapse;text-align: center;">Remarks</th>
+            </tr>
+            {% for i in sm_infra_data %}
+            <tr style="background-color: rgb(249, 242, 53);border: 1px solid black; border-collapse: collapse;">
+                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;" id="td-border">{{i.ticket_id}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;" id="td-border">{{i.subject}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;">{{i.floatingImplementation}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;">{{i.assigned}}</td>
+                <td style="border: 1px solid black; border-collapse: collapse;text-align: center;">{{i.remarks}}</td>
 
                 
-        
-        
-
+            </tr>
+            {% endfor %}
     </table>
     
 </body>

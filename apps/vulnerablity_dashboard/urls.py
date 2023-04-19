@@ -9,7 +9,7 @@ from django.conf.urls import url, include
 from .views import *
 router = routers.DefaultRouter()
 
-
+router.register(r'upload_excel',upload_excel)
 app_name = 'vulnerablity_dashboard'
 
 chart_url = [
@@ -20,8 +20,9 @@ api_url=[
 ]
 
 html_url = [
-
-    path('', dashboard_html.as_view(), name='dashboard')
+    path('api/',include(router.urls)),
+    path('', dashboard_html.as_view(), name='dashboard'),
+    # path('upload_excel/',upload_excel.as_view(),name='upload_excel')
 ]
 
 
