@@ -184,11 +184,6 @@ function closeModal(){
     all_dict_from_before_js=[]
 }
 
-function closeModal_date_and_shift(){
-  console.log("asdlklfhasjkdhf")
-  $('#check_alert_changes').modal('hide')
-  // all_dict_from_before_js=[]
-}
 function get_activity(data) {
   var host_list = "";
   var hostArray = [];
@@ -1423,30 +1418,22 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
     get_infra_activate();
   });
 }
-function alert_messages(dic){
-  if (Object.keys(dic).includes('selected_date') && Object.keys(dic).includes('shift')) {
-    // do something here
-    console.log("pass")
-  }else{
-    
-    // if(data){
-      $('#check_alert_changes').modal('show')
-      // }
-  }
-
-}
 
 function update_notes_CMD(date, shift) {
-  
+  if (request_data == "") {
     var dic = JSON.stringify({
       date: request_data["selected_date"],
       shift: request_data["shift"],
       notes: $("#comment_id").val(),
     });
+  } else {
+    var dic = JSON.stringify({
+      date: request_data["selected_date"],
+      shift: request_data["shift"],
+      notes: $("#comment_id").val(),
+    });
+  }
 
-  alert_messages(dic)
-  console.log("alert")
-  
   var csrftoken = getCookie("csrftoken");
   var settings = {
     headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
@@ -1457,7 +1444,7 @@ function update_notes_CMD(date, shift) {
     processData: false,
     data: dic,
   };
-  // $.ajax(settings).done(function (response) {});
+  $.ajax(settings).done(function (response) {});
 }
 
 $("#submit_button_hostList").on("click", function (e) {

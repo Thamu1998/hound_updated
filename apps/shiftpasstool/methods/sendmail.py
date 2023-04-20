@@ -1,14 +1,13 @@
-from django.core.mail import EmailMessage, send_mail
-from django.template.loader import render_to_string, get_template
+from django.core.mail import EmailMessage
+from django.template.loader import get_template
 import threading
-import sys
-from django.utils.html import strip_tags
 
-# """############### BEGIN Initiate logger ###############"""
-# from config.logger import init_logging
 
-#log = init_logging("logs/shiftpasstool.#log", __name__)
-# """############### END Initiate logger ###############"""
+"""############### BEGIN Initiate logger ###############"""
+from config.logger import init_logging
+
+log = init_logging("logs/shiftpasstool.log", __name__)
+"""############### END Initiate logger ###############"""
 
 
 class EmailThread(threading.Thread):
@@ -28,12 +27,10 @@ class send_mail_to_destination:
 
     def mail_content(self, *args, **kwargs):
         try:
-            #log.error("start mail content")
+            log.error("start mail content")
             json_data = kwargs['json_data']
-            subject = 'Shift Handover'
-            to = ["naveen.kumar.devaraj@sap.com", "abishek.p@sap.com",
-                  "hariprasath.narayanamoorthy@sap.com"]
-            body = "HI Team"
+            to = ["DL_S4CD_SM_ALL@sap.com"]
+
             context = {}
             from datetime import datetime
             for i in json_data['shifpassjs']:
@@ -78,7 +75,8 @@ class send_mail_to_destination:
                 context['sm_infra_data'] = []
 
             try:
-                sorted_items = sorted(json_data['shiftpasschartjs']['activity_data'], key=lambda x: x['region'])
+                sorted_items = sorted(
+                    json_data['shiftpasschartjs']['activity_data'], key=lambda x: x['region'])
                 data = sorted_items
             except KeyError as e:
                 data = []
@@ -104,27 +102,19 @@ class send_mail_to_destination:
             context['Activity_data'] = dictionary
 
             # Render the HTML template
-            #log.error("Initial mail HTML")
+            log.error("Initial mail HTML")
             html_content = get_template(
                 'shiftpasstool/mail.html').render(context)
-            #log.error("Finish mail HTML", context)
-            # email = EmailMessage(f'Shift Handover - {context["shift_and_date"]["selected"]} ({context["shift_and_date"]["shift"]})', html_content,
-            #                      'hound@mail.s4hana.ondemand.com', to)
-            # #log.error("Start mail message")
-            # email.content_subtype = 'html'
-            # email.send()
+            log.error("Finish mail HTML", context)
+            email = EmailMessage(f'Shift Handover - {context["shift_and_date"]["selected"]} ({context["shift_and_date"]["shift"]})', html_content,
+                                 'hound@mail.s4hana.ondemand.com', to)
+            log.error("Start mail message")
+            email.content_subtype = 'html'
+            email.send()
 
-            send_mail(
-            f'Shift Handover - {context["shift_and_date"]["selected"]} ({context["shift_and_date"]["shift"]})',
-            'Here is the message.',
-            'jeevanom306@gmail.com',
-            ['jeevanom306@gmail.com','kunigal.naveen@gmail.com'],
-            html_message=html_content
-            )
-            #log.error("Mail Sent succesfully")
-# 
-            return context['Activity_data']
-        
+            log.error("Mail Sent succesfully")
+
+            return context
+
         except Exception as e:
-            print(str(e))
-            #log.error(str(e))
+            log.error(str(e))

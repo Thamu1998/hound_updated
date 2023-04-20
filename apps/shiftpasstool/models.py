@@ -8,7 +8,7 @@ choice_planned_type = [
     ('S4H', 'S4H'),
     ('IBP', 'IBP'),
     ('BYD', 'BYD'),
-    ('C4C','C4C')
+    ('C4C', 'C4C')
 ]
 
 choice_region = [
@@ -117,8 +117,8 @@ class ActivityDB(models.Model):
     shift = models.CharField(max_length=250, null=True)
     floatingCmpDate = models.TextField(null=True)
     timerange = models.TimeField(blank=True, null=True)
-    assigned=models.CharField(max_length=250,null=True,blank=True)
-    remarks=models.TextField()
+    assigned = models.CharField(max_length=250, null=True, blank=True)
+    remarks = models.TextField(blank=True, null=True)
 
     # def __str__(self):
     #     return self.planned_type
@@ -134,6 +134,5 @@ class sm_infra_activate(models.Model):
     shift = models.CharField(max_length=250, null=True)
     floatingImplementation = models.TextField(null=True)
     timerange = models.TimeField(blank=True, null=True)
-    assigned=models.CharField(max_length=250,null=True,blank=True)
-    remarks=models.TextField(blank=True, null=True)
-
+    assigned = models.CharField(max_length=250, null=True, blank=True)
+    remarks = models.TextField(blank=True, null=True)
