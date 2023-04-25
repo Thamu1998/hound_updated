@@ -68,40 +68,83 @@ function broadcast_data_transforming(newdata) {
 }
 
 $("#submit_button").on("click", function (e) {
-  var floatingShift = request_data["shift"];
-  var floatingdate = request_data["selected_date"];
-  var floatingTicket = $("#floatingTicket").val();
-  var floatingCause = $("#floatingCause").val();
-  var floatingCustomerImp = $("#floatingCustomerImp").val();
-  var floatingActionReq = $("#floatingActionReq").val();
-  var floatingStatus = $("#floatingStatus").val();
-  var date = request_data["selected_date"];
-  data = JSON.stringify({
-    Ticket_ID: floatingTicket,
-    Subject: floatingCause,
-    customer_impact: floatingCustomerImp,
-    Action_Required: floatingActionReq,
-    created_date: floatingdate,
-    shift: floatingShift,
-    Status: floatingStatus,
-    start_time: date,
-  });
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
-    headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-    async: true,
-    crossDomain: false,
-    url: "/shiftpasstool/post_api/",
-    method: "POST",
-    processData: false,
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  }
+  else{
+    var floatingShift = request_data["shift"];
+    var floatingdate = request_data["selected_date"];
+    var floatingTicket = $("#floatingTicket").val();
+    var floatingCause = $("#floatingCause").val();
+    var floatingCustomerImp = $("#floatingCustomerImp").val();
+    var floatingActionReq = $("#floatingActionReq").val();
+    var floatingStatus = $("#floatingStatus").val();
+    var date = request_data["selected_date"];
+    data = JSON.stringify({
+      Ticket_ID: floatingTicket,
+      Subject: floatingCause,
+      customer_impact: floatingCustomerImp,
+      Action_Required: floatingActionReq,
+      created_date: floatingdate,
+      shift: floatingShift,
+      Status: floatingStatus,
+      start_time: date,
+    });
+  
+    var csrftoken = getCookie("csrftoken");
+    var settings = {
+      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+      async: true,
+      crossDomain: false,
+      url: "/shiftpasstool/post_api/",
+      method: "POST",
+      processData: false,
+      data: data,
+    };
+    $.ajax(settings).done(function (response) {
+      console.log(response)
+      if(response == 'created'){
+        $("#model_create_token").modal("hide");
+        $('#createAlert').modal('show')
+        getoutageData();
+      }
+      else{
+        console.log('workk')
+          fieldModel()
+      }
+      
+    });
+  } 
 
-    data: data,
-  };
-  $.ajax(settings).done(function (response) {
-    getoutageData();
-  });
 });
+
+function fieldModel(){
+  var fieldPopup=''
+  // var resData=res.toString()
+  fieldPopup=fieldPopup+`
+
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                            <div class="swal2-icon-content">!</div>
+                        </div>
+                        <h6 class="text-center">Please fill all the fields</h6><br>
+                        <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                            data-dismiss="modal">Ok</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+  `
+  $('#warningFieldAlert').html(fieldPopup)
+  $('#warningFieldAlert').modal('show')
+}
 
 $.ajax({
   method: "GET",
@@ -279,14 +322,16 @@ function generate_change_request_list_dom(data) {
             
             `;
       });
-    } else {
+    } 
+    else {
       team_options =
         team_options +
         `
             <h3 style="text-align:center">No data found</h3>
         `;
     }
-  } else {
+  } 
+  else {
     team_options =
       team_options +
       `
@@ -367,7 +412,7 @@ function update(ID) {
             <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
         </label>
 
-        <input type="text" class="form-control" id="updateTicket" placeholder="Ticket Id" value="` +
+        <input type="text" disabled class="form-control" id="updateTicket" placeholder="Ticket Id" value="` +
     UpdateData.Ticket_ID +
     `">
         </div>
@@ -416,8 +461,8 @@ function update(ID) {
 
     <div class="text-center">
         <button type="reset" onclick="cancelModel()" class="btn btn-light">Cancel</button>
-        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true" onclick="update_ticket('${UpdateData.created_date}','${UpdateData.shift}')"
-        data-bs-dismiss="modal" >Update</button>
+        <button type="button" class="btn btn-primary" onclick="update_ticket('${UpdateData.created_date}','${UpdateData.shift}')"
+         >Update</button>
     </div>
 
 </form>
@@ -429,39 +474,83 @@ function update(ID) {
 }
 
 function update_ticket(created_date, shift) {
-  $("#modal").modal("toggle");
+ 
 
-  var Ticket_ID = $("#updateTicket").val();
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+    var Ticket_ID = $("#updateTicket").val();
 
-  var Subject = $("#updateCause").val();
+    var Subject = $("#updateCause").val();
+  
+    var customer_impact = $("#updateCustomerImp").val();
+    var Action_Required = $("#updateActionReq").val();
+    var status = $("#updateStatus").val();
+    var data = JSON.stringify({
+      Ticket_ID: Ticket_ID,
+      Subject: Subject,
+      customer_impact: customer_impact,
+      Action_Required: Action_Required,
+      Status: status,
+      created_date: request_data["selected_date"],
+      shift: request_data["shift"],
+    });
+  
+    var csrftoken = getCookie("csrftoken");
+    $.ajax({
+      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+      async: true,
+      crossDomain: false,
+      url: "/shiftpasstool/post_api/",
+      method: "PUT",
+      processData: false,
+      data: data,
+      success: function (response) {
+        console.log(response)
+      if(response == 'updated'){
+        $("#updateToken").modal("hide");
+        $('#updateAlert').modal('show')
+        getoutageData();
+      }
+     },
+      error: function (data) {
+        console.log(data.statusText);
+        ErrorModel(data.statusText)
+    }
+      
+    });
+  }
 
-  var customer_impact = $("#updateCustomerImp").val();
-  var Action_Required = $("#updateActionReq").val();
-  var status = $("#updateStatus").val();
-  var data = JSON.stringify({
-    Ticket_ID: Ticket_ID,
-    Subject: Subject,
-    customer_impact: customer_impact,
-    Action_Required: Action_Required,
-    Status: status,
-    created_date: request_data["selected_date"],
-    shift: request_data["shift"],
-  });
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
-    headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-    async: true,
-    crossDomain: false,
-    url: "/shiftpasstool/post_api/",
-    method: "PUT",
-    processData: false,
+}
 
-    data: data,
-  };
-  $.ajax(settings).done(function (response) {
-    getoutageData();
-  });
+
+function ErrorModel(error){
+  var ErrorPopup=''
+
+  ErrorPopup=ErrorPopup+`
+
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                            <div class="swal2-icon-content">!</div>
+                        </div>
+                        <h6 class="text-center">${error}</h6><br>
+                        <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                            data-dismiss="modal">Ok</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+  `
+  $('#apicallErrorAlert').html(ErrorPopup)
+  $('#apicallErrorAlert').modal('show')
 }
 
 $("#update_button").on("click", function (e) {
@@ -641,16 +730,7 @@ function generate_change_request_list_SPC(data) {
                     </div>
                 </td>
                 
-                <td style="text-align: center;">
-
-                    ${statusHide}
-
-                 
-
-
-  
-                    
-                </td>
+                <td style="text-align: center;"> ${statusHide}</td>
                 
             </tr>
             
@@ -674,37 +754,56 @@ function generate_change_request_list_SPC(data) {
 }
 
 $("#submit_button_spc").on("click", function (e) {
-  var floatingShift = request_data["shift"];
-  var floatingdate = request_data["selected_date"];
-  var floatingTicket = $("#floatingTicket_spc").val();
-  var floatingCause = $("#floatingCause_spc").val();
-  var floatingCustomerImp = $("#floatingCustomerImp_spc").val();
-  var floatingActionReq = $("#floatingActionReq_spc").val();
-  var floatingStatus = $("#floatingStatus_spc").val();
-  data = JSON.stringify({
-    Ticket_ID: floatingTicket,
-    Subject: floatingCause,
-    Action_Taken: floatingCustomerImp,
-    Action_Required: floatingActionReq,
-    created_date: floatingdate,
-    shift: floatingShift,
-    Status: floatingStatus,
-    start_time: floatingdate,
-  });
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
-    headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-    async: true,
-    crossDomain: false,
-    url: "/shiftpasstool/post_tracking/",
-    method: "POST",
-    processData: false,
-    data: data,
-  };
-  $.ajax(settings).done(function (response) {
-    getspcData();
-  });
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+    var floatingShift = request_data["shift"];
+    var floatingdate = request_data["selected_date"];
+    var floatingTicket = $("#floatingTicket_spc").val();
+    var floatingCause = $("#floatingCause_spc").val();
+    var floatingCustomerImp = $("#floatingCustomerImp_spc").val();
+    var floatingActionReq = $("#floatingActionReq_spc").val();
+    var floatingStatus = $("#floatingStatus_spc").val();
+    data = JSON.stringify({
+      Ticket_ID: floatingTicket,
+      Subject: floatingCause,
+      Action_Taken: floatingCustomerImp,
+      Action_Required: floatingActionReq,
+      created_date: floatingdate,
+      shift: floatingShift,
+      Status: floatingStatus,
+      start_time: floatingdate,
+    });
+  
+    var csrftoken = getCookie("csrftoken");
+    var settings = {
+      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+      async: true,
+      crossDomain: false,
+      url: "/shiftpasstool/post_tracking/",
+      method: "POST",
+      processData: false,
+      data: data,
+    };
+    $.ajax(settings).done(function (response) {
+      console.log(response)
+      if(response == 'Tracking data saved successfully'){
+        $("#model_create_token1").modal("hide");
+        $('#createAlert').modal('show')
+        getspcData();
+      }
+      else{
+        fieldModel()
+      }
+
+
+
+    });
+  }
+
+
 });
 
 function getspcData() {
@@ -905,6 +1004,7 @@ function view_outage(
 }
 
 function update_spa(ID) {
+
   var updateSpaData;
 
   updateSpaData = outage_report["SPC_data"].filter((e) => e.ID == ID);
@@ -977,7 +1077,7 @@ function update_spa(ID) {
             <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
         </label>
 
-        <input type="text" class="form-control" id="updateTicket_spa" placeholder="Ticket Id" value="` +
+        <input type="text" disabled class="form-control" id="updateTicket_spa" placeholder="Ticket Id" value="` +
     updateSpaData.Ticket_ID +
     `">
       </div>  
@@ -1036,10 +1136,15 @@ function update_spa(ID) {
 </form>
 
                     `;
-  $("#floatingTickets_spa ").html(upd_spa);
+  $("#floatingTickets_spa").html(upd_spa);
 }
 
 function update_ticket_spa(created_date, shift) {
+
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
   var Ticket_ID = $("#updateTicket_spa").val();
 
   var Subject = $("#updateCause_spa").val();
@@ -1068,6 +1173,13 @@ function update_ticket_spa(created_date, shift) {
     data: data,
   };
   $.ajax(settings).done(function (response) {
-    getspcData();
+    console.log(response)
+    if(response == 'Tracking history updated successfully'){
+      $("#updateToken_spa").modal("hide");
+      $('#updateAlert').modal('show')
+      getspcData();
+    }
+   
   });
+}
 }

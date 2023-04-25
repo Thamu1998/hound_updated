@@ -53,7 +53,7 @@ class post_tracking(APIView):
             serializer.save()
             return Response("Tracking data saved successfully")
         else:
-            return Response(serializer.error_messages)
+            return Response(status=201,data=serializer.errors.keys())
 
     def get(self, request):
         try:
@@ -172,7 +172,7 @@ class post_api(APIView):
 
             return Response('created')
         else:
-            return Response(serializer.errors)
+            return Response(status=201,data=serializer.errors.keys())
 
     def put(self, request):
 
@@ -220,7 +220,7 @@ class post_api(APIView):
                 history = his.make_outage_history(data=self.request.data)
                 return Response("updated")
             else:
-                return Response(serializer.errors)
+                return Response(status=201,data=serializer.errors.keys())
 
     def get(self, request):
         serializer = outage_master_tickets_serializer(
@@ -322,7 +322,7 @@ class ticket_comment(APIView):
                 serializer.save()
                 return Response("Tickets Notes created")
             else:
-                return Response(serializer.errors)
+                return Response(status=201,data=serializer.errors.keys())
 
     def get(self, request):
 
@@ -386,7 +386,7 @@ class set_Ticket_count(APIView):
             serializer.save()
             return Response("Ticket count created")
         else:
-            return Response("Not created Ticket count")
+            return Response(status=201,data=serializer.errors.keys())
 
     def put(self, request):
         date = self.request.data['date']
@@ -413,7 +413,7 @@ class set_Ticket_count(APIView):
                 return Response("Updated successfully")
             else:
 
-                return Response(serializer.error_messages)
+                return Response(status=201,data=serializer.errors.keys())
         else:
             self.post(self.request.data)
 
@@ -466,16 +466,18 @@ class sm_infra_activate_obj(APIView):
             else:
                 sm_infra_activate.objects.filter(
                     **query1[0]).update(planned_end_date=self.request.data['planned_start_date'])
-
+        
         if self.request.data['pre_check_status'] == 'Resolved':
             json_query['planned_end_date'] = self.request.data['planned_start_date']
 
         serializer = sm_infra_activate_serializer(data=json_query)
+        print(serializer.is_valid())
+        print(json_query)
         if serializer.is_valid():
             serializer.save()
             return Response("sm_infra_createed")
         else:
-            return Response(serializer.errors)
+            return Response(status=201,data=serializer.errors.keys())
 
 
 class Get_sm_infra_activate(APIView):
@@ -548,7 +550,7 @@ class Activity_db(APIView):
             serializer.save()
             return Response("Activate DB created")
         else:
-            return Response(serializer.errors)
+            return Response(status=201,data=serializer.errors.keys())
 
 
 class Get_all_activity(APIView):

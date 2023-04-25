@@ -135,6 +135,7 @@ function get_infra_activate() {
     method: "GET",
     url: "/shiftpasstool/Get_sm_infra_activate/",
     success: function (data) {
+      console.log(data)
       get_activity_infra(data);
     },
   });
@@ -181,6 +182,14 @@ function mail_trigger() {
 
 function closeModal(){
     $('#exampleModalCenter').modal('hide')
+    $('#warningAlert').modal('hide')
+    $('#createAlert').modal('hide')
+    $('#updateAlert').modal('hide')
+    $('#warningFieldAlert').modal('hide')
+    $('#apicallErrorAlert').modal('hide')
+    
+    
+    
     all_dict_from_before_js=[]
 }
 
@@ -385,6 +394,7 @@ function get_activity(data) {
 }
 
 function get_activity_infra(data) {
+  console.log(data)
   var host_list_infra = "";
 
   if (data.length != 0) {
@@ -427,7 +437,7 @@ function get_activity_infra(data) {
           item.pre_check_status +
           `</span> `;
       }
-
+      if(item.subject != null){
       if (item.subject.length > 200) {
         textData =
           ` <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:1000px !important">
@@ -435,14 +445,15 @@ function get_activity_infra(data) {
           item.subject +
           `</label>
             </div>`;
-      } else if (item.subject.length > 100) {
+      } else if (item.subject.length > 100 && item.subject.length != null) {
         textData =
           ` <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;width:700px !important">
                  <label style="font-size: small;" class="text-muted fw-bold d-block">` +
           item.subject +
           `</label>
              </div>`;
-      } else {
+      } 
+      else {
         textData =
           ` <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
                 <label style="font-size: small;" class="text-muted fw-bold d-block">` +
@@ -450,6 +461,15 @@ function get_activity_infra(data) {
           `</label>
             </div>`;
       }
+    }
+    else {
+      textData =
+        ` <div class="form-check form-check-sm form-check-custom form-check-solid" style="display: block;">
+              <label style="font-size: small;" class="text-muted fw-bold d-block">` +
+        item.subject +
+        `</label>
+          </div>`;
+    }
 
       host_list_infra =
         host_list_infra +
@@ -800,51 +820,66 @@ function upate_counts(
 }
 
 $("#submit_button_chart_update").on("click", function (e) {
-  if (update_count_ticket["date"] != "undefined") {
-    var dic = JSON.stringify({
-      alerts: $("#floatingAlerts_update").val(),
-      manual_incidents: $("#floatingManualIncidents_update").val(),
-      problems: $("#floatingProblems_update").val(),
-      service_request: $("#floatingServiceRequest_update").val(),
 
-      date: update_count_ticket["date"],
-      shift: update_count_ticket["shift"],
-    });
-    var csrftoken = getCookie("csrftoken");
-    var settings = {
-      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-      async: true,
-      crossDomain: false,
-      url: "/shiftpasstool/set_Ticket_count/",
-      method: "PUT",
-      processData: false,
-      data: dic,
-    };
-    $.ajax(settings).done(function (response) {
-      get_all_count();
-    });
-  } else {
-    POST_data();
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+    if (update_count_ticket["date"] != "undefined") {
+      var dic = JSON.stringify({
+        alerts: $("#floatingAlerts_update").val(),
+        manual_incidents: $("#floatingManualIncidents_update").val(),
+        problems: $("#floatingProblems_update").val(),
+        service_request: $("#floatingServiceRequest_update").val(),
+  
+        date: update_count_ticket["date"],
+        shift: update_count_ticket["shift"],
+      });
+      var csrftoken = getCookie("csrftoken");
+      var settings = {
+        headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+        async: true,
+        crossDomain: false,
+        url: "/shiftpasstool/set_Ticket_count/",
+        method: "PUT",
+        processData: false,
+        data: dic,
+      };
+      $.ajax(settings).done(function (response) {
+        console.log(response)
+        if(response == 'Ticket count POSTEd'){
+          $("#model_chart_update").modal("hide");
+          $('#updateAlert').modal('show')
+          get_all_count();
+        }
+        
+      });
+    } else {
+      POST_data();
+    }
   }
+ 
 });
+
+
 
 // Comment notes
 
 // notes
 
-$("#submit_cmd_btn_notes").on("click", function (e) {});
+// $("#submit_cmd_btn_notes").on("click", function (e) {});
 
 function get_notes(data) {
   var upd_notes = "";
 
   var upd_button = "";
   if (Object.keys(data).length > 0) {
+    if(data.notes == null){
+      data.notes=''
+    }
     upd_button =
       upd_button +
-      `
-  
-
-    
+      ` 
     <a href="#" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder" onclick=update_notes_CMD('${data.date}','${data.shift}') >Update</a>
     `;
     upd_notes =
@@ -883,6 +918,8 @@ $.ajax({
   method: "GET",
   url: "/shiftpasstool/ticket_comment/",
   success: function (data) {
+    console.log(data)
+    // if(data == )
     get_notes(data);
   },
 });
@@ -969,7 +1006,7 @@ function updateHostList_infra(id) {
     <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
 </label>
 
-<input type="text" class="form-control" id="floatingTid_infra_update"  placeholder="Ticket ID" value="` +
+<input type="text" disabled class="form-control" id="floatingTid_infra_update"  placeholder="Ticket ID" value="` +
     updateSpaData.ticket_id +
     `">
 
@@ -1236,7 +1273,7 @@ function updateHostList(id) {
                 <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
             </label>
 
-            <input type="text" class="form-control" id="updatefloatingTid" placeholder="Ticket ID" value="` +
+            <input type="text" disabled class="form-control" id="updatefloatingTid" placeholder="Ticket ID" value="` +
     updatehost_data.ticket_id +
     `">
         </div>
@@ -1357,6 +1394,12 @@ function updateHostList(id) {
 }
 
 function updateHostListData() {
+
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+
   var Updatedic = JSON.stringify({
     ticket_id: $("#updatefloatingTid").val(),
     region: $("#updatefloatingRegion").val(),
@@ -1387,11 +1430,21 @@ function updateHostListData() {
   };
 
   $.ajax(settings).done(function (data) {
-    get_act_datas();
+    console.log(data)
+    if(data == 'Activate DB created'){
+      $("#updateViewHost").modal("hide");
+      $('#updateAlert').modal('show')
+      get_act_datas();
+    }    
   });
+}
 }
 
 function submit_button_hostList_infra_update(planned_start_date, shift) {
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
   var dic_infra_update = JSON.stringify({
     ticket_id: $("#floatingTid_infra_update").val(),
     subject: $("#floatingSubject_infra_update").val(),
@@ -1415,27 +1468,30 @@ function submit_button_hostList_infra_update(planned_start_date, shift) {
   };
 
   $.ajax(settings).done(function (data) {
-    get_infra_activate();
+    console.log(data)
+    if(data == 'sm_infra_createed'){
+      $("#updateViewHost_infra").modal("hide");
+      $('#updateAlert').modal('show')
+      get_infra_activate();
+    }
   });
+}
 }
 
 function update_notes_CMD(date, shift) {
-  if (request_data == "") {
-    var dic = JSON.stringify({
-      date: request_data["selected_date"],
-      shift: request_data["shift"],
-      notes: $("#comment_id").val(),
-    });
-  } else {
-    var dic = JSON.stringify({
-      date: request_data["selected_date"],
-      shift: request_data["shift"],
-      notes: $("#comment_id").val(),
-    });
-  }
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else {
+    if($("#comment_id").val() != null && $("#comment_id").val() != '' ){
+    var dic = JSON.stringify({
+      date: request_data["selected_date"],
+      shift: request_data["shift"],
+      notes: $("#comment_id").val(),
+    });
+    var csrftoken = getCookie("csrftoken");
+    var settings = {
     headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
     async: true,
     crossDomain: false,
@@ -1443,68 +1499,111 @@ function update_notes_CMD(date, shift) {
     method: "POST",
     processData: false,
     data: dic,
-  };
-  $.ajax(settings).done(function (response) {});
+    };
+    $.ajax(settings).done(function (response) {
+      console.log(response)
+      if(response == 'tickets notes updates'){
+        $('#updateAlert').modal('show')
+      }
+    });
+  }
+  else{
+    fieldModel()
+  }
+
+}
+
 }
 
 $("#submit_button_hostList").on("click", function (e) {
-  var dic = JSON.stringify({
-    ticket_id: $("#floatingTid").val(),
-    region: $("#floatingRegion").val(),
-    subject: $("#floatingSubject").val(),
-    cr_id: $("#floatingCR").val(),
-    cr_approval: $("#floatingHostStatus").val(),
-    resource: $("#floatingComment").val(),
-    pre_check_status_text: $("#floatingComment").val(),
-    planned_type: $("#floatingPlanned").val(),
-    floatingCmpDate: $("#floatingCmpDate").val(),
-    pre_check_status: $("#floatingHostStatus").val(),
-    assigned: $("#selectEmployee").val(),
-    remarks: $("#floatingRemarks").val(),
-    planned_start_date: request_data["selected_date"],
-    shift: request_data["shift"],
-  });
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+    var dic = JSON.stringify({
+      ticket_id: $("#floatingTid").val(),
+      region: $("#floatingRegion").val(),
+      subject: $("#floatingSubject").val(),
+      cr_id: $("#floatingCR").val(),
+      cr_approval: $("#floatingHostStatus").val(),
+      resource: $("#floatingComment").val(),
+      pre_check_status_text: $("#floatingComment").val(),
+      planned_type: $("#floatingPlanned").val(),
+      floatingCmpDate: $("#floatingCmpDate").val(),
+      pre_check_status: $("#floatingHostStatus").val(),
+      assigned: $("#selectEmployee").val(),
+      remarks: $("#floatingRemarks").val(),
+      planned_start_date: request_data["selected_date"],
+      shift: request_data["shift"],
+    });
+  
+    var csrftoken = getCookie("csrftoken");
+    var settings = {
+      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+      async: true,
+      crossDomain: false,
+      url: "/shiftpasstool/Activity_db/",
+      method: "POST",
+      processData: false,
+      data: dic,
+    };
+    $.ajax(settings).done(function (data) {
+      console.log(data)
+      if(data == 'Activate DB created'){
+        $("#model_host_list").modal("hide");
+        $('#createAlert').modal('show')
+        get_act_datas();
+      }
+      else{
+          fieldModel()
+      }
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
-    headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-    async: true,
-    crossDomain: false,
-    url: "/shiftpasstool/Activity_db/",
-    method: "POST",
-    processData: false,
-    data: dic,
-  };
-  $.ajax(settings).done(function (data) {
-    get_act_datas();
-  });
+      
+    });
+  }
+
 });
 
 $("#submit_button_hostList_infra").on("click", function (e) {
-  var dic_infra = JSON.stringify({
-    ticket_id: $("#floatingTid_infra").val(),
-    subject: $("#floatingSubject_infra").val(),
-    pre_check_status: $("#floatingHostStatus_infra").val(),
-    floatingImplementation: $("#floatingImplementation").val(),
-    assigned: $("#selectEmployee_infra").val(),
-    remarks: $("#floatingRemarks_infra").val(),
-    planned_start_date: request_data["selected_date"],
-    shift: request_data["shift"],
-  });
+  if (request_data == "") {
+    $('#warningAlert').modal('show')
+  } 
+  else{
+    var dic_infra = JSON.stringify({
+      ticket_id: $("#floatingTid_infra").val(),
+      subject: $("#floatingSubject_infra").val(),
+      pre_check_status: $("#floatingHostStatus_infra").val(),
+      floatingImplementation: $("#floatingImplementation").val(),
+      assigned: $("#selectEmployee_infra").val(),
+      remarks: $("#floatingRemarks_infra").val(),
+      planned_start_date: request_data["selected_date"],
+      shift: request_data["shift"],
+    });
+  
+    var csrftoken = getCookie("csrftoken");
+    var settings = {
+      headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
+      async: true,
+      crossDomain: false,
+      url: "/shiftpasstool/sm_infra_activate_obj/",
+      method: "POST",
+      processData: false,
+      data: dic_infra,
+    };
+    $.ajax(settings).done(function (data) {
+      console.log(data)
+      if(data == 'sm_infra_createed'){
+        $("#model_host_list_infra").modal("hide");
+        $('#createAlert').modal('show')
+        get_infra_activate();
+      }
+      else{
+          fieldModel()
+      }
+      
+    });
+  }
 
-  var csrftoken = getCookie("csrftoken");
-  var settings = {
-    headers: { "X-CSRFToken": csrftoken, "Content-Type": "application/json" },
-    async: true,
-    crossDomain: false,
-    url: "/shiftpasstool/sm_infra_activate_obj/",
-    method: "POST",
-    processData: false,
-    data: dic_infra,
-  };
-  $.ajax(settings).done(function (data) {
-    get_infra_activate();
-  });
 });
 
 function closeAlert_popup() {

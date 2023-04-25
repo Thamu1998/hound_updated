@@ -23,20 +23,22 @@
     #swap_request_from_tbody_outages {
         white-space: nowrap;
         overflow-x: scroll !important;
-}
-   #swap_request_from_tbody{
-        white-space: nowrap;
-        overflow-x: scroll !important;
-}
-#host_list_tbody{
-        white-space: nowrap;
-        overflow-x: scroll !important;
-}
-#host_list_tbody_infra{
-        white-space: nowrap;
-        overflow-x: scroll !important;
-}
+    }
 
+    #swap_request_from_tbody {
+        white-space: nowrap;
+        overflow-x: scroll !important;
+    }
+
+    #host_list_tbody {
+        white-space: nowrap;
+        overflow-x: scroll !important;
+    }
+
+    #host_list_tbody_infra {
+        white-space: nowrap;
+        overflow-x: scroll !important;
+    }
 </style>
 
 
@@ -59,7 +61,7 @@
             <div class="modal-body">
                 <div class="card-body">
                     <div class="form-floating">
-                       
+
                         <select id="Shift_dropdown" class="form-select form-select-solid mb-5"
                             data-placeholder="Select Shift" data-dropdown-parent="#model_apply_leave">
                             <option value="" disabled hidden selected>Select Shift</option>
@@ -88,11 +90,11 @@
 
 
 <!--begin::Row-->
-  
-        <div class="card card-flush" style="min-height:325px;">
-            <div class="row g-5 g-xl-10 mt-1">
-            <div class="col-6">
-               <div class="card-header border-0 pt-5">
+
+<div class="card card-flush" style="min-height:325px;">
+    <div class="row g-5 g-xl-10 mt-1">
+        <div class="col-6">
+            <div class="card-header border-0 pt-5">
                 <h3 class="card-title align-items-start flex-column">
                     <span class="card-label fw-bolder text-dark">Queue Status Chart</span>
 
@@ -114,37 +116,37 @@
         <div class="col-6">
             <div class="card card-flush" style="min-height:325px;">
 
-    
+
                 <div class="card-header border-0 pt-5">
                     <h3 class="card-title align-items-start flex-column">
                         <span class="card-label fw-bolder text-dark">Technical Note</span>
-    
+
                     </h3>
                     <div class="modal-footer">
-                      
+
                     </div>
-    
+
                     <!-- <div >
         
                     </div> -->
-    
+
                     <div class="me-3" id="Update_button_comment">
-    
-                        
+
+
                     </div>
                 </div>
-    
+
                 <div class="card-body" id="update_notes">
-                    
+
                 </div>
-    
+
                 <!-- <div class="card-footer">
                 </div> -->
             </div>
         </div>
     </div>
 
-  
+
 </div><br><br>
 <!--end::Row-->
 
@@ -152,16 +154,16 @@
 <div class="card">
     <div class="row g-5 g-xl-10 mt-1">
         <div class="col" id="ShiftKanban">
-            
+
         </div>
     </div>
-    
+
     <div class="row g-5 g-xl-10 mt-1">
         <div class="col" id="ShiftKanban1">
-            
+
         </div>
     </div>
-    
+
 </div>
 
 
@@ -192,16 +194,15 @@
 
             <div class="tab-content" id="pills-tabContent">
                 <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                    <table class="table table-row-dashed table-row-gray-300 gy-7" >
+                    <table class="table table-row-dashed table-row-gray-300 gy-7">
                         <thead>
                             <tr class="fw-bolder fs-6 text-muted">
                                 <th style="min-width: 200px;">Ticket ID</th>
                                 <th style="min-width: 200px;">Cause</th>
-                                <th  style="min-width: 200px;">Customer Impact</th>
-                                <th  style="min-width: 200px;">Action Required</th>
-                                <th  style="min-width: 100px;">Status</th>
-                                <th  class="min-w-100px" style="min-width: 100px;">Actions
-                                </th>
+                                <th style="min-width: 200px;">Customer Impact</th>
+                                <th style="min-width: 200px;">Action Required</th>
+                                <th style="min-width: 100px;">Status</th>
+                                <th class="min-w-100px" style="min-width: 100px;">Actions</th>
                             </tr>
                         </thead>
                         <tbody id="swap_request_from_tbody_outages">
@@ -285,7 +286,7 @@
                             <tr class="fw-bolder fs-6 text-muted">
                                 <th style="min-width: 200px;text-align: center;">Region</th>
                                 <th style="min-width: 200px;">Ticket ID</th>
-                                
+
                                 <!-- <th style="">Planned_type</th> -->
                                 <th style="min-width: 200px;">Description</th>
                                 <th style="min-width: 200px;">Pre Check</th>
@@ -313,7 +314,7 @@
 
 
 
-   
+
 
 
 
@@ -342,13 +343,13 @@
                                 <!-- <th style="">Region</th> -->
                                 <th style="min-width: 100px;">Ticket ID</th>
                                 <!-- <th style="">Planned_type</th> -->
-                                <th >Description</th>
+                                <th>Description</th>
                                 <!-- <th style="">CR ID</th> -->
                                 <th style="min-width: 100px;">Implementation Period</th>
                                 <th style="min-width: 100px;">Assignee</th>
                                 <th style="min-width: 100px;">Remarks</th>
                                 <!-- <th style="">Shift</th> -->
-                               
+
                                 <th style="min-width: 100px;">Status</th>
                                 <th style="min-width: 100px;">Actions
                                 </th>
@@ -392,13 +393,13 @@
 
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 
-                <form  class="form" action="#">
+                <form class="form" action="#">
 
                     <div class="mb-13 text-center">
 
                         <h1 class="mb-3">Create Outage</h1>
 
-                        
+
 
                     </div>
 
@@ -469,8 +470,8 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="button"  id="submit_button" class="btn btn-primary" data-kt-menu-dismiss="true"
-                            data-bs-dismiss="modal">Submit</button>
+                        <button type="button" id="submit_button" class="btn btn-primary" 
+                            >Submit</button>
                     </div>
 
                 </form>
@@ -513,13 +514,13 @@
 
             <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15">
 
-                <form  class="form" action="#">
+                <form class="form" action="#">
 
                     <div class="mb-13 text-center">
 
                         <h1 class="mb-3">Create SPC Ticket</h1>
 
-                        
+
 
                     </div>
 
@@ -580,8 +581,7 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
-                            data-bs-dismiss="modal" id="submit_button_spc">Submit</button>
+                        <button type="button" class="btn btn-primary" id="submit_button_spc">Submit</button>
                     </div>
 
                 </form>
@@ -733,7 +733,7 @@
 
 <!-- Create Host list Model -->
 <div class="modal fade" tabindex="-1" id="model_host_list">
-    
+
 
     <div class="modal-dialog modal-dialog-centered mw-750px">
 
@@ -764,7 +764,7 @@
 
                         <h1 class="mb-3">Create Ticket</h1>
 
-                       
+
 
                     </div>
 
@@ -825,7 +825,7 @@
 
                     <div class="row g-9 mb-8">
 
-                        <div  class="col-md-6 fv-row">
+                        <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">Description</label>
 
                             <textarea class="form-control" rows="3" cols="40" id="floatingSubject"
@@ -851,26 +851,26 @@
                             <input type="text" class="form-control" id="floatingCR" placeholder="CR ID">
                         </div>
 
-                        
+
                         <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">Remarks</label>
 
-                            <textarea class="form-control" rows="1" cols="10" id="floatingRemarks"
-                                placeholder="Remarks"
+                            <textarea class="form-control" rows="1" cols="10" id="floatingRemarks" placeholder="Remarks"
                                 style="font-size: initial;background: aliceblue;"></textarea>
 
                         </div>
-                       
+
                     </div>
 
                     <div class="row g-9 mb-8">
 
-                        <div class="col-md-6 fv-row" >
+                        <div class="col-md-6 fv-row">
                             <label class="required fs-6 fw-bold mb-2">Assignee</label>
                             <select class="form-select form-select-solid" data-control="select2"
-                            data-placeholder="Select a Assignee" id="selectEmployee" data-dropdown-parent="#model_host_list">
+                                data-placeholder="Select a Assignee" id="selectEmployee"
+                                data-dropdown-parent="#model_host_list">
                             </select>
-                        </div>   
+                        </div>
 
                         <div class="col-md-6 fv-row">
 
@@ -893,8 +893,7 @@
 
                     <div class="text-center">
                         <button type="reset" onclick="cancelModel()" class="btn btn-light me-3">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
-                            data-bs-dismiss="modal" id="submit_button_hostList">Submit</button>
+                        <button type="button" class="btn btn-primary" id="submit_button_hostList">Submit</button>
                     </div>
 
                 </form>
@@ -943,60 +942,63 @@
 
                         <h1 class="mb-3">Create Infra Ticket</h1>
 
-                        
+
 
                     </div>
 
                     <div class="row g-9 mb-8">
 
                         <div class="col-md-6 fv-row">
-                          <label class="d-flex align-items-center fs-6 fw-bold mb-2">
-                            <span class="required">Ticket ID</span>
-                            <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Ticket ID"></i>
-                          </label>
-                          <input type="text" class="form-control" id="floatingTid_infra" placeholder="Ticket ID">
+                            <label class="d-flex align-items-center fs-6 fw-bold mb-2">
+                                <span class="required">Ticket ID</span>
+                                <i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip"
+                                    title="Ticket ID"></i>
+                            </label>
+                            <input type="text" class="form-control" id="floatingTid_infra" placeholder="Ticket ID">
                         </div>
-                      
+
                         <div class="col-md-6 fv-row">
-                          <label class="required fs-6 fw-bold mb-2">Status</label>
-                          <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
-                            data-placeholder="Select a Status" id="floatingHostStatus_infra">
-                            <option value="">Select a Status...</option>
-                            <option value="New">New</option>
-                            <option value="Inprogress">Inprogress</option>
-                            <option value="Waiting">Waiting</option>
-                            <option value="Resolved">Resolved</option>
-                          </select>
+                            <label class="required fs-6 fw-bold mb-2">Status</label>
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true"
+                                data-placeholder="Select a Status" id="floatingHostStatus_infra">
+                                <option value="">Select a Status...</option>
+                                <option value="New">New</option>
+                                <option value="Inprogress">Inprogress</option>
+                                <option value="Waiting">Waiting</option>
+                                <option value="Resolved">Resolved</option>
+                            </select>
                         </div>
-                      
-                      </div>
-                      
-                      
-                      <div class="d-flex flex-column mb-8 fv-row">
+
+                    </div>
+
+
+                    <div class="d-flex flex-column mb-8 fv-row">
                         <label class="required fs-6 fw-bold mb-2">Implementation Period</label>
-                        <input type="text" class="form-control" id="floatingImplementation" placeholder="Implementation Period">
-                      </div>
-                      
-                      <div class="d-flex flex-column mb-8 fv-row">
+                        <input type="text" class="form-control" id="floatingImplementation"
+                            placeholder="Implementation Period">
+                    </div>
+
+                    <div class="d-flex flex-column mb-8 fv-row">
                         <label class="required fs-6 fw-bold mb-2">Description</label>
-                        <textarea class="form-control" rows="3" cols="40" id="floatingSubject_infra" placeholder="Description"
-                          style="font-size: initial;background: aliceblue;"></textarea>
-                      </div>
-                      
-                      <div class="row g-9 mb-8">
+                        <textarea class="form-control" rows="3" cols="40" id="floatingSubject_infra"
+                            placeholder="Description" style="font-size: initial;background: aliceblue;"></textarea>
+                    </div>
+
+                    <div class="row g-9 mb-8">
                         <div class="col-md-6 fv-row">
-                          <label class="required fs-6 fw-bold mb-2">Remarks</label>
-                          <textarea class="form-control" rows="1" cols="10" id="floatingRemarks_infra" placeholder="Remarks"
-                            style="font-size: initial;background: aliceblue;"></textarea>
+                            <label class="required fs-6 fw-bold mb-2">Remarks</label>
+                            <textarea class="form-control" rows="1" cols="10" id="floatingRemarks_infra"
+                                placeholder="Remarks" style="font-size: initial;background: aliceblue;"></textarea>
                         </div>
-                      
+
                         <div class="col-md-6 fv-row">
-                          <label class="required fs-6 fw-bold mb-2">Assignee</label>
-                          <select class="form-select form-select-solid" data-control="select2" data-placeholder="Select a Assignee"
-                            id="selectEmployee_infra" data-dropdown-parent="#model_host_list_infra">
-                          </select>
+                            <label class="required fs-6 fw-bold mb-2">Assignee</label>
+                            <select class="form-select form-select-solid" data-control="select2"
+                                data-placeholder="Select a Assignee" id="selectEmployee_infra"
+                                data-dropdown-parent="#model_host_list_infra">
+                            </select>
                         </div>
-                      </div>
+                    </div>
 
 
 
@@ -1005,8 +1007,7 @@
 
                     <div class="text-center">
                         <button type="reset" class="btn btn-light me-3" onclick="cancelModel()">Cancel</button>
-                        <button type="button" class="btn btn-primary" data-kt-menu-dismiss="true"
-                            data-bs-dismiss="modal" id="submit_button_hostList_infra">Submit</button>
+                        <button type="button" class="btn btn-primary" id="submit_button_hostList_infra">Submit</button>
                     </div>
 
                 </form>
@@ -1025,7 +1026,6 @@
 <div id="cancelModelView" data-bs-backdrop="static" class="" tabindex="-1">
 
 </div>
-
 
 
 <div class="modal fade" tabindex="-1" id="updateToken">
@@ -1124,39 +1124,39 @@
 
 
 
-    <div class="modal fade" tabindex="-1" id="updateViewHost">
+<div class="modal fade" tabindex="-1" id="updateViewHost">
 
-        <div class="modal-dialog modal-dialog-centered mw-750px">
-    
-            <div class="modal-content rounded">
-    
-                <div class="modal-header pb-0 border-0 justify-content-end">
-    
-                    <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
-    
-                        <span class="svg-icon svg-icon-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
-                                    transform="rotate(-45 6 17.3137)" fill="black" />
-                                <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
-                                    fill="black" />
-                            </svg>
-                        </span>
-    
-                    </div>
-    
-                </div>
-    
-                <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost">
+    <div class="modal-dialog modal-dialog-centered mw-750px">
+
+        <div class="modal-content rounded">
+
+            <div class="modal-header pb-0 border-0 justify-content-end">
+
+                <div class="btn btn-sm btn-icon btn-active-color-primary" data-bs-dismiss="modal">
+
+                    <span class="svg-icon svg-icon-1">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                            <rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1"
+                                transform="rotate(-45 6 17.3137)" fill="black" />
+                            <rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)"
+                                fill="black" />
+                        </svg>
+                    </span>
 
                 </div>
 
             </div>
-    
+
+            <div class="modal-body scroll-y px-10 px-lg-15 pt-0 pb-15" id="modelUpdateHost">
+
+            </div>
+
         </div>
-    
-    
+
     </div>
+
+
+</div>
 
 
 
@@ -1202,26 +1202,119 @@
     <a href="#" style="float: right;
     margin-top: 2%;min-width: 115px;justify-content: center;
     margin-right: 4%;" class="btn btn-sm btn-flex btn-primary btn-active-primary fw-bolder"
-     id="create_work_group_request_btn" onclick="mail_trigger()">Send Mail</a>
+        id="create_work_group_request_btn" onclick="mail_trigger()">Send Mail</a>
 </div>
 
 
 <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
- aria-hidden="true" >
+    aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
-      <div class="modal-content">
-        <div class="modal-body">
-            <div class="text-center">
-                <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt="" style="width: 50px;"><br><br>
-                <h6 class="text-center">Mail Sent Successfully</h6><br>
-                <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;" data-dismiss="modal">Ok</button>
+        <div class="modal-content">
+            <div class="modal-body">
+                <div class="text-center">
+                    <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt=""
+                        style="width: 50px;"><br><br>
+                    <h6 class="text-center">Mail Sent Successfully</h6><br>
+                    <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                        data-dismiss="modal">Ok</button>
+                </div>
+
             </div>
-           
+
         </div>
-      
-      </div>
     </div>
-  </div>
+</div>
+
+
+<!-- Warning Popup -->
+
+<div data-bs-backdrop="static" class="" tabindex="-1">
+    <div class="modal fade" id="warningAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <div class="swal2-icon swal2-warning swal2-icon-show" style="display: flex;">
+                            <div class="swal2-icon-content">!</div>
+                        </div>
+                        <h6 class="text-center">Please Check Date and Shift</h6><br>
+                        <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                            data-dismiss="modal">Ok</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create Popup -->
+
+<div data-bs-backdrop="static" class="" tabindex="-1">
+    <div class="modal fade" id="createAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt=""
+                            style="width: 50px;"><br><br>
+                        <h6 class="text-center">Created Successfully</h6><br>
+                        <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                            data-dismiss="modal">Ok</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Update Popup -->
+
+<div data-bs-backdrop="static" class="" tabindex="-1">
+    <div class="modal fade" id="updateAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document" style="width: 300px;">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <div class="text-center">
+                        <img src="https://www.freeiconspng.com/thumbs/success-icon/success-icon-10.png" alt=""
+                            style="width: 50px;"><br><br>
+                        <h6 class="text-center">Updated Successfully</h6><br>
+                        <button type="button" class="btn btn-primary" onclick="closeModal()" style="min-width: 100px;"
+                            data-dismiss="modal">Ok</button>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- warning field popup -->
+
+<div data-bs-backdrop="static" class="" tabindex="-1">
+    <div class="modal fade" id="warningFieldAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+    </div>
+</div>
+
+
+<!-- Network Error || Backend Error popup  -->
+
+<div data-bs-backdrop="static" class="" tabindex="-1">
+    <div class="modal fade" id="apicallErrorAlert" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle"
+        aria-hidden="true">
+    </div>
+</div>
+
 
 <!--end::Row-->
 

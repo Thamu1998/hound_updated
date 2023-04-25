@@ -97,6 +97,28 @@ class tickets_count_table(models.Model):
     service_request = models.CharField(max_length=50)
 
 
+# class ActivityDB(models.Model):
+#     planned_type = models.CharField(
+#         max_length=20, choices=choice_planned_type, null=False, blank=False, default='S4H')
+#     region = models.CharField(
+#         max_length=20, choices=choice_region, null=False, blank=False, default='EMEA')
+#     planned_start_date = models.DateTimeField()
+#     planned_end_date = models.DateTimeField(null=True, blank=True)
+#     ticket_id = models.CharField(max_length=100)
+#     subject = models.TextField(null=True)
+#     pre_check_status = models.CharField(
+#         max_length=250, default='New', blank=False)
+#     pre_check_status_text = models.TextField()
+#     comments = models.TextField(null=True)
+#     cr_id = models.CharField(max_length=250, null=True)
+#     cr_approval = models.CharField(
+#         max_length=250, null=True, choices=choice_status, default='New', blank=False)
+#     resource = models.TextField(null=True)
+#     shift = models.CharField(max_length=250, null=True)
+#     floatingCmpDate = models.TextField(null=True)
+#     timerange = models.TimeField(blank=True, null=True)
+#     assigned = models.CharField(max_length=250, null=True, blank=True)
+#     remarks = models.TextField(blank=True, null=True)
 class ActivityDB(models.Model):
     planned_type = models.CharField(
         max_length=20, choices=choice_planned_type, null=False, blank=False, default='S4H')
@@ -104,25 +126,37 @@ class ActivityDB(models.Model):
         max_length=20, choices=choice_region, null=False, blank=False, default='EMEA')
     planned_start_date = models.DateTimeField()
     planned_end_date = models.DateTimeField(null=True, blank=True)
-    ticket_id = models.CharField(max_length=100, null=True)
-    subject = models.TextField(null=True)
+    ticket_id = models.CharField(max_length=100)
+    subject = models.TextField()
     pre_check_status = models.CharField(
         max_length=250, default='New', blank=False)
     pre_check_status_text = models.TextField()
     comments = models.TextField(null=True)
-    cr_id = models.CharField(max_length=250, null=True)
+    cr_id = models.CharField(max_length=250)
     cr_approval = models.CharField(
-        max_length=250, null=True, choices=choice_status, default='New', blank=False)
+        max_length=250, choices=choice_status, default='New', blank=False)
     resource = models.TextField(null=True)
     shift = models.CharField(max_length=250, null=True)
     floatingCmpDate = models.TextField(null=True)
     timerange = models.TimeField(blank=True, null=True)
     assigned = models.CharField(max_length=250, null=True, blank=True)
     remarks = models.TextField(blank=True, null=True)
-
     # def __str__(self):
     #     return self.planned_type
 
+
+# class sm_infra_activate(models.Model):
+#     planned_start_date = models.DateTimeField()
+#     planned_end_date = models.DateTimeField(null=True, blank=True)
+#     subject = models.TextField(null=True)
+#     pre_check_status = models.CharField(
+#         max_length=250, choices=choice_status, default='New', blank=False)
+#     ticket_id = models.CharField(max_length=250)
+#     shift = models.CharField(max_length=250, null=True)
+#     floatingImplementation = models.TextField(null=True)
+#     timerange = models.TimeField(blank=True, null=True)
+#     assigned = models.CharField(max_length=250, null=True, blank=True)
+#     remarks = models.TextField(blank=True, null=True)
 
 class sm_infra_activate(models.Model):
     planned_start_date = models.DateTimeField()
@@ -130,9 +164,10 @@ class sm_infra_activate(models.Model):
     subject = models.TextField(null=True)
     pre_check_status = models.CharField(
         max_length=250, choices=choice_status, default='New', blank=False)
-    ticket_id = models.CharField(max_length=250, null=True)
-    shift = models.CharField(max_length=250, null=True)
-    floatingImplementation = models.TextField(null=True)
+    ticket_id = models.CharField(max_length=250)
+    shift = models.CharField(max_length=250)
+    floatingImplementation = models.TextField()
     timerange = models.TimeField(blank=True, null=True)
-    assigned = models.CharField(max_length=250, null=True, blank=True)
-    remarks = models.TextField(blank=True, null=True)
+    assigned = models.CharField(max_length=250)
+    remarks = models.TextField()
+
